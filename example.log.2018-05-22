@@ -1,0 +1,40 @@
+2018-05-22 12:33:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 12:33:52 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Column count doesn't match value count at row 1
+ 2018-05-22 12:33:52 [com.heso.service.cart.CartService]-[ERROR] 
+ 2018-05-22 12:36:34 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 12:36:35 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Column count doesn't match value count at row 1
+ 2018-05-22 12:36:35 [com.heso.service.cart.CartService]-[ERROR] 
+ 2018-05-22 12:37:25 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 12:38:20 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2018-05-22 12:38:20 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] A PooledConnection that has already signalled a Connection error is still in use!
+ 2018-05-22 12:38:20 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] Another error has occurred [ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state. ] which will not be reported to listeners!
+ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:888)
+	at com.mysql.jdbc.Connection.getMutex(Connection.java:3755)
+	at com.mysql.jdbc.Connection.rollback(Connection.java:5251)
+	at com.mchange.v2.c3p0.impl.NewProxyConnection.rollback(NewProxyConnection.java:860)
+	at com.heso.service.order.consume.ConsumeOrder.genarate(ConsumeOrder.java:211)
+	at com.heso.service.cart.CartService.settle(CartService.java:1050)
+	at com.heso.transaction.outer.Transaction_001024.execute(Transaction_001024.java:48)
+	at com.heso.data.TransDataProcess.execute(TransDataProcess.java:101)
+	at com.heso.transaction.outer.Transaction_001024.main(Transaction_001024.java:100)
+2018-05-22 12:38:20 [com.heso.service.cart.CartService]-[ERROR] 
+ 2018-05-22 12:50:11 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 18:14:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 18:24:44 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 18:26:10 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 18:26:35 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 18:27:06 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 18:33:16 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:12:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:12:25 [com.heso.service.yesUser.YesUserService]-[ERROR] 
+ 2018-05-22 19:13:23 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:17:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:18:57 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:20:10 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:23:18 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:23:37 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:23:44 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-22 19:25:12 [com.heso.service.yesUser.YesUserService]-[ERROR] No operations allowed after connection closed.
+ 2018-05-22 19:27:30 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

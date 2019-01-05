@@ -1,0 +1,17 @@
+2018-09-18 10:38:53 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 10:44:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 10:44:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 10:47:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:19:20 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:20:10 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:24:29 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:24:48 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:25:16 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:25:46 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:27:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:27:48 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:29:26 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:29:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:47:25 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-09-18 11:58:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

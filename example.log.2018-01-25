@@ -1,0 +1,41 @@
+2018-01-25 14:43:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 14:44:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 14:54:09 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 14:57:53 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 14:58:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 14:59:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 14:59:29 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 15:00:05 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 15:00:53 [com.heso.service.yesUser.YesUserService]-[ERROR] No operations allowed after connection closed.
+ 2018-01-25 15:00:53 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] A PooledConnection that has already signalled a Connection error is still in use!
+ 2018-01-25 15:00:53 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] Another error has occurred [ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state. ] which will not be reported to listeners!
+ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:888)
+	at com.mysql.jdbc.Connection.getMutex(Connection.java:3755)
+	at com.mysql.jdbc.Connection.rollback(Connection.java:5251)
+	at com.mchange.v2.c3p0.impl.NewProxyConnection.rollback(NewProxyConnection.java:860)
+	at com.heso.service.yesUser.YesUserService.autoRegisterByMan(YesUserService.java:419)
+	at com.heso.transaction.outer.Transaction_001080.execute(Transaction_001080.java:119)
+	at com.heso.data.TransDataProcess.execute(TransDataProcess.java:101)
+	at com.heso.transaction.outer.Transaction_001080.main(Transaction_001080.java:567)
+2018-01-25 15:02:09 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 15:09:51 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 15:21:12 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 15:21:14 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 100150
+ 2018-01-25 15:21:14 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-25 15:22:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 15:22:43 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 100150
+ 2018-01-25 15:22:43 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-25 15:23:28 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 15:39:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 15:42:59 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 17:38:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 17:38:23 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] >>>>>>>>>>>>>查找商品，找不到该商品：F18ZX0015
+ 2018-01-25 17:42:43 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 17:51:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 18:09:02 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 18:10:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 18:11:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 18:11:49 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-25 18:12:09 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

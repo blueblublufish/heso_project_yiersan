@@ -1,0 +1,14 @@
+package com.heso.service.article.entity;
+
+import java.sql.Date;
+
+public class ArticleCommentDTO {
+	private String articleId;//ÎÄÕÂID
+	private String comment;//ÄÚÈİ
+	private String author;
+	private String goodCount;
+	private Date createTime;
+	private String readCount;
+	 
+}
+ 

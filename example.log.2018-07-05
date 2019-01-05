@@ -1,0 +1,5 @@
+2018-07-05 09:26:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-05 18:02:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-05 18:04:00 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-05 18:05:06 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

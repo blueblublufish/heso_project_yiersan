@@ -1,0 +1,349 @@
+package com.heso.service.order.consume.entity;
+
+import java.util.ArrayList;
+
+public class ConsumeOrderObject {
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+ 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
+
+	public String getAmount() {
+		return amount;
+	}
+
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getInnerCoin() {
+		return innerCoin;
+	}
+
+	public void setInnerCoin(String innerCoin) {
+		this.innerCoin = innerCoin;
+	}
+
+	public String getBonusPoint() {
+		return bonusPoint;
+	}
+
+	public void setBonusPoint(String bonusPoint) {
+		this.bonusPoint = bonusPoint;
+	}
+
+	public String getPayTime() {
+		return payTime;
+	}
+
+	public void setPayTime(String payTime) {
+		this.payTime = payTime;
+	}
+
+	public String getPayStatus() {
+		return payStatus;
+	}
+
+	public void setPayStatus(String payStatus) {
+		this.payStatus = payStatus;
+	}
+
+	public String getSendStatus() {
+		return sendStatus;
+	}
+
+	public void setSendStatus(String sendStatus) {
+		this.sendStatus = sendStatus;
+	}
+
+	public String getReturnStatus() {
+		return returnStatus;
+	}
+
+	public void setReturnStatus(String returnStatus) {
+		this.returnStatus = returnStatus;
+	}
+
+	public String getReceiveId() {
+		return receiveId;
+	}
+
+	public void setReceiveId(String receiveId) {
+		this.receiveId = receiveId;
+	}
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public ArrayList<ConsumeProductObject> getCpoList() {
+		return cpoList;
+	}
+
+	public void setCpoList(ArrayList<ConsumeProductObject> cpoList) {
+		this.cpoList = cpoList;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+	
+	public String getPaymentTerms() {
+		return paymentTerms;
+	}
+
+	public void setPaymentTerms(String paymentTerms) {
+		this.paymentTerms = paymentTerms;
+	}
+	
+	public String getDiscountPrice() {
+		return discountPrice;
+	}
+
+	public void setDiscountPrice(String discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+	
+	public String getSuitId() {
+		return suitId;
+	}
+
+	public void setSuitId(String suitId) {
+		this.suitId = suitId;
+	}
+	
+	public String getLogistCom() {
+		return logistCom;
+	}
+
+	public void setLogistCom(String logistCom) {
+		this.logistCom = logistCom;
+	}
+
+	public String getTrackingNum() {
+		return trackingNum;
+	}
+
+	public void setTrackingNum(String trackingNum) {
+		this.trackingNum = trackingNum;
+	}
+
+	String account;
+	String orderId;
+	String createTime;
+	String productId;
+	String type;
+	String name;
+	String image;
+	String price;
+	String count;
+	String amount;
+	String currency;
+	String innerCoin;
+	String bonusPoint;
+	String payTime;
+	String payStatus;
+	String sendStatus;
+	String returnStatus;
+	String receiveId;
+	String color;
+	String size;
+	String paymentTerms;
+	String discountPrice;
+	String suitId;
+	String logistCom;
+	String trackingNum;
+	String subordinate;
+	String showStatus;
+	String seller;//经手人
+	String channelType;//下单渠道，0为原线上，1为线下
+	String formatType;//版式
+	String sizeType;//衣码
+	String clothType;//布料
+	String styleType;//风格
+	String remark;//客户备注
+	public String getRemark() {
+		return remark;
+	}
+  
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	String remarks;//商家备注
+	
+	public String getSeller() {
+		return seller;
+	}
+
+	public void setSeller(String seller) {
+		this.seller = seller;
+	}
+
+	public String getChannelType() {
+		return channelType;
+	}
+
+	public void setChannelType(String channelType) {
+		this.channelType = channelType;
+	}
+
+	public String getFormatType() {
+		return formatType;
+	}
+
+	public void setFormatType(String formatType) {
+		this.formatType = formatType;
+	}
+
+	public String getSizeType() {
+		return sizeType;
+	}
+
+	public void setSizeType(String sizeType) {
+		this.sizeType = sizeType;
+	}
+
+	public String getClothType() {
+		return clothType;
+	}
+
+	public void setClothType(String clothType) {
+		this.clothType = clothType;
+	}
+
+	public String getStyleType() {
+		return styleType;
+	}
+
+	public void setStyleType(String styleType) {
+		this.styleType = styleType;
+	}
+
+	public String getShowStatus() {
+		return showStatus;
+	}
+
+	public void setShowStatus(String showStatus) {
+		this.showStatus = showStatus;
+	}
+
+	public String getSubordinate() {
+		return subordinate;
+	}
+
+	public void setSubordinate(String subordinate) {
+		this.subordinate = subordinate;
+	}
+
+	ArrayList<ConsumeProductObject> cpoList;
+	private String pointType;
+	private String sendTime;
+	public String getPointType() {
+		return pointType;
+	}
+
+	public void setPointType(String pointType) {
+		this.pointType = pointType;
+	}
+
+	public String getSendTime() {
+		return sendTime;
+	}
+
+	public void setSendTime(String sendTime) {
+		this.sendTime = sendTime;
+	}
+
+}

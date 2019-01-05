@@ -1,0 +1,54 @@
+package com.heso.transaction.outer;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Node;
+
+import com.heso.service.user.entity.UserDataObject;
+import com.heso.service.user.entity.UserServiceReturnObject;
+import com.heso.service.yesUser.YesUserService;
+import com.heso.transaction.AbstractInterfaceClass;
+/**
+ * 衣二衫注册送金币，积分
+ * @author qinjianzhao
+ *
+ */
+public class Transaction_001000 extends AbstractInterfaceClass {
+
+		private static final Log logger = LogFactory.getLog(Transaction_001000.class);
+		
+		@Override
+		public String execute(Node xmlBody, String IPAddress) {
+			try {
+				//取出数据
+				String userId= xmlBody.selectSingleNode("userId").getText();
+				String password = xmlBody.selectSingleNode("password").getText();
+				String userType = xmlBody.selectSingleNode("userType").getText();
+				String mobile = xmlBody.selectSingleNode("mobile").getText();
+				String  mobileCode = xmlBody.selectSingleNode("mobileCode").getText();
+				
+				//注册类型：0-原注册页面；1-有新人券时，系统自动注册
+				String  registerType = xmlBody.selectSingleNode("registerType").getText();
+				
+				//进行注册交易
+				UserServiceReturnObject usro = new YesUserService().registerByUsername(userId, password, userType ,mobile,mobileCode,registerType);
+				
+				//设置返回数据
+				StringBuffer sb = new StringBuffer();
+				if (usro.getCode().equals("000000")) {
+					UserDataObject udo = usro.getUdo();
+					sb.append("<account>" + usro.getAccount() + "</account>");
+					sb.append("<token>" + usro.getToken() + "</token>");
+					//GlobalCache.getInstance().setValue(GlobalCache.USER_TOKEN, usro.getAccount(), usro.getToken());
+				}
+				String xmlBodyStr = super.buildResp(usro.getCode(), sb.toString());
+				return xmlBodyStr;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return super.ERROR_RETURN;
+		}
+		
+
+}

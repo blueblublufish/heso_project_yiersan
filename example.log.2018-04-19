@@ -1,0 +1,13 @@
+2018-04-19 15:28:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-19 17:09:03 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-19 17:09:05 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] For input string: "5927.00"
+ 2018-04-19 17:11:31 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-19 17:11:34 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 0
+ 2018-04-19 17:12:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-19 17:12:24 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 0
+ 2018-04-19 17:12:31 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-19 17:12:33 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 0
+ 2018-04-19 17:14:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-19 17:25:00 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-19 17:37:09 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job-scheduling-data
+  xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+  version="1.8">
+  <!-- 
+ <schedule>
+    <job>
+      <name>uploadGoods</name>
+      <group>goods</group>
+      <job-class>quartz.QuartzService</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadGoods</name>
+        <group>triggerGroup</group>
+        <job-name>uploadGoods</job-name>
+        <job-group>goods</job-group>
+        <cron-expression>0 0 2 * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+   -->
+  
+   <schedule>
+    <job>
+      <name>uploadGoods</name>
+      <group>goods</group>
+      <job-class>quartz.UploadGoods</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadGoods</name>
+        <group>triggerGroup</group>
+        <job-name>uploadGoods</job-name>
+        <job-group>goods</job-group>
+        <cron-expression>0 0 2 * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+  
+   <schedule>
+    <job>
+      <name>uploadCoin</name>
+      <group>coin</group>
+      <job-class>quartz.UploadCoins</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadCoin</name>
+        <group>triggerGroup</group>
+        <job-name>uploadCoin</job-name>
+        <job-group>coin</job-group>
+        <cron-expression>0 0 2 * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+  
+  
+  <schedule>
+    <job>
+      <name>uploadPoint2</name>
+      <group>point2</group>
+      <job-class>quartz.UploadPoint2</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadPoint2</name>
+        <group>triggerGroup</group>
+        <job-name>uploadPoint2</job-name>
+        <job-group>point2</job-group>
+        <cron-expression>0 0 2 * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+  
+    <schedule>
+    <job>
+      <name>uploadPoint</name>
+      <group>point</group>
+      <job-class>quartz.UploadPoint</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadPoint</name>
+        <group>triggerGroup</group>
+        <job-name>uploadPoint</job-name>
+        <job-group>point</job-group>
+        <cron-expression>0 0 2 * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+  
+  <schedule>
+    <job>
+      <name>uploadStaticRank</name>
+      <group>staticRank</group>
+      <job-class>quartz.UploadStaticRank</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadStaticRank</name>
+        <group>triggerGroup</group>
+        <job-name>uploadStaticRank</job-name>
+        <job-group>staticRank</job-group>
+        <cron-expression>0 0 2 * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+  
+    <schedule>
+    <job>
+      <name>uploadStaticsLevel</name>
+      <group>staticsLevel</group>
+      <job-class>quartz.UploadStaticsLevel</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadStaticsLevel</name>
+        <group>triggerGroup</group>
+        <job-name>uploadStaticsLevel</job-name>
+        <job-group>staticsLevel</job-group>
+        <cron-expression>0 0 2 * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+  
+ <schedule>
+    <job>
+      <name>uploadOrder</name>
+      <group>order</group>
+      <job-class>quartz.UploadOrder</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadOrder</name>
+        <group>triggerGroup</group>
+        <job-name>uploadOrder</job-name>
+        <job-group>order</job-group>
+        <cron-expression>0 0/59 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>  
+
+ <schedule>
+    <job>
+      <name>uploadUserCoupon</name>
+      <group>userCoupon</group>
+      <job-class>quartz.UserCouponService</job-class>
+    </job>
+    <trigger>
+      <cron>
+        <name>uploadUserCoupon</name>
+        <group>triggerGroup</group>
+        <job-name>uploadUserCoupon</job-name>
+        <job-group>userCoupon</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>  
+</job-scheduling-data>

@@ -1,0 +1,69 @@
+2016-03-26 16:09:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 16:12:06 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 16:12:07 [com.heso.service.mall.MallService]-[ERROR] 000102
+ 2016-03-26 16:12:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 16:20:53 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 16:21:28 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 16:27:24 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 16:28:55 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 16:32:32 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 16:39:02 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:13:56 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:14:32 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:14:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:16:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:16:24 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:16:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:17:25 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:18:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:18:23 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%'XXX'%  and status = 1' at line 1
+ 2016-03-26 17:19:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:19:02 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%  and status = 1' at line 1
+ 2016-03-26 17:19:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:19:37 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%'XXX'  and status = 1' at line 1
+ 2016-03-26 17:20:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:20:39 [com.heso.service.mall.MallService]-[ERROR] Parameter index out of range (5 > number of parameters, which is 4).
+ 2016-03-26 17:28:26 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:28:27 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '% 'XXX'  and status = 1' at line 1
+ 2016-03-26 17:29:02 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:29:03 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%  and status = 1' at line 1
+ 2016-03-26 17:30:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:30:01 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%  and status = 1' at line 1
+ 2016-03-26 17:35:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:35:46 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%  and status = 1' at line 1
+ 2016-03-26 17:36:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:36:02 [com.heso.service.mall.MallService]-[ERROR] Parameter index out of range (8 > number of parameters, which is 7).
+ 2016-03-26 17:36:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:36:14 [com.heso.service.mall.MallService]-[ERROR] Parameter index out of range (8 > number of parameters, which is 7).
+ 2016-03-26 17:36:24 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:36:25 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%  and status = 1' at line 1
+ 2016-03-26 17:36:47 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:37:08 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:37:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:37:49 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:37:57 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:38:17 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:38:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:38:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:39:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:39:14 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:39:32 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:39:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:41:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:41:39 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%  and status = 1' at line 1
+ 2016-03-26 17:42:33 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:42:53 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:45:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:45:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:46:06 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:46:25 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:54:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:58:16 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:58:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 17:58:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 18:23:11 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 18:23:25 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 18:23:32 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 18:24:44 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-03-26 18:24:53 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 

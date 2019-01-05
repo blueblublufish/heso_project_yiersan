@@ -1,0 +1,100 @@
+package com.heso.transaction.outer;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Node;
+
+import com.heso.data.TransDataProcess;
+import com.heso.service.article.ArticleService;
+import com.heso.service.mall.MallService;
+import com.heso.service.mall.entity.MallServiceReturnObject;
+import com.heso.service.mall.entity.MemberProduct;
+import com.heso.service.order.consume.ConsumeOrder;
+import com.heso.service.order.consume.entity.ConsumeOrderReturnObject;
+import com.heso.service.wardrobe.WardrobeService;
+import com.heso.service.wardrobe.entity.TripsuitDTO;
+import com.heso.service.wardrobe.entity.WardrobeServiceReturnObject;
+import com.heso.transaction.AbstractInterfaceClass;
+/**
+ * 根据设计师ID查询设计师详情与排班表
+ * @author Administrator
+ *
+ */
+public class Transaction_001092 extends AbstractInterfaceClass {
+	private static final Log logger = LogFactory.getLog(Transaction_001910.class);
+	@Override
+	public String execute(Node xmlBody, String IPAddress) {
+		// TODO Auto-generated method stub
+		try{  
+			//获取数据
+			String account = xmlBody.selectSingleNode("account").getText();
+			//String amount = xmlBody.selectSingleNode("account").getText();
+			String token = xmlBody.selectSingleNode("token").getText();
+			String designerId = xmlBody.selectSingleNode("designerId").getText();
+			
+		//	String wardrobeId = xmlBody.selectSingleNode("wardrobeId").getText();
+		 
+			//String orderId = xmlBody.selectSingleNode("orderId").getText();
+			//String desc = xmlBody.selectSingleNode("desc").getText();
+			//判断token
+			if(!tokenAuth(account, token)){
+				throw new Exception(super.ERROR_TOKEN);
+			}
+			
+			MallServiceReturnObject msro = new MallService().getDesignerDate(designerId);
+			
+		 
+		
+			//返回数据
+			StringBuffer sb = new StringBuffer();
+			if(msro.getCode().equals("000000")){
+				for(MemberProduct mp:msro.getMpList()){
+					sb.append("<date_place_Item>");
+					sb.append("<date_place_id>"+mp.getId()+"</date_place_id>");
+					sb.append("<designerId>"+mp.getDesignerId()+"</designerId>");
+					sb.append("<place>"+mp.getPlace()+"</place>");
+					sb.append("<date_place>"+mp.getDate_place()+"</date_place>");
+					sb.append("<designerDesc>"+mp.getDesignerDesc()+"</designerDesc>");
+					sb.append("<designation>"+mp.getDesignation()+"</designation>");
+					sb.append("<designerName>"+mp.getDesignerName()+"</designerName>");
+					sb.append("<status>"+mp.getStatus()+"</status>");
+					sb.append("<designerImage>"+mp.getImage()+"</designerImage>");
+					sb.append("</date_place_Item>");
+					
+				}
+				
+			}
+		
+			String xmlBodyStr = super.buildResp("000000", sb.toString());
+			return xmlBodyStr;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return super.ERROR_RETURN;
+	}
+	public static void main(String[] args) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version='1.0' encoding='utf-8'?>");
+		sb.append("<message>");
+		sb.append("<head>");
+		sb.append("<type>001092</type>");
+		sb.append("<messageId>1</messageId>");
+		sb.append("<agentId>001</agentId>");
+		sb.append("<digest>MD5数字签名</digest>");
+		sb.append("</head>");
+		sb.append("<body>");
+		sb.append("<designerId>1111111</designerId>");
+		sb.append("<account>0000000000000016</account>");
+		sb.append("<token>0</token>");	
+		sb.append("</body>");
+		sb.append("</message>");
+		try {
+			new TransDataProcess().execute(sb.toString());
+			System.out.println(">>>>>>>>>>>>>>gg");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+}

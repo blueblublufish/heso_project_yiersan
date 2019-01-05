@@ -1,0 +1,12 @@
+2018-07-31 19:12:10 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-31 19:12:12 [com.heso.service.expert.ExpertService]-[ERROR] 1
+ 2018-07-31 19:13:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-31 19:13:25 [com.heso.service.expert.ExpertService]-[ERROR] 101206
+ 2018-07-31 19:13:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-31 19:15:03 [com.heso.service.expert.ExpertService]-[ERROR] No operations allowed after connection closed.
+ 2018-07-31 19:15:28 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-31 19:15:58 [com.heso.service.expert.ExpertService]-[ERROR] No operations allowed after connection closed.
+ 2018-07-31 19:17:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-31 19:17:47 [com.heso.service.mall.MallService]-[ERROR] >>>>>>>>>>查询服务列表失败
+ 2018-07-31 19:17:47 [com.heso.service.mall.MallService]-[ERROR] 001090
+ 

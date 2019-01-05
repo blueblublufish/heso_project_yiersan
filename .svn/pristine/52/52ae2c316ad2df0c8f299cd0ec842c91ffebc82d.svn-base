@@ -1,0 +1,176 @@
+package com.heso.service.cart.entity;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class CartItemObject implements Serializable{
+	public String getProductId() {
+		return productId;
+	}
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCount() {
+		return count;
+	}
+	public void setCount(String count) {
+		this.count = count;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getAmount() {
+		return amount;
+	}
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+	public String getSelected() {
+		return selected;
+	}
+	public void setSelected(String selected) {
+		this.selected = selected;
+	}
+
+
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getAccount() {
+		return account;
+	}
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
+	public ArrayList<CartItemObject> getCioList() {
+		return cioList;
+	}
+	public void setCioList(ArrayList<CartItemObject> cioList) {
+		this.cioList = cioList;
+	}
+
+	public String getSuitPrice() {
+		return suitPrice;
+	}
+	public void setSuitPrice(String suitPrice) {
+		this.suitPrice = suitPrice;
+	}
+	public String getSuitPromotion() {
+		return suitPromotion;
+	}
+	public void setSuitPromotion(String suitPromotion) {
+		this.suitPromotion = suitPromotion;
+	}
+	
+	public String getSuitId() {
+		return suitId;
+	}
+	public void setSuitId(String suitId) {
+		this.suitId = suitId;
+	}
+
+	
+	public String getSubordinate() {
+		return subordinate;
+	}
+	public void setSubordinate(String subordinate) {
+		this.subordinate = subordinate;
+	}
+
+
+	/*public String getSeller() {
+		return seller;
+	}
+	public void setSeller(String seller) {
+		this.seller = seller;
+	}
+	public String getChannelType() {
+		return channelType;
+	}
+	public void setChannelType(String channelType) {
+		this.channelType = channelType;
+	}
+	public String getFormatType() {
+		return formatType;
+	}
+	public void setFormatType(String formatType) {
+		this.formatType = formatType;
+	}
+	public String getSizeType() {
+		return sizeType;
+	}
+	public void setSizeType(String sizeType) {
+		this.sizeType = sizeType;
+	}
+	public String getClothType() {
+		return clothType;
+	}
+	public void setClothType(String clothType) {
+		this.clothType = clothType;
+	}
+	public String getStyleType() {
+		return styleType;
+	}
+	public void setStyleType(String styleType) {
+		this.styleType = styleType;
+	}*/
+
+
+	String account;
+	String productId;
+	String type;
+	String image;
+	String name;
+	String color;
+	String size;
+	String count;
+	String price;
+	String amount; 
+	String suitPrice;
+	String suitPromotion;
+	String selected;
+	String suitId;
+	String subordinate; 
+	//新增订单字段
+	/*String seller;//经手人
+	String channelType;//下单渠道，0为原线上，1为线下
+	String formatType;//版式
+	String sizeType;//衣码
+	String clothType;//布料
+	String styleType;//风格
+*/	
+	ArrayList<CartItemObject> cioList;
+}

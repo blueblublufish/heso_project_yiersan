@@ -1,0 +1,10 @@
+2018-04-20 16:18:00 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-20 16:18:02 [com.heso.service.yesUser.YesUserService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(height=121,weight=66,bust=22,waist=33,hip=0,shoesize='ии??иж?????',shoulder11,sha' at line 1
+ 2018-04-20 16:18:28 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-20 16:18:29 [com.heso.service.yesUser.YesUserService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(height=121,weight=66,bust=22,waist=33,hip=0,shoesize='ии??иж?????',shoulder11,sha' at line 1
+ 2018-04-20 16:21:26 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-20 16:21:28 [com.heso.service.yesUser.YesUserService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(height=121,weight=66,bust=22,waist=33,hip=0,shoesize='33',shoulder11,shank22,th' at line 1
+ 2018-04-20 16:22:16 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-20 16:22:17 [com.heso.service.yesUser.YesUserService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(height=121,weight=66,bust=22,waist=33,hip=0,shoesize='33',shoulder=11,shank=22,' at line 1
+ 2018-04-20 16:43:34 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

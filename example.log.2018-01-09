@@ -1,0 +1,33 @@
+2018-01-09 10:03:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:03:37 [com.heso.service.cart.CartService]-[ERROR] >>>>>>>>>>>>>>>>>>>>>¿â´æ²»×ã
+ 2018-01-09 10:03:37 [com.heso.service.cart.CartService]-[ERROR] 101131
+ 2018-01-09 10:04:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:04:05 [com.heso.service.cart.CartService]-[ERROR] >>>>>>>>>>>>>>>>>>>>>¿â´æ²»×ã
+ 2018-01-09 10:04:05 [com.heso.service.cart.CartService]-[ERROR] 101131
+ 2018-01-09 10:04:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:04:40 [com.heso.service.cart.CartService]-[ERROR] >>>>>>>>>>>>>>>>>>>>>¿â´æ²»×ã
+ 2018-01-09 10:04:40 [com.heso.service.cart.CartService]-[ERROR] 101131
+ 2018-01-09 10:05:26 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:05:27 [com.heso.service.cart.CartService]-[ERROR] >>>>>>>>>>>>>>>>>>>>>¿â´æ²»×ã
+ 2018-01-09 10:05:27 [com.heso.service.cart.CartService]-[ERROR] 101131
+ 2018-01-09 10:15:17 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:15:18 [com.heso.service.cart.CartService]-[ERROR] >>>>>>>>>>>>>>>>>>>>>¿â´æ²»×ã
+ 2018-01-09 10:16:16 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:16:17 [com.heso.service.cart.CartService]-[ERROR] 101130
+ 2018-01-09 10:17:34 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:18:36 [com.heso.service.cart.CartService]-[ERROR] 101130
+ 2018-01-09 10:21:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:40:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 10:40:05 [com.heso.service.cart.CartService]-[ERROR] >>>>>>>>>>>>>>>>>>>>>¿â´æ²»×ã
+ 2018-01-09 12:13:32 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 12:13:33 [com.heso.service.mall.MallService]-[ERROR] 001091
+ 2018-01-09 12:15:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 14:01:26 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 16:40:44 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 16:40:45 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101268
+ 2018-01-09 16:42:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 17:09:11 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 17:09:15 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-09 17:09:37 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-09 17:12:32 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

@@ -1,0 +1,16 @@
+2016-06-29 21:20:47 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-29 21:20:47 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Parameter index out of range (2 > number of parameters, which is 1).
+ 2016-06-29 21:21:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-29 21:21:52 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Parameter index out of range (2 > number of parameters, which is 1).
+ 2016-06-29 21:22:30 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-29 21:22:31 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Parameter index out of range (2 > number of parameters, which is 1).
+ 2016-06-29 21:23:05 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-29 21:23:05 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Parameter index out of range (3 > number of parameters, which is 2).
+ 2016-06-29 21:24:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-29 21:24:02 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Parameter index out of range (3 > number of parameters, which is 2).
+ 2016-06-29 21:25:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-29 21:25:13 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '£©' at line 1
+ 2016-06-29 21:26:49 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-29 21:26:50 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '£©' at line 1
+ 2016-06-29 21:30:30 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 

@@ -1,0 +1,7 @@
+2018-12-28 19:01:35 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-12-28 19:01:36 [com.heso.service.mall.MallService]-[ERROR] 101265
+ 2018-12-28 19:02:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-12-28 20:11:59 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-12-28 20:12:01 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Array index out of range: 0
+ 2018-12-28 20:19:24 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

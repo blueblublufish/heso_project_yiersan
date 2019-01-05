@@ -1,0 +1,39 @@
+2018-10-22 10:22:25 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 10:22:27 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] >>>>>>>>>预约服务：新增订单失败
+ 2018-10-22 10:41:46 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 10:41:48 [com.heso.service.article.ArticleService]-[ERROR] Subquery returns more than 1 row
+ 2018-10-22 10:42:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 10:42:03 [com.heso.service.article.ArticleService]-[ERROR] Subquery returns more than 1 row
+ 2018-10-22 10:43:15 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 10:43:37 [com.heso.service.article.ArticleService]-[ERROR] Subquery returns more than 1 row
+ 2018-10-22 10:44:15 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 10:44:28 [com.heso.service.article.ArticleService]-[ERROR] Subquery returns more than 1 row
+ 2018-10-22 10:48:06 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 10:59:15 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:06:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:11:29 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:11:30 [com.heso.service.article.ArticleService]-[ERROR] 
+ 2018-10-22 11:11:44 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:11:48 [com.heso.service.article.ArticleService]-[ERROR] 
+ 2018-10-22 11:12:27 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:12:31 [com.heso.service.article.ArticleService]-[ERROR] 
+ 2018-10-22 11:12:54 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:13:18 [com.heso.service.article.ArticleService]-[ERROR] 
+ 2018-10-22 11:13:58 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:14:15 [com.heso.service.article.ArticleService]-[ERROR] 
+ 2018-10-22 11:17:34 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:17:36 [com.heso.service.article.ArticleService]-[ERROR] 
+ 2018-10-22 11:17:43 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:18:47 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:28:31 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:30:31 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 11:31:03 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 16:25:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 16:25:40 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Array index out of range: 0
+ 2018-10-22 16:26:23 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 18:22:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 18:51:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 19:21:57 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 19:22:40 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-22 19:23:32 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

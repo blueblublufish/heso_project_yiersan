@@ -1,0 +1,187 @@
+package com.heso.transaction.outer;
+
+import java.util.ArrayList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Node;
+
+import com.heso.common.GlobalCache;
+import com.heso.data.TransDataProcess;
+import com.heso.service.mall.MallService;
+import com.heso.service.mall.entity.MallServiceReturnObject;
+import com.heso.service.mall.entity.ProductItemObject;
+import com.heso.service.mall.entity.SuitMatchArgsObject;
+import com.heso.service.sms.SmsService;
+import com.heso.service.user.UserService;
+import com.heso.service.user.entity.UserServiceReturnObject;
+import com.heso.transaction.AbstractInterfaceClass;
+import com.heso.utility.StringTools;
+
+/**
+ * 匹配套装并返回结果
+ * 
+ * @author xujun
+ * 
+ */
+public class Transaction_001012 extends AbstractInterfaceClass {
+	private static final Log logger = LogFactory.getLog(Transaction_001012.class);
+
+	@Override
+	public String execute(Node xmlBody, String IPAddress) {
+		try {
+			// 取出数据
+			String account = xmlBody.selectSingleNode("account").getText();
+			String scene = xmlBody.selectSingleNode("scene").getText();
+			String style = xmlBody.selectSingleNode("style").getText();
+			String age = xmlBody.selectSingleNode("age").getText();
+			String name = xmlBody.selectSingleNode("name").getText();
+			String recStart = xmlBody.selectSingleNode("recStart").getText();
+			String recCount = xmlBody.selectSingleNode("recCount").getText();
+			String orderBy = xmlBody.selectSingleNode("orderBy").getText();
+			String category = xmlBody.selectSingleNode("category").getText();
+			String type = xmlBody.selectSingleNode("type").getText();
+			String sex = xmlBody.selectSingleNode("sex").getText();
+			String supply = xmlBody.selectSingleNode("supply").getText();
+			SuitMatchArgsObject smao = new SuitMatchArgsObject();
+			smao.setScene(scene);
+			smao.setStyle(style);
+			smao.setAge(age);
+			smao.setName(name);
+			smao.setBust("");
+			smao.setHeight("");
+			smao.setWaist("");
+			smao.setHip("");
+			smao.setYard("");
+			smao.setShape("");
+			smao.setSex(sex);
+			smao.setSupply(supply);
+			// 读取个人配置文件
+			if (!account.isEmpty()) {
+				// 校验token
+				String token = xmlBody.selectSingleNode("token").getText();
+				if (!super.tokenAuth(account, token))
+					return super.ERROR_TOKEN;
+
+				UserServiceReturnObject usro = new UserService().getUserProfiles(account);
+				if (usro.getCode().equals("000000")) {
+					smao.setBust(usro.getUpo().getBust());
+					smao.setHeight(usro.getUpo().getHeight());
+					smao.setWaist(usro.getUpo().getWaist());
+					smao.setHip(usro.getUpo().getHip());
+					smao.setYard(usro.getUpo().getShoesize());
+					smao.setShape(usro.getUpo().getShape());
+				}
+			}
+			MallServiceReturnObject msro = new MallServiceReturnObject();
+			// 匹配套装
+			if(type.equals("1")){
+				 msro = new MallService().matchSuit1(smao, recStart, recCount, orderBy ,category);
+			}else if(type.equals("2")){
+				 msro = new MallService().matchSuit2(smao, recStart, recCount, orderBy ,category);
+			}
+			
+			// 设置返回数据
+			StringBuffer sb = new StringBuffer();
+			if (msro.getCode().equals("000000")) {
+				sb.append("<recCount>" + msro.getRecCount() + "</recCount>");
+				for (int i = 0; i < msro.getPioList().size(); i++) {
+					ProductItemObject suit = msro.getPioList().get(i);
+					sb.append("<suitItem>");
+					sb.append("<productId>" + suit.getProductId() + "</productId>");
+					sb.append("<name>" + suit.getName() + "</name>");
+					sb.append("<desc>" + suit.getDesc() + "</desc>");
+					sb.append("<category>" + suit.getCategory() + "</category>");
+					sb.append("<designName>" + suit.getDesignName() + "</designName>");
+					sb.append("<scene>" + suit.getScene() + "</scene>");
+					sb.append("<style>" + suit.getStyle() + "</style>");
+					sb.append("<shape>" + suit.getShape() + "</shape>");
+					sb.append("<ageType>" + suit.getAgeType() + "</ageType>");
+					sb.append("<price>" + suit.getPrice() + "</price>");
+					sb.append("<suitPrice>" + suit.getSuitPrice() + "</suitPrice>");
+					sb.append("<discountPrice>" + suit.getDiscountPrice() + "</discountPrice>");
+					sb.append("<soldCount>" + suit.getSoldCount() + "</soldCount>");
+					sb.append("<imgFront>" + suit.getImgFront() + "</imgFront>");
+					sb.append("<imgBehind>" + suit.getImgBehind() + "</imgBehind>");
+					sb.append("<images>" + suit.getImages() + "</images>");
+					sb.append("<stockStatus>"+suit.getStockStatus()+"</stockStatus>");
+					ArrayList<ProductItemObject> goodsList = suit.getGoodsList();
+					if(goodsList!=null&&goodsList.size()!=0){
+						for (int j = 0; j < goodsList.size(); j++) {
+							ProductItemObject item = goodsList.get(j);
+							sb.append("<goodsItem>");
+							sb.append("<productId>" + item.getProductId() + "</productId>");
+							sb.append("<name>" + item.getName() + "</name>");
+							sb.append("<desc>" + item.getDesc() + "</desc>");
+							sb.append("<category>" + item.getCategory() + "</category>");
+							sb.append("<metarialDesc>" + item.getMetarialDesc() + "</metarialDesc>");
+							sb.append("<supplyName>" + item.getSupplyName() + "</supplyName>");
+							sb.append("<color>" + item.getColor() + "</color>");
+							sb.append("<price>" + item.getPrice() + "</price>");
+							sb.append("<suitPrice>" + item.getSuitPrice() + "</suitPrice>");
+							sb.append("<discountPrice>" + item.getDiscountPrice() + "</discountPrice>");
+							sb.append("<size>" + item.getSize() + "</size>");
+							sb.append("<stockStatus>" + item.getStockStatus() + "</stockStatus>");
+							sb.append("<stockCount>" + item.getStockCount() + "</stockCount>");
+							sb.append("<soldCount>" + item.getSoldCount() + "</soldCount>");
+							sb.append("<imgFront>" + item.getImgFront() + "</imgFront>");
+							sb.append("<imgBehind>" + item.getImgBehind() + "</imgBehind>");
+							sb.append("<stockStatus>"+item.getStockStatus()+"</stockStatus>");
+							sb.append("</goodsItem>");
+						}
+					}else {
+						sb.append("<goodsItem></goodsItem>");
+					}
+				
+					sb.append("</suitItem>");
+				}
+			}
+
+			String xmlBodyStr = super.buildResp(msro.getCode(), sb.toString());
+			return xmlBodyStr;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return super.ERROR_RETURN;
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version='1.0' encoding='utf-8'?>");
+		sb.append("<message>");
+		sb.append("<head>");
+		sb.append("<type>001012</type>");
+		sb.append("<messageId>1</messageId>");
+		sb.append("<agentId>001</agentId>");
+		sb.append("<digest>MD5数字签名</digest>");
+		sb.append("</head>");
+		sb.append("<body>");
+		sb.append("<account></account>");
+		sb.append("<token>0</token>");
+		sb.append("<scene></scene>");
+		sb.append("<style></style>");
+		sb.append("<recStart>0</recStart>");
+		sb.append("<recCount>6</recCount>");
+		sb.append("<orderBy></orderBy>");
+		sb.append("<category></category>");
+		sb.append("<type>1</type>");
+		sb.append("<sex>1</sex>");
+		sb.append("<age></age>");
+		sb.append("<name></name>");
+		sb.append("<shape></shape>"); 	
+		sb.append("</body>");
+		sb.append("</message>");
+
+		try {
+			new TransDataProcess().execute(sb.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="project_yiersan"
+  id="myeclipse.1456204727354"
+  context-root="/heso_project_yiersan"
+  j2ee-spec="5.0"
+  archive="project_yiersan.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

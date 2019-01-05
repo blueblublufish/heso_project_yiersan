@@ -1,0 +1,5 @@
+2016-05-27 18:58:17 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-27 18:58:18 [quartz.job.Upload]-[ERROR] 101506
+ 2016-05-27 18:59:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-27 18:59:05 [quartz.job.Upload]-[ERROR] Array index out of range: 0
+ 

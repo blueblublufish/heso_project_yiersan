@@ -1,0 +1,40 @@
+2017-11-23 13:54:16 [com.heso.service.yesUser.YesUserService]-[ERROR] Data truncation: Data too long for column 'SEX' at row 1
+ 2017-11-23 14:03:23 [com.heso.service.yesUser.YesUserService]-[ERROR] 
+ 2017-11-23 14:05:48 [com.heso.service.yesUser.YesUserService]-[ERROR] 
+ 2017-11-23 14:06:14 [com.heso.service.yesUser.YesUserService]-[ERROR] 
+ 2017-11-23 14:14:22 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Incorrect integer value: '' for column 'pay_type' at row 1
+ 2017-11-23 14:14:22 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 14:16:47 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Incorrect integer value: '' for column 'pay_type' at row 1
+ 2017-11-23 14:18:11 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 14:19:23 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] String index out of range: 2
+ 2017-11-23 14:19:23 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 14:24:11 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] String index out of range: 2
+ 2017-11-23 14:24:11 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 15:07:40 [com.heso.service.yesUser.YesUserService]-[ERROR] 
+ 2017-11-23 15:14:18 [com.heso.service.yesUser.YesUserService]-[ERROR] 
+ 2017-11-23 16:00:34 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-23 16:07:47 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2017-11-23 16:19:58 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-23 16:24:45 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-23 16:25:01 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-23 16:29:22 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2017-11-23 16:30:38 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-23 16:35:10 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Incorrect integer value: '' for column 'pay_type' at row 1
+ 2017-11-23 16:35:27 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 16:35:28 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 16:37:00 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Incorrect integer value: '' for column 'pay_type' at row 1
+ 2017-11-23 16:39:16 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 16:39:17 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 16:40:54 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Incorrect integer value: '' for column 'pay_type' at row 1
+ 2017-11-23 16:43:05 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 16:43:06 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 16:52:42 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] String index out of range: 2
+ 2017-11-23 16:52:42 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 16:52:49 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-23 16:55:09 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] String index out of range: 2
+ 2017-11-23 16:55:09 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 16:55:10 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-23 16:57:59 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-23 17:00:23 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-23 17:13:04 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 

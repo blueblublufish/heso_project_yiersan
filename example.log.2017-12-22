@@ -1,0 +1,7 @@
+2017-12-22 12:40:29 [com.heso.service.article.ArticleService]-[ERROR] Unknown column 'hdc.videoname' in 'field list'
+ 2017-12-22 12:41:08 [com.heso.service.article.ArticleService]-[ERROR] Unknown column 'hdc.videoname' in 'field list'
+ 2017-12-22 13:17:51 [com.heso.service.article.ArticleService]-[ERROR] Unknown column 'hdc.videoname' in 'field list'
+ 2017-12-22 13:25:44 [com.heso.service.article.ArticleService]-[ERROR] No operations allowed after connection closed.
+ 2017-12-22 13:26:56 [com.heso.service.article.ArticleService]-[ERROR] Unknown column 'hdc.designerid' in 'where clause'
+ 2017-12-22 13:28:17 [com.heso.service.article.ArticleService]-[ERROR] Unknown column 'hdc.designerid' in 'where clause'
+ 

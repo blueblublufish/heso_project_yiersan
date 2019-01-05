@@ -1,0 +1,11 @@
+2018-07-23 13:43:43 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-23 13:43:44 [com.heso.service.expert.ExpertService]-[ERROR] 101206
+ 2018-07-23 13:44:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-23 13:45:12 [com.heso.service.expert.ExpertService]-[ERROR] 101206
+ 2018-07-23 13:47:09 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-23 13:47:56 [com.heso.service.expert.ExpertService]-[ERROR] 101206
+ 2018-07-23 13:54:28 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-23 14:00:05 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-23 14:02:49 [com.heso.service.expert.ExpertService]-[ERROR] No operations allowed after connection closed.
+ 2018-07-23 14:03:06 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

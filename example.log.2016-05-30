@@ -1,0 +1,6 @@
+2016-05-30 11:29:06 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-30 11:29:35 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-30 11:29:56 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-30 11:37:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-30 11:37:57 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 

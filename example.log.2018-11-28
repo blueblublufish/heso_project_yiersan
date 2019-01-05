@@ -1,0 +1,17 @@
+2018-11-28 10:32:05 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 10:32:07 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Array index out of range: 0
+ 2018-11-28 10:34:09 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 10:41:35 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 10:41:41 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] For input string: "4590.00"
+ 2018-11-28 10:44:10 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 10:44:12 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] For input string: "4590.00"
+ 2018-11-28 10:45:35 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 10:45:36 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] For input string: "4590.00"
+ 2018-11-28 10:46:14 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 10:46:16 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] For input string: "4590.00"
+ 2018-11-28 10:52:34 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 10:52:36 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] String index out of range: -1
+ 2018-11-28 10:56:10 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 11:02:18 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-11-28 11:12:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

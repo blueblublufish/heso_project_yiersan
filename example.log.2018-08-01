@@ -1,0 +1,6 @@
+2018-08-01 11:29:48 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-01 11:29:49 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] >>>>>>>>>预约服务：查询服务对应设计师价格失败
+ 2018-08-01 11:49:30 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-01 11:55:56 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-01 11:57:46 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

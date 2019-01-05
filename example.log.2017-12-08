@@ -1,0 +1,63 @@
+2017-12-08 10:20:44 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:21:56 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:23:12 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ad.ADMIN_ID=hdp.DESIGNERID' at line 1
+ 2017-12-08 10:23:56 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ad.ADMIN_ID=hdp.DESIGNERID' at line 1
+ 2017-12-08 10:24:13 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:32:50 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:32:58 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:36:39 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:42:47 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:43:05 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:43:52 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:44:20 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:44:48 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:45:30 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:45:50 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-08 10:49:14 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC ,NAME,IMAGE,PRICE FROM heso_designer_place as hdp, heso_admin as ad WHERE C' at line 1
+ 2017-12-08 10:51:11 [com.heso.service.mall.MallService]-[ERROR] Unknown column 'hpd.DESIGNERID' in 'field list'
+ 2017-12-08 17:40:14 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2017-12-08 17:40:54 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] A PooledConnection that has already signalled a Connection error is still in use!
+ 2017-12-08 17:40:54 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] Another error has occurred [ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state. ] which will not be reported to listeners!
+ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:888)
+	at com.mysql.jdbc.Connection.getMutex(Connection.java:3755)
+	at com.mysql.jdbc.Connection.rollback(Connection.java:5251)
+	at com.mchange.v2.c3p0.impl.NewProxyConnection.rollback(NewProxyConnection.java:860)
+	at com.heso.service.order.consume.ConsumeOrder.genarate2(ConsumeOrder.java:466)
+	at com.heso.service.order.consume.ConsumeOrder.innerOrder(ConsumeOrder.java:1243)
+	at com.heso.transaction.outer.Transaction_001080.execute(Transaction_001080.java:227)
+	at com.heso.data.TransDataProcess.execute(TransDataProcess.java:101)
+	at com.heso.transaction.outer.Transaction_001080.main(Transaction_001080.java:378)
+2017-12-08 17:40:59 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-12-08 17:41:00 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-12-08 17:42:29 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2017-12-08 17:42:31 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] A PooledConnection that has already signalled a Connection error is still in use!
+ 2017-12-08 17:42:31 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] Another error has occurred [ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state. ] which will not be reported to listeners!
+ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:888)
+	at com.mysql.jdbc.Connection.getMutex(Connection.java:3755)
+	at com.mysql.jdbc.Connection.rollback(Connection.java:5251)
+	at com.mchange.v2.c3p0.impl.NewProxyConnection.rollback(NewProxyConnection.java:860)
+	at com.heso.service.order.consume.ConsumeOrder.genarate2(ConsumeOrder.java:466)
+	at com.heso.service.order.consume.ConsumeOrder.innerOrder(ConsumeOrder.java:1243)
+	at com.heso.transaction.outer.Transaction_001080.execute(Transaction_001080.java:227)
+	at com.heso.data.TransDataProcess.execute(TransDataProcess.java:101)
+	at com.heso.transaction.outer.Transaction_001080.main(Transaction_001080.java:378)
+2017-12-08 17:42:32 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-12-08 17:42:33 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-12-08 17:43:21 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2017-12-08 17:43:22 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] A PooledConnection that has already signalled a Connection error is still in use!
+ 2017-12-08 17:43:22 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] Another error has occurred [ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state. ] which will not be reported to listeners!
+ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:888)
+	at com.mysql.jdbc.Connection.getMutex(Connection.java:3755)
+	at com.mysql.jdbc.Connection.rollback(Connection.java:5251)
+	at com.mchange.v2.c3p0.impl.NewProxyConnection.rollback(NewProxyConnection.java:860)
+	at com.heso.service.order.consume.ConsumeOrder.genarate2(ConsumeOrder.java:466)
+	at com.heso.service.order.consume.ConsumeOrder.innerOrder(ConsumeOrder.java:1243)
+	at com.heso.transaction.outer.Transaction_001080.execute(Transaction_001080.java:227)
+	at com.heso.data.TransDataProcess.execute(TransDataProcess.java:101)
+	at com.heso.transaction.outer.Transaction_001080.main(Transaction_001080.java:378)
+2017-12-08 17:43:32 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-12-08 17:43:34 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 

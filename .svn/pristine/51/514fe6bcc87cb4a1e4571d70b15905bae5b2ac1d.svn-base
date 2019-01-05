@@ -1,0 +1,124 @@
+package com.heso.service.article.entity;
+
+import java.sql.Date;
+
+public class ArticleCommentDTO {
+	private String articleId;//ÎÄÕÂID
+	
+	private String comment;//ÄÚÈÝ
+	private String account;
+	private String goodCount;
+	private Date createTime;
+	private String readCount;
+	private String accountName;
+	public String getAccountName() {
+		return accountName;
+	} 
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	} 
+	private String videoId;//ÊÓÆµId
+
+	 
+	private String designerName ;
+	private String videonName ;
+	private String videoSrc ;
+	private String like ;
+	private String videoLength;
+	private String videoImage ;
+	private String image ;
+	private String dcreateTime ;
+	
+	public String getDcreateTime() {
+		return dcreateTime;
+	}
+	public void setDcreateTime(String dcreateTime) {
+		this.dcreateTime = dcreateTime;
+	}
+	public String getvideoId() {
+		return videoId;
+	}
+	public void setvideoId(String videoId) {
+		this.videoId = videoId;
+	}
+	public String getDesignerName() {
+		return designerName;
+	}
+	public void setDesignerName(String designerName) {
+		this.designerName = designerName;
+	}
+	public String getvideonName() {
+		return videonName;
+	}
+	public void setvideonName(String videonName) {
+		this.videonName = videonName;
+	}
+	public String getvideoSrc() {
+		return videoSrc;
+	}
+	public void setvideoSrc(String videoSrc) {
+		this.videoSrc = videoSrc;
+	}
+	public String getLike() {
+		return like;
+	}
+	public void setLike(String like) {
+		this.like = like;
+	}
+	public String getvideoLength() {
+		return videoLength;
+	}
+	public void setvideoLength(String videoLength) {
+		this.videoLength = videoLength;
+	}
+	public String getvideoImage() {
+		return videoImage;
+	}
+	public void setvideoImage(String videoImage) {
+		this.videoImage = videoImage;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public String getArticleId() {
+		return articleId;
+	}
+	public void setArticleId(String articleId) {
+		this.articleId = articleId;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	public String getaccount() {
+		return account;
+	}
+	public void setaccount(String account) {
+		this.account = account;
+	}
+	public String getGoodCount() {
+		return goodCount;
+	}
+	public void setGoodCount(String goodCount) {
+		this.goodCount = goodCount;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	public String getReadCount() {
+		return readCount;
+	}
+	public void setReadCount(String readCount) {
+		this.readCount = readCount;
+	}
+	 
+}
+ 

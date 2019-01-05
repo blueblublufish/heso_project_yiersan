@@ -1,0 +1,100 @@
+package com.heso.service.mall.entity;
+
+import com.heso.common.entity.CommonType;
+
+public class SuitMatchArgsObject {
+	public String getScene() {
+		return scene;
+	}
+	public void setScene(String scene) {
+		this.scene = scene;
+	}
+	public String getStyle() {
+		return style;
+	}
+	public void setStyle(String style) {
+		this.style = style;
+	}
+	public String getBust() {
+		return bust;
+	}
+	public void setBust(String bust) {
+		this.bust = bust;
+	}
+	public String getWaist() {
+		return waist;
+	}
+	public void setWaist(String waist) {
+		this.waist = waist;
+	}
+	public String getHip() {
+		return hip;
+	}
+	public void setHip(String hip) {
+		this.hip = hip;
+	}
+	public String getYard() {
+		return yard;
+	}
+	public void setYard(String yard) {
+		this.yard = yard;
+	}
+	public String getHeight() {
+		return height;
+	}
+	public void setHeight(String height) {
+		this.height = height;
+	}
+	public String getShape() {
+		return shape;
+	}
+	public void setShape(String shape) {
+		this.shape = shape;
+	}
+	public String getAge() {
+		return age;
+	}
+	public void setAge(String age) {
+		this.age = age;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	String season;
+	String scene;
+	String style;
+	String age;
+	String height;
+	String bust;
+	String waist;
+	String hip;
+	String yard;
+	String sex;
+	String supply;
+	
+	public String getSupply() {
+		return supply;
+	}
+	public void setSupply(String supply) {
+		this.supply = supply;
+	}
+	public String getSeason() {
+		return season;
+	}
+	public void setSeason(String season) {
+		this.season = season;
+	}
+	public String getSex() {
+		return sex;
+	}
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	String shape;
+	String name;
+}

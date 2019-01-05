@@ -1,0 +1,8 @@
+2016-06-05 13:54:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-05 13:58:37 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-05 14:05:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-05 14:05:14 [quartz.job.Upload]-[ERROR] 101506
+ 2016-06-05 14:05:23 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-05 14:05:24 [quartz.job.Upload]-[ERROR] 101506
+ 2016-06-05 14:05:24 [quartz.job.Upload]-[ERROR] 101506
+ 

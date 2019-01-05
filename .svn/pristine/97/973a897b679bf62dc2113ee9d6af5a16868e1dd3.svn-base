@@ -1,0 +1,133 @@
+package com.heso.transaction.outer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Element;
+import org.dom4j.Node;
+
+import com.heso.common.GlobalCache;
+import com.heso.data.TransDataProcess;
+import com.heso.service.cart.CartService;
+import com.heso.service.cart.entity.CartServiceReturnObject;
+import com.heso.service.order.consume.ConsumeOrder;
+import com.heso.service.order.consume.entity.ConsumeOrderObject;
+import com.heso.service.order.consume.entity.ConsumeOrderReturnObject;
+import com.heso.service.sms.SmsService;
+import com.heso.service.user.UserService;
+import com.heso.service.user.entity.UserServiceReturnObject;
+import com.heso.transaction.AbstractInterfaceClass;
+import com.heso.utility.StringTools;
+
+/**
+ * 查询订单列表
+ * 
+ * @author xujun
+ * 
+ */
+public class Transaction_001025 extends AbstractInterfaceClass {
+	private static final Log logger = LogFactory.getLog(Transaction_001025.class);
+
+	@Override
+	public String execute(Node xmlBody, String IPAddress) {
+		try {
+			// 取出数据
+			String account = xmlBody.selectSingleNode("account").getText();
+			String orderId = xmlBody.selectSingleNode("orderId").getText();
+			String payStatus = xmlBody.selectSingleNode("payStatus").getText();
+			String sendStatus = xmlBody.selectSingleNode("sendStatus").getText();
+			String returnStatus = xmlBody.selectSingleNode("returnStatus").getText();
+			String showStatus = xmlBody.selectSingleNode("showStatus").getText();
+			String recStart = xmlBody.selectSingleNode("recStart").getText();
+			String recCount = xmlBody.selectSingleNode("recCount").getText();
+
+			// 校验token
+			String token = xmlBody.selectSingleNode("token").getText();
+			if (!super.tokenAuth(account, token))
+				return super.ERROR_TOKEN;
+ 
+			// 设置返回数据
+			StringBuffer sb = new StringBuffer();
+			ConsumeOrderReturnObject coro = new ConsumeOrder().getInfo(account, orderId, payStatus, sendStatus, returnStatus, showStatus, Integer.parseInt(recStart), Integer.parseInt(recCount));
+			if (coro.getCode().equals("000000")) {
+				sb.append("<recCount>" + coro.getReccount() + "</recCount>");
+				for (ConsumeOrderObject coo : coro.getCooList()) {
+					sb.append("<orderItem>");
+					sb.append("<orderId>" + coo.getOrderId() + "</orderId>");
+					sb.append("<account>" + coo.getAccount() + "</account>");
+					sb.append("<createTime>" + coo.getCreateTime() + "</createTime>");
+					sb.append("<productId>" + coo.getProductId() + "</productId>");
+					sb.append("<type>" + coo.getType() + "</type>");
+					sb.append("<name>" + coo.getName() + "</name>");
+					sb.append("<image>" + coo.getImage() + "</image>");
+					sb.append("<count>" + coo.getCount() + "</count>");
+					sb.append("<price>" + coo.getPrice() + "</price>");
+					sb.append("<amount>" + coo.getAmount() + "</amount>");
+					sb.append("<color>" + coo.getColor() + "</color>");
+					sb.append("<size>" + coo.getSize() + "</size>");
+					sb.append("<payTime>" + coo.getPayTime() + "</payTime>");
+					sb.append("<payStatus>" + coo.getPayStatus() + "</payStatus>");
+					sb.append("<currency>" + coo.getCurrency() + "</currency>");
+					sb.append("<innerCoin>" + coo.getInnerCoin() + "</innerCoin>");
+					sb.append("<BonunPoint>" + coo.getBonusPoint() + "</BonunPoint>");
+					sb.append("<sendStatus>" + coo.getSendStatus() + "</sendStatus>");
+					sb.append("<returnStatus>" + coo.getReturnStatus() + "</returnStatus>");
+					sb.append("<receiveId>" + coo.getReceiveId() + "</receiveId>");
+					sb.append("<logistCom>"+coo.getLogistCom()+"</logistCom>");
+					sb.append("<trackingNum>"+coo.getTrackingNum()+"</trackingNum>");
+					sb.append("<showStatus>"+coo.getShowStatus()+"</showStatus>");
+					sb.append("<suitId>"+coo.getSuitId()+"</suitId>");
+					sb.append("<pointType>"+coo.getPointType()+"</pointType>");
+					sb.append("<sendTime>"+coo.getSendTime()+"</sendTime>");
+					sb.append("</orderItem>");
+				} 
+			}
+
+			String xmlBodyStr = super.buildResp(coro.getCode(), sb.toString());
+			return xmlBodyStr;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return super.ERROR_RETURN;
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version='1.0' encoding='utf-8'?>");
+		sb.append("<message>");
+		sb.append("<head>");
+		sb.append("<type>001025</type>");
+		sb.append("<messageId>1</messageId>");
+		sb.append("<agentId>001</agentId>");
+		sb.append("<digest>MD5数字签名</digest>");
+		sb.append("</head>");
+		sb.append("<body>");
+		sb.append("<account>in_0000000000000901</account>");
+		 
+		sb.append("<token>jjj</token>");
+		sb.append("<orderId>0000000000002934</orderId>");
+	
+		sb.append("<payStatus>0</payStatus>");
+		sb.append("<sendStatus>0</sendStatus>");
+		sb.append("<returnStatus>0</returnStatus>");
+		sb.append("<showStatus>3</showStatus>");
+		sb.append("<recStart>0</recStart>");
+		sb.append("<recCount>2</recCount>");
+		
+		sb.append("</body>");
+		sb.append("</message>");
+
+		try {
+			new TransDataProcess().execute(sb.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

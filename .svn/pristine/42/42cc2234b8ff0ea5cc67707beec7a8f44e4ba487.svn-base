@@ -1,0 +1,162 @@
+package com.heso.service.expert;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.heso.db.DatabaseMgr;
+import com.heso.service.article.ArticleService;
+import com.heso.service.mall.entity.MallServiceReturnObject;
+import com.heso.service.mall.entity.ProductItemObject;
+import com.heso.utility.ErrorProcess;
+
+import data.DataRow;
+import data.DataTable;
+/**
+ * 专家作品
+ * @author win10
+ *
+ */
+public class ExpertService {
+	
+	private static final Log logger = LogFactory.getLog(ExpertService.class);
+	 
+	
+	public static  MallServiceReturnObject getSuitInfo(String desingerId,String style,String sex) {
+		MallServiceReturnObject msro = new MallServiceReturnObject();
+		Connection conn = DatabaseMgr.getInstance().getConnection();
+
+		try {
+			// 获取套装列表
+			String sql = "select * from heso_product where DESIGNER=? and STYLE like " +
+					"'%"+style.trim()+"%'"+
+					" and SEX = ? and type = 2 and status = '1'";
+			 
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(desingerId);
+			//argsList.add(style);
+			argsList.add(sex);
+			DataTable dtSuit = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			if(dtSuit.getRows().size() <=0 ){
+				throw new Exception("101206");
+			}
+			ArrayList<ProductItemObject> pioSuitList = new ArrayList<ProductItemObject>();
+			for (int i = 0; i < dtSuit.getRows().size(); i++) {
+				DataRow dr = dtSuit.getRows().get(i);
+				ProductItemObject pioSuit = new ProductItemObject();
+				pioSuit.setProductId(dr.getString("product_id"));
+				pioSuit.setName(dr.getString("name"));
+				pioSuit.setDesc(dr.getString("desc"));
+				pioSuit.setCategory(dr.getString("category"));
+				pioSuit.setDesignName(dr.getString("designer_name"));
+				pioSuit.setScene(dr.getString("scene"));
+				pioSuit.setStyle(dr.getString("style"));
+				pioSuit.setAgeType(dr.getString("age_type"));
+				pioSuit.setShape(dr.getString("shape"));
+				pioSuit.setPrice(dr.getString("price"));
+				pioSuit.setDiscountPrice(dr.getString("discount_price"));
+				pioSuit.setSuitPrice(dr.getString("suit_price"));
+				pioSuit.setImgFront(dr.getString("img_front"));
+				pioSuit.setImgBehind(dr.getString("img_behind"));
+				pioSuit.setImages(dr.getString("images"));
+				pioSuit.setDesignerId(dr.getString("DESIGNER"));
+				pioSuit.setSex(dr.getString("sex"));
+				// 获取套装明细
+				sql = "select * from heso_product where product_id in (select PRODUCT_GOODS_ID from heso_product_detail where product_suit_id = ?) ORDER BY PRODUCT_ID";
+				argsList.clear();
+				argsList.add(pioSuit.getProductId());
+				DataTable dtGoods = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				ArrayList<ProductItemObject> pioGoodsList = new ArrayList<ProductItemObject>();
+				boolean status = true;
+				for (int j = 0; j < dtGoods.getRows().size(); j++) {
+					DataRow dr1 = dtGoods.getRows().get(j);
+					ProductItemObject pioGoods = new ProductItemObject();
+					pioGoods.setProductId(dr1.getString("product_id"));
+					pioGoods.setName(dr1.getString("name"));
+					pioGoods.setDesc(dr1.getString("desc"));
+					pioGoods.setCategory(dr1.getString("category"));
+					pioGoods.setMetarialDesc(dr1.getString("metarial_desc"));
+					pioGoods.setSupplyName(dr1.getString("supply_name"));
+					pioGoods.setColor(dr1.getString("color"));
+					pioGoods.setPrice(dr1.getString("price"));
+					pioGoods.setSuitPrice(dr1.getString("suit_price"));
+					pioGoods.setDiscountPrice(dr1.getString("discount_price"));
+					pioGoods.setStockStatus(dr1.getString("stock_status"));
+					pioGoods.setStockCount(dr1.getString("stock_count"));
+					pioGoods.setSoldCount(dr1.getString("sold_count"));
+					pioGoods.setImgFront(dr1.getString("img_front"));
+					pioGoods.setImgBehind(dr1.getString("img_behind"));
+					pioGoods.setStockStatus(dr1.getString("stock_status"));
+					pioGoodsList.add(pioGoods);
+					if(dr1.getString("stock_status").equals("0")){
+						status = false;
+					}
+				}
+				if(status){
+					pioSuit.setStockStatus("1");
+				}
+				// 添加到单品列表
+				pioSuit.setGoodsList(pioGoodsList);
+				// 添加套装列表
+				pioSuitList.add(pioSuit);
+			}
+			msro.setPioList(pioSuitList);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			msro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return msro;
+	}
+	public void getExpertDesign(String designer,String style,String sex){
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		DataRow dr = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = " SELECT * FROM heso_product WHERE DESIGNER= ? and STYLE= ? and SEX =?";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(designer);
+			argsList.add(style);
+			argsList.add(sex);
+			
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+ 			if(dt.getRows().size() <= 0 )
+				throw new Exception("101268");
+ 			//把所有数据存到DTO
+ 			for (int i = 0; i < dt.getRows().size(); i++) {
+				DataRow dr1 = dt.getRows().get(i);
+				dr.getString("");//获取字段名
+ 			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	public static void main(String[] args) {
+		MallServiceReturnObject object = getSuitInfo("1", "2", "0");
+		System.out.println("------");
+		
+	}
+}

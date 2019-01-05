@@ -1,0 +1,4 @@
+2018-12-30 21:30:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-12-30 21:30:23 [com.heso.service.cart.CartService]-[ERROR] Incorrect integer value: 'DAS017A' for column 'COUNT' at row 1
+ 2018-12-30 21:34:09 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

@@ -1,0 +1,13 @@
+2018-01-28 11:52:32 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-28 11:52:34 [com.heso.service.mall.MallService]-[ERROR] <<<<<<<<<<<<<
+ 2018-01-28 11:57:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-28 11:57:37 [com.heso.service.mall.MallService]-[ERROR] <<<<<<<<<<<<<
+ 2018-01-28 12:02:02 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-28 12:02:04 [com.heso.service.mall.MallService]-[ERROR] >>>>>>>>>>查询设计师日程表失败
+ 2018-01-28 12:02:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-28 12:02:40 [com.heso.service.mall.MallService]-[ERROR] >>>>>>>>>>查询设计师日程表失败
+ 2018-01-28 12:03:31 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-28 12:04:05 [com.heso.service.mall.MallService]-[ERROR] >>>>>>>>>>查询设计师日程表失败
+ 2018-01-28 12:13:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-28 12:14:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

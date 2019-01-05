@@ -1,0 +1,658 @@
+package com.heso.service.wardrobe;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import oracle.net.aso.a;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import antlr.Lookahead;
+
+import com.heso.db.DatabaseMgr;
+import com.heso.service.article.ArticleService;
+import com.heso.service.mall.MallService;
+import com.heso.service.mall.entity.MallServiceReturnObject;
+import com.heso.service.mall.entity.SuitMatchArgsObject;
+import com.heso.service.system.SystemType;
+import com.heso.service.user.UserService;
+import com.heso.service.user.entity.UserProfilesObject;
+import com.heso.service.user.entity.UserServiceReturnObject;
+import com.heso.service.wardrobe.entity.TripsuitDTO;
+import com.heso.service.wardrobe.entity.WardrobeDTO;
+import com.heso.service.wardrobe.entity.WardrobeServiceReturnObject;
+import com.heso.utility.ErrorProcess;
+import com.sun.accessibility.internal.resources.accessibility;
+
+import data.DataRow;
+import data.DataTable;
+/**
+ * 衣橱
+ * @author win10
+ *
+ */
+public class WardrobeService {
+	private static final Log logger = LogFactory.getLog(ArticleService.class);
+	
+	/**
+	 * 增加衣橱
+	 * @param wardrobeDTOs
+	 * @return
+	 */
+	public  WardrobeServiceReturnObject addMyWardrobe(List<WardrobeDTO> wardrobeDTOs){
+	    WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = "insert into heso_user_wardrobe (ACCOUNT,IMAGE,TYPE,CLOTH,SCENE,STYLE,COLOR,SUIT,UPLOAD,PATTERN,OUTLINE,NATURE,IS_GOOD,NAME)" +
+					"VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			for(WardrobeDTO dto: wardrobeDTOs){
+				ArrayList<Object> argsList = new ArrayList<Object>();
+				argsList.add(dto.getAccount());//
+				argsList.add(dto.getImage());//
+				argsList.add(dto.getType());//
+				argsList.add(dto.getCloth());//
+				argsList.add(dto.getScene());//
+				argsList.add(dto.getStyle());//
+				argsList.add(dto.getColor());//
+				argsList.add(dto.getSuit());//
+				argsList.add(dto.getUplaod());
+				argsList.add(dto.getPattern());//
+				argsList.add(dto.getOutline());//
+				argsList.add(dto.getCharater());//
+				argsList.add(dto.getIsGood());
+				argsList.add(dto.getName());
+				logger.info(">>>>>>>添加衣橱物品开始,account = "+dto.getAccount());
+				if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0)
+					throw new Exception("100303");
+				logger.info(">>>>>>>添加衣橱物品成功");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return wsro;
+	}
+	
+	/**
+	 * 查找衣橱
+	 * @param account
+	 * @param type
+	 * @param scene
+	 * @param style
+	 * @param suit
+	 * @param pattern
+	 * @param outline
+	 * @param charater
+	 * @return
+	 */
+	public  static  WardrobeServiceReturnObject getMyWardRobe(String account,String type,String scene,
+				String style,String suit,String pattern,String outline,String charater,String wid,String isGood){
+	    WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
+
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		ArrayList<Object> argsList = new ArrayList<Object>();
+		Connection conn = null;
+		ArrayList<WardrobeDTO> wardrobeDTOs = new ArrayList<WardrobeDTO>();
+		try {
+			conn = dbm.getConnection();
+			String sql = "SELECT * FROM heso_user_wardrobe where ACCOUNT = ? ";
+			argsList.add(account);
+			if(!type.isEmpty()&&type!=null){
+				sql = sql + " and TYPE = ?";//类型 裤子、衣服		
+				argsList.add(type);
+			}
+			if(!scene.isEmpty()&&scene!=null){
+				sql = sql + " and SCENE like '%"+scene+"%'";//场景		
+				//argsList.add(scene);
+			}
+			if(!style.isEmpty()&&style!=null){
+				sql = sql + " and STYLE = ?";//风格					
+				argsList.add(style);
+			}			
+			if(!suit.isEmpty()&&suit!=null){		
+				sql = sql + " and SUIT = ?";//套装是否
+				argsList.add(suit);
+			}
+			if(!pattern.isEmpty()&&pattern!=null){
+				sql = sql + " and PATTERN = ?";//款式
+				argsList.add(pattern);
+			}
+			if(!outline.isEmpty()&&outline!=null){
+				sql = sql + " and OUTLINE = ?";//轮廓
+				argsList.add(outline);
+			}
+			if(!charater.isEmpty()&&charater!=null){
+				sql = sql + " and NATURE = ?";//性格	
+				argsList.add(charater);
+			}
+			if(!wid.isEmpty()&&wid!=null){
+				sql = sql + " and ID = ?";//性格	
+				argsList.add(wid);
+			}
+			if(!isGood.isEmpty()&&isGood!=null){
+				sql = sql + " and IS_GOOD = ?";//性格	
+				argsList.add(isGood);
+			}
+			logger.info(">>>>>>>>>>>查找衣橱物品，account = "+account);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			int x = dt.getRows().size();
+ 			if(dt.getRows().size() <= 0 )
+				throw new Exception("001086");
+ 			logger.info(">>>>>>>>>>>查找衣橱物品成功");
+ 			for (int i = 0; i < dt.getRows().size(); i++) {
+				DataRow dr1 = dt.getRows().get(i);
+				String waccount =dr1.getString("ACCOUNT");
+				String wimage =dr1.getString("IMAGE");
+				String wtype =dr1.getString("TYPE");
+				String wcloth =dr1.getString("CLOTH");
+				String wscene =dr1.getString("SCENE");
+				String wstyle =dr1.getString("STYLE");
+				String wcolor =dr1.getString("COLOR");
+				String wsuit =dr1.getString("SUIT");
+				String wupload = dr1.getString("UPLOAD");
+				String wpattern = dr1.getString("PATTERN");
+				String woutline = dr1.getString("OUTLINE");
+				String wcharater = dr1.getString("NATURE");
+				String createTime = dr1.getString("CREATETIME");
+				String id = dr1.getString("ID");
+				String wisGood = dr1.getString("IS_GOOD");
+				String wname = dr1.getString("NAME");
+				WardrobeDTO dto = new WardrobeDTO();
+				dto.setAccount(waccount);
+				dto.setCreateTime(createTime);
+				dto.setImage(wimage);
+				dto.setType(wtype);
+				dto.setCloth(wcloth);
+				dto.setScene(wscene);
+				dto.setStyle(wstyle);
+				dto.setColor(wcolor);
+				dto.setSuit(wsuit);
+				dto.setUplaod(wupload);
+				dto.setPattern(wpattern);
+				dto.setOutline(woutline);
+				dto.setId(id);
+				dto.setCharater(wcharater);
+				dto.setIsGood(wisGood);
+				dto.setName(wname);
+				wardrobeDTOs.add(dto);
+				}
+ 		    wsro.setWardrobeList(wardrobeDTOs);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return wsro;
+	}
+	
+	public   WardrobeServiceReturnObject updateWardrobe(WardrobeDTO wardrobeDTO){
+		WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = "update heso_user_wardrobe set TYPE = ? , CLOTH = ? , SCENE = ? , STYLE = ? , " +
+					"COLOR = ?, SUIT = ?, UPLOAD = ?, PATTERN = ?, OUTLINE = ?, NATURE = ? where ID = ? and ACCOUNT = ?";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(wardrobeDTO.getType());
+			argsList.add(wardrobeDTO.getCloth());
+			argsList.add(wardrobeDTO.getScene());
+			argsList.add(wardrobeDTO.getStyle());
+			argsList.add(wardrobeDTO.getColor());
+			argsList.add(wardrobeDTO.getSuit());
+			argsList.add(wardrobeDTO.getUplaod());
+			argsList.add(wardrobeDTO.getPattern());
+			argsList.add(wardrobeDTO.getOutline());
+			argsList.add(wardrobeDTO.getCharater());
+			argsList.add(wardrobeDTO.getId());
+			argsList.add(wardrobeDTO.getAccount());
+			logger.info(">>>>>>>>>>>更新衣橱物品，account="+wardrobeDTO.getAccount()+"wardrobeId="+wardrobeDTO.getId());
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0)
+				throw new Exception("100303");
+			logger.info(">>>>>>>>>>>更新衣橱物品成功");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return wsro;
+	}
+	
+	/**
+	 * 删除衣橱衣服
+	 * @param Id
+	 * @return
+	 */
+	public   WardrobeServiceReturnObject delMyWardrobe(String Id){
+	    WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = "delete from heso_user_wardrobe where ID = ?";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(Id);
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0)
+				throw new Exception("001087");
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return wsro;
+	}
+	 
+	
+	/**
+	 * 查找用户信息
+	 * @param account
+	 * @return
+	 */
+	public  static UserServiceReturnObject getUserProfiles(String account)
+	{
+		// 初始化返回对象
+		UserServiceReturnObject usro = new UserServiceReturnObject();
+		usro.setCode("000000");
+
+		try {
+			String sql = "select * from heso_account_profiles where account = ? ";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(account);
+			DataTable dt = DatabaseMgr.getInstance().execSql(sql, argsList);
+			if (dt.getRows().size() != 1)
+				throw new Exception("100104");
+			
+			DataRow dr = dt.getRows().get(0);
+			
+			UserProfilesObject upo = new UserProfilesObject();
+			upo.setSex(dr.getString("sex"));
+			upo.setSexName("");
+			upo.setBirthday(dr.getString("birthday"));
+			upo.setHeight(dr.getString("height"));
+			upo.setWeight(dr.getString("weight"));
+			upo.setBust(dr.getString("bust"));
+			upo.setWaist(dr.getString("waist"));
+			upo.setHip(dr.getString("hip"));
+			upo.setImage(dr.getString("image"));
+			upo.setShoesize(dr.getString("shoesize"));
+			upo.setMarriage(dr.getString("marriage"));
+			upo.setShape(dr.getString("shape"));
+			upo.setShapeName("");
+			upo.setStarsign(dr.getString("starsign"));
+			upo.setAnimalsign(dr.getString("animalsign"));
+			upo.setFace(dr.getString("face"));
+			upo.setFaceName("");
+			upo.setHair(dr.getString("hair"));
+			upo.setHairName("");
+			usro.setUpo(upo);
+		
+		} catch (Exception e) {
+			// TODO: handle exception
+			usro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return usro;
+	}
+	
+	public static WardrobeServiceReturnObject getTripsuit(String account){
+		 WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
+			DatabaseMgr dbm = DatabaseMgr.getInstance();
+			Connection conn = null;
+			try {
+				conn = dbm.getConnection();
+				String sql = "SELECT * FROM heso_tripsuit where TRIPCOUNT = (select MAX(TRIPCOUNT)  from heso_tripsuit t WHERE ACCOUNT = ? );";
+				ArrayList<Object> argsList = new ArrayList<Object>();
+				argsList.add(account);
+				ArrayList<TripsuitDTO> dtos = new ArrayList<TripsuitDTO>();
+				DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+	 			if(dt.getRows().size() <= 0 )
+					throw new Exception("101268");
+	 			logger.info(">>>>>>>>>>>查找衣橱物品成功");
+	 			for (int i = 0; i < dt.getRows().size(); i++) {
+					DataRow dr1 = dt.getRows().get(i);
+					String aaccount =dr1.getString("ACCOUNT");
+					String tripDate =dr1.getString("TRIPDATE");
+					String place =dr1.getString("PLACE");
+					String temperature =dr1.getString("TEMPERATURE");
+					String scene =dr1.getString("SCENE");
+					String wardrobeId =dr1.getString("WARDROBEID");
+					String productId = dr1.getString("PRODUCTID");
+					String flag = dr1.getString("FLAG");
+					List<TripsuitDTO> wardrobeList = new ArrayList<TripsuitDTO>();
+					if(!wardrobeId.isEmpty()&&wardrobeId!=null){
+						wardrobeList = getWardrobeDetail(wardrobeId);						
+					}
+					List<TripsuitDTO> productList = new ArrayList<TripsuitDTO>();
+					if(!productId.isEmpty()&&productId!=null){
+						productList = getProductDetail(productId);						
+					}
+					TripsuitDTO dto = new TripsuitDTO();
+					dto.setAccount(aaccount);
+					dto.setPlace(place);
+					dto.setProductId(productId);
+					dto.setScene(scene);
+					dto.setSuit_flag(flag);
+					dto.setTemperatuure(temperature);
+					dto.setTripDate(tripDate);
+					dto.setWardrobeId(wardrobeId);
+					dto.setWardrobeList(wardrobeList);
+					dto.setProductList(productList);
+					dtos.add(dto);
+					
+		 
+					}
+	 		    wsro.setTripsuitList(dtos);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				logger.error(e.getMessage());
+				System.out.println(e.getMessage());
+			}finally{
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return wsro;
+			 
+		}
+	/**
+	 * 根据id获取衣橱物品详情
+	 * @param products
+	 * @return
+	 */
+	public static List<TripsuitDTO> getWardrobeDetail(String products){
+		String sql = "SELECT ID,NAME,IMAGE from heso_user_wardrobe where ID in (" +
+				products+
+				")";
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		List<TripsuitDTO> list = new ArrayList<TripsuitDTO>();
+				
+		Connection conn = null;
+		ArrayList<Object> argsList = new ArrayList<Object>();
+		try {
+			conn = dbm.getConnection();
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			if(dt.getRows().size()<=0){
+				logger.error(">>>>>>>>>>>查询衣橱物品失败");
+				throw new Exception("001089");
+			}
+			for(int i = 0;i<dt.getRows().size();i++){
+				TripsuitDTO td = new TripsuitDTO();
+				td.setImage(dt.getRows().get(i).getString("IMAGE"));
+				td.setName(dt.getRows().get(i).getString("NAME"));
+				td.setWardrobeId(dt.getRows().get(i).getString("ID"));
+				list.add(td);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error(e.getMessage());
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return list;
+		
+	}
+	
+	public static List<TripsuitDTO> getProductDetail(String products){
+		
+		
+	
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		List<TripsuitDTO> list = new ArrayList<TripsuitDTO>();
+				
+		Connection conn = null;
+		ArrayList<Object> argsList = new ArrayList<Object>();
+		try {
+			String sql = "SELECT PRODUCT_ID,NAME,PRICE,IMG_FRONT ,DISCOUNT_PRICE FROM heso_product WHERE PRODUCT_ID = ?" ;
+			String[] sourceStrArray = products.split(",");
+			conn = dbm.getConnection();
+			for (int i = 0; i < sourceStrArray.length; i++) {
+				TripsuitDTO td = new TripsuitDTO();
+				 String productId = sourceStrArray[i];
+				 argsList.clear();
+				 argsList.add(productId);
+				 DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				 if(dt.getRows().size()<=0){
+						logger.error(">>>>>>>>>>>查询商品失败");
+						throw new Exception("");
+					}
+					td.setImage(dt.getRows().get(0).getString("IMG_FRONT"));
+					td.setName(dt.getRows().get(0).getString("NAME"));
+					td.setProductId(dt.getRows().get(0).getString("PRODUCT_ID"));
+					td.setPrice(dt.getRows().get(0).getString("PRICE"));
+					td.setPrice2(dt.getRows().get(0).getString("DISCOUNT_PRICE"));
+					list.add(td);
+			}
+			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error(e.getMessage());
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return list;
+		
+	}
+	
+	
+	/**
+	 * 新增行程套装 
+	 * @param dtos
+	 */
+	
+	//保留static方便测试
+	public static WardrobeServiceReturnObject addTripsuit(List<TripsuitDTO> dtos,String account){
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		SuitMatchArgsObject smao = new SuitMatchArgsObject();
+		try {
+			
+			//查询计数器
+			ArrayList<Object> argsList1 = new ArrayList<Object>();
+			conn = dbm.getConnection();
+			String sql1 = "SELECT TRIPCOUNT FROM heso_tripsuit where ID = (select MAX(ID)  from heso_tripsuit t WHERE ACCOUNT = ? ORDER BY ID);";
+			argsList1.add(account);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql1, argsList1, conn);
+			int count = 0 ;
+			if(dt.getRows().size()!=0){
+				 count = dt.getRows().get(0).getInt("TRIPCOUNT");
+			}
+			count = count + 1 ;
+			//查询用户喜好
+			//根据喜好智能搭配套装
+		 
+			UserServiceReturnObject usro = getUserProfiles(account);
+			
+			if (usro.getCode().equals("000000")) {
+				smao.setBust(usro.getUpo().getBust());
+				smao.setHeight(usro.getUpo().getHeight());
+				smao.setWaist(usro.getUpo().getWaist());
+				smao.setHip(usro.getUpo().getHip());
+				smao.setYard(usro.getUpo().getShoesize());
+				smao.setShape(usro.getUpo().getShape());
+				smao.setScene("");
+				smao.setStyle("");
+				smao.setAge("");
+				smao.setName("");
+				smao.setBust("");
+				smao.setHeight("");
+				smao.setWaist("");
+				smao.setHip("");
+				smao.setYard("");
+				smao.setShape("");
+
+			}
+			String sql = "insert into heso_tripsuit (ACCOUNT,TRIPDATE,SCENE,PLACE,TEMPERATURE,WARDROBEID,PRODUCTID,FLAG,TRIPCOUNT)" +
+					"VALUES(?,?,?,?,?,?,?,?,?)";
+			for(TripsuitDTO dto : dtos){
+				ArrayList<Object> argsList = new ArrayList<Object>();
+				String scene = dto.getScene();
+				//获取衣橱符合的物品
+				WardrobeServiceReturnObject wsro = getMyWardRobe(account,"",scene,"","1","","","","" ,"");
+				smao.setScene(scene);
+				//智能匹配衣服
+				MallServiceReturnObject msro = new MallService().matchTripsuit(smao, "0", "3", "" ,"");
+				argsList.clear();
+				argsList.add(dto.getAccount());
+				argsList.add(dto.getTripDate());
+				argsList.add(dto.getScene());
+				argsList.add(dto.getPlace());
+				argsList.add(dto.getTemperatuure());
+				String flag = "0";
+				if(wsro.getWardrobeList()!=null&&wsro.getWardrobeList().size()!=0){	
+					int y = wsro.getWardrobeList().size();
+					if(y>=4){
+						y=4;
+					}
+					String productIds = "";
+					for(int i=0;i<y;y++){
+						String productId = "";
+						productId = msro.getPioList().get(i).getProductId();
+						if(productIds.isEmpty()){
+							productIds = productId ;
+						}else {
+							
+							productIds = productIds+","+productId;
+						}
+						
+					}
+					argsList.add(productIds);
+					flag = "1";
+				}else{
+					argsList.add("");
+				}
+				if(msro.getPioList()!=null&&msro.getPioList().size()!=0){
+					int x = msro.getPioList().size() ;
+					if(msro.getPioList().size()>=4){
+						x = 4;
+					}
+					String productIds = "";
+					for(int i = 0;i<x;i++){
+						
+						String productId = "";
+						productId = msro.getPioList().get(i).getProductId();
+						if(productIds.isEmpty()){
+							productIds = productId ;
+						}else {
+							
+							productIds = productIds+","+productId;
+						}
+						
+					}
+					argsList.add(productIds);
+				}else {
+					argsList.add("");
+				}
+				
+				argsList.add(flag);
+				argsList.add(count);
+				int x = DatabaseMgr.getInstance().execNonSql(sql, argsList);
+				if  (x<= 0)
+					throw new Exception("001088");
+				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			logger.error(e.getMessage());
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return new WardrobeServiceReturnObject();
+	}
+	
+	public static void main(String[] args) {
+		List<TripsuitDTO> dtos = new ArrayList<TripsuitDTO>();
+		TripsuitDTO dto = new TripsuitDTO();
+		dto.setAccount("0000000000000016");
+		dto.setPlace("1");
+		dto.setProductId("");
+		dto.setScene("1");
+		dto.setSuit_flag("");
+		dto.setTemperatuure("23");
+		dto.setTripDate("2017-11-12");
+		dto.setWardrobeId("");
+		
+		TripsuitDTO dto1 = new TripsuitDTO();
+		dto1.setAccount("0000000000000016");
+		dto1.setPlace("3");
+		dto1.setProductId("");
+		dto1.setScene("2");
+		dto1.setSuit_flag("");
+		dto1.setTemperatuure("23");
+		dto1.setTripDate("2017-11-11");
+		dto1.setWardrobeId("");
+		
+		
+		dtos.add(dto);
+		dtos.add(dto1);
+		//addTripsuit(dtos,"0000000000000016");
+	/*	WardrobeServiceReturnObject wObject = 
+		getTripsuit("0000000000000016");*/
+		//List<TripsuitDTO> lsitDtos =  getProductDetail("CS00004,CS00003");
+		WardrobeServiceReturnObject s = getTripsuit("0000000000000019");
+		//updateWardrobe(wardrobeDTO);
+		//addMyWardrobe(wardrobeDTOs);
+		//WardrobeServiceReturnObject wsro = getMyWardRobe("2222222", "4", "3", "2", "1", "2", "3", "1");
+		//WardrobeServiceReturnObject wsro = getMyWardRobe("2222222", "4", "", "", "", "", "", "");
+		//delMyWardrobe("2");
+		System.out.println("----");
+	}
+}

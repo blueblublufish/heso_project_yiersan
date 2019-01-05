@@ -1,0 +1,4 @@
+2018-04-04 10:50:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-04 15:51:47 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-04 15:51:48 [com.heso.service.wardrobe.WardrobeService]-[ERROR] >>>>>>>>>>>>查询类型数量失败
+ 

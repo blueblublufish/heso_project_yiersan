@@ -1,0 +1,160 @@
+package com.heso.service.article;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.print.attribute.Size2DSyntax;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.heso.db.DatabaseMgr;
+import com.heso.service.order.consume.entity.ConsumeOrderObject;
+
+import data.DataRow;
+import data.DataTable;
+
+ 
+
+
+
+public class ArticleService {
+	private static final Log logger = LogFactory.getLog(ArticleService.class);
+	
+	
+	
+	
+	
+	
+	public void getVideo(){
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		DataRow dr = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = "SELECT * FROM heso_video ";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			if(dt.getRows().size()<=0){
+				logger.error(">>>>>>>>>查询专家课堂失败");
+				throw new Exception("");
+			}
+			for(int i=0;i<dt.getRows().size();i++){
+				String designerId = dt.getRows().get(i).getString("");
+				String designerName = dt.getRows().get(i).getString("");
+				
+			}
+			 
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			
+		}
+	}
+	
+	/**
+	 * 文章点赞
+	 */
+	public void addGood(String articleId){
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		DataRow dr = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = "UPDATE heso_article_infor SET good_count = good_count+1 where ARTICLE_ID=?";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(articleId);
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0)
+				throw new Exception("100303");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * 添加评论
+	 * @param articleId
+	 * @param comment
+	 * @param userId
+	 * @param account
+	 */
+	
+	public  void addComment(String articleId,String comment,String userId,String account){
+		
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		DataRow dr = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = "insert into heso_comment (TYPE,ARTICLE_ID,ACCOUNT,USER_ID,COMMENT,COMMENT_ID)VALUES(?,?,?,?,?,?)";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add("1");
+			argsList.add(articleId);
+			argsList.add(account);
+			argsList.add(userId);
+			argsList.add(comment);
+			argsList.add(articleId);
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0)
+				throw new Exception("100303");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	public  static void getArticleList(){
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		DataRow dr = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = "SELECT a1.ARTICLE_ID,a2.ARTICLE_CONTENT  FROM heso_article_infor a1,heso_article_infor_detail a2,heso_comment c where a1.ARTICLE_ID=a2.ARTICLE_ID AND a1.ARTICLE_ID = c.article_id";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+ 			if(dt.getRows().size() <= 0 )
+				throw new Exception("101268");
+ 			
+ 			for (int i = 0; i < dt.getRows().size(); i++) {
+				DataRow dr1 = dt.getRows().get(i);
+				String articleId =dr1.getString("ARTICLE_ID");
+				String comment = dr1.getString("ARTICLE_CONTENT");
+				}
+			String [] orderIds = dt.getRows().get(0).getString("ARTICLE_ID").split(";");
+		
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {  
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	public static void main(String[] args) {
+		//addGood("1");
+		//addComment("1", "testetesttsetse", "fdf", "fhdjhfjd");
+		getArticleList();
+		System.out.println("-------");
+	}
+}

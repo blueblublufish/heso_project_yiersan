@@ -1,0 +1,17 @@
+2018-06-08 15:09:27 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:09:29 [com.heso.service.yesUser.YesUserService]-[ERROR] 100106
+ 2018-06-08 15:10:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:11:03 [com.heso.service.yesUser.YesUserService]-[ERROR] 100106
+ 2018-06-08 15:11:26 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:15:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:15:40 [com.heso.service.yesUser.YesUserService]-[ERROR] 100106
+ 2018-06-08 15:16:55 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:16:57 [com.heso.service.yesUser.YesUserService]-[ERROR] 100106
+ 2018-06-08 15:17:48 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:17:50 [com.heso.service.yesUser.YesUserService]-[ERROR] Field 'YOUJIAN' doesn't have a default value
+ 2018-06-08 15:18:47 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:21:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:21:46 [com.heso.service.yesUser.YesUserService]-[ERROR] Can't call commit when autocommit=true
+ 2018-06-08 15:22:14 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-08 15:23:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

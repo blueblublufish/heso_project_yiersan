@@ -1,0 +1,925 @@
+package com.heso.service.cart;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.heso.common.entity.CommonType;
+import com.heso.db.DatabaseMgr;
+import com.heso.service.cart.entity.CartItemObject;
+import com.heso.service.cart.entity.CartServiceReturnObject;
+import com.heso.service.order.consume.ConsumeOrder;
+import com.heso.service.order.consume.entity.ConsumeOrderObject;
+import com.heso.service.order.consume.entity.ConsumeOrderReturnObject;
+import com.heso.service.order.consume.entity.ConsumeProductObject;
+import com.heso.utility.ErrorProcess;
+import com.heso.utility.JarUtil;
+
+import data.DataRow;
+import data.DataTable;
+
+public class CartService {
+	private static final Log logger = LogFactory.getLog(CartService.class);
+
+	/**
+	 * 添加购物车
+	 * 
+	 * @param account
+	 * @param ctType
+	 * @param productId
+	 * @param count 
+	 * @param ct
+	 * @return 
+	 */
+	public CartServiceReturnObject setProduct(CartItemObject cio) {
+		// 初始化返回对象
+		CartServiceReturnObject csro = new CartServiceReturnObject();
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		DataRow dr = null;
+		try { 
+			conn = dbm.getConnection();
+			conn.setAutoCommit(false);
+			// 获取商品信息
+			String sql = " select name ,type , images , img_front , " +
+							  " case when type='1' then if(DISCOUNT_PRICE = 0,price,DISCOUNT_PRICE) when type = '2' then SUIT_PRICE end price ,color " +
+					          " from heso_product where product_id = ? ";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(cio.getProductId());
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			if (dt.getRows().size() == 0)
+				throw new Exception("101120");
+
+			// 产品名称
+			String name = dt.getRows().get(0).getString("name");
+			// 产品类型
+			String type = dt.getRows().get(0).getString("type");
+			// 产品图片
+			String image = ""; 
+			if(type.equals("2")){
+				 image = dt.getRows().get(0).getString("img_front");
+			}else{
+				 image = dt.getRows().get(0).getString("img_front");
+			}
+			
+			// 取得单价和金额
+
+			String price = dt.getRows().get(0).getString("price");
+			float amount = 0;
+			if (!cio.getCount().isEmpty())
+				amount = Integer.parseInt(cio.getCount()) * new BigDecimal(price).floatValue();
+			// 颜色
+			String color = dt.getRows().get(0).getString("color");
+
+			sql = "select * from heso_cart where account = ? and product_id = ? ";
+			argsList = new ArrayList<Object>();
+			argsList.add(cio.getAccount());
+			argsList.add(cio.getProductId());
+			dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			String subordinate = null ;
+			Integer count = 0 ;
+			
+			//判断购物车里是否有相同的商品，尺寸或颜色相同
+			boolean status = false ;
+			if(!cio.getSize().isEmpty()||cio.getCioList().size() != 0){
+				List <CartItemObject> list = cio.getCioList();
+				for(int i =0 ; i<dt.getRows().size() ; i++){
+								//判断购物车单品相同的
+		
+					if(type.equals(CommonType.PRODUCT_TYPE_GOODS.getNumber().toString())){									
+						subordinate =  dt.getRows().get(i).getString("SUBORDINATE");
+								count = dt.getRows().get(i).getInt("count");
+								//判断该商品颜色或尺寸是否相同
+								if(!dt.getRows().get(i).getString("size").equals(cio.getSize()) || !dt.getRows().get(i).getString("color").equals(color)){
+									status = true;
+								}else{
+									status = false;
+								}
+								//相同就更新原有信息
+								if(!status){
+									count += 1;
+									amount = amount = count * new BigDecimal(price).floatValue();
+									break;
+								}
+							}else {
+								//判断购物车套装相同的
+								subordinate =  dt.getRows().get(i).getString("SUBORDINATE");
+								count = dt.getRows().get(i).getInt("count");
+								sql = "select * from heso_cart_detail where account = ? and product_suit_id = ? and subordinate = ? group by product_id ";
+								argsList.clear();
+								argsList.add(cio.getAccount());
+								argsList.add(cio.getProductId());
+								argsList.add(subordinate);
+								DataTable dt1 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+							
+								for(int index = 0 ; index < dt1.getRows().size() ; index++){
+									for(int j = 0 ; j < list.size();j++){
+										if(dt1.getRows().get(index).getString("product_id").equals(list.get(j).getProductId())){
+											sql = " select color from heso_product where product_id = ?  ";
+											argsList.clear();
+											argsList.add(list.get(j).getProductId());
+											DataTable dt2 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+											String col = dt2.getRows().get(0).getString("color");
+											if(!dt1.getRows().get(index).getString("size").equals(list.get(j).getSize()) || !dt1.getRows().get(index).getString("color").equals(col) ){
+												subordinate = dbm.getSequence("seq_subordinate", "16");
+												status = true;
+												break;
+											}else{
+												status = false ; 
+											}
+										  }
+									}
+									if(status){
+										break;
+									}
+							}
+							if(!status){
+								count += 1;
+								amount = amount = count * new BigDecimal(price).floatValue();
+								break;
+							}
+						
+						}
+						
+					}
+										
+										
+			}else{
+				subordinate =cio.getSubordinate();
+				if(!cio.getCount().isEmpty()){
+					count = Integer.parseInt(cio.getCount());
+				}
+			}
+			
+			if(subordinate == null || status ){
+				subordinate = dbm.getSequence("seq_subordinate", "16");
+			}
+			
+			// 判断购物车中已经是否存在
+			if (dt.getRows().size() == 0 || status ) {
+						// 添加购物车
+						if (type.equals(CommonType.PRODUCT_TYPE_GOODS.getNumber().toString())) {// 添加单品
+							sql = "insert into heso_cart (account, product_id, name, type, image, size, color, count, price, amount,suit_id, subordinate ) values(?,?,?,?,?,?,?,?,?,?,?,?) ";
+							argsList.clear();
+							argsList.add(cio.getAccount());
+							argsList.add(cio.getProductId());
+							argsList.add(name);
+							argsList.add(type);
+							argsList.add(image);
+							if (cio.getSize().isEmpty())
+								throw new Exception("101126");
+							argsList.add(cio.getSize());
+							argsList.add(color);
+							argsList.add(cio.getCount());
+							argsList.add(price);
+							argsList.add(amount);
+							argsList.add(cio.getSuitId());
+							argsList.add(subordinate);
+							if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+								throw new Exception("101121");
+						} else {// 添加套装
+							sql = "insert into heso_cart (account, product_id, name, type, image, count, price, amount,suit_id,subordinate) values(?,?,?,?,?,?,?,?,?,?) ";
+							
+							argsList.clear();
+							argsList.add(cio.getAccount());
+							argsList.add(cio.getProductId());
+							argsList.add(name);
+							argsList.add(type);
+							argsList.add(image);
+							argsList.add(cio.getCount());
+							argsList.add(price);
+							argsList.add(amount);
+							argsList.add(cio.getSuitId());
+							argsList.add(subordinate);
+							if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+								throw new Exception("101121");
+						
+							
+							// 查询套装中单品mark
+							sql = "select * from heso_product where PRODUCT_ID in (select b.product_goods_id from heso_product a, heso_product_detail b where a.product_id = b.product_suit_id and b.product_suit_id =? ) ";
+							argsList.clear();
+							argsList.add(cio.getProductId());
+							DataTable dt1 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+							for (int i = 0; i < dt1.getRows().size(); i++) {
+								dr = dt1.getRows().get(i);
+								sql = "insert into heso_cart_detail (account, product_suit_id, product_id, type, name, image, count, price, amount, color, size, suit_price, suit_promotion ,subordinate) value (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+								argsList.clear();
+								argsList.add(cio.getAccount());
+								argsList.add(cio.getProductId());
+								argsList.add(dr.getString("product_id"));
+								argsList.add(dr.getString("type"));
+								argsList.add(dr.getString("name"));
+								argsList.add(dr.getString("img_front"));
+								argsList.add(cio.getCount());
+								String goodsPrice = dr.getString("discount_price");
+								String suitPrice = dr.getString("suit_price");
+								float goodsAmount = Integer.parseInt(cio.getCount()) * new BigDecimal(goodsPrice).floatValue();
+								float suitAmount = Integer.parseInt(cio.getCount()) * new BigDecimal(suitPrice).floatValue();
+								argsList.add(goodsPrice);
+								argsList.add(suitAmount);
+								argsList.add(dr.getString("color"));
+								String size = "";
+								// 更新尺码
+								if (cio.getCioList() != null) {
+									for (CartItemObject co : cio.getCioList()) {
+										if (co.getProductId().equals(dr.getString("product_id"))) {
+											size = co.getSize();
+											break;
+										}
+									}
+								}
+								// 如果套装单品尺码为空返回无法添加购物车
+								if (size.isEmpty())
+									throw new Exception("101126");
+								argsList.add(size);
+								argsList.add(suitPrice);
+								argsList.add(goodsAmount - suitAmount);
+								argsList.add(subordinate);
+								if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+									throw new Exception("101122");
+							}
+						}
+			} else {
+					// 更新购物车
+					if (type.equals(CommonType.PRODUCT_TYPE_GOODS.getNumber().toString())) {
+						// 修改数量
+						if (!cio.getCount().isEmpty()) {
+							sql = "update heso_cart set  count = ? , amount= ? where account = ? and product_id = ? and subordinate = ? ";
+							argsList.clear();
+							argsList.add(count);
+							argsList.add(amount);
+							argsList.add(cio.getAccount());
+							argsList.add(cio.getProductId());
+							argsList.add(subordinate);
+							if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+								throw new Exception("101122");
+						}
+	//					// 修改尺码
+	//					if (!cio.getSize().isEmpty()) {
+	//						sql = "update heso_cart set size=? where account = ? and product_id = ?";
+	//						argsList.clear();
+	//						argsList.add(cio.getSize());
+	//						argsList.add(cio.getAccount());
+	//						argsList.add(cio.getProductId());
+	//						if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+	//							throw new Exception("101122");
+	//					}
+						// 修改选中状态
+						if (!cio.getSelected().isEmpty()) {
+							sql = "update heso_cart set selected=? where account = ? and product_id = ? and subordinate = ? ";
+							argsList.clear();
+							argsList.add(cio.getSelected());
+							argsList.add(cio.getAccount());
+							argsList.add(cio.getProductId());
+							argsList.add(subordinate);
+							if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+								throw new Exception("101122");
+						}
+					} else {
+								// 更新套装记录
+								// 修改数量
+								if (!cio.getCount().isEmpty()) {
+									sql = "update heso_cart set  count = ? , amount= ? where account = ? and product_id = ? and subordinate = ? ";
+									argsList.clear();
+									argsList.add(count);
+									argsList.add(amount);
+									argsList.add(cio.getAccount());
+									argsList.add(cio.getProductId());
+									argsList.add(subordinate);
+									if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+										throw new Exception("101122");
+									
+									//更新单品记录
+									sql = "update heso_cart_detail set count=?, amount = count * suit_price , suit_promotion = count * price - count*suit_price  where account = ? and product_suit_id = ? and subordinate = ? ";
+									argsList.clear();
+									argsList.add(count);
+									argsList.add(cio.getAccount());
+									argsList.add(cio.getProductId());
+									argsList.add(subordinate);
+									if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+										throw new Exception("101122");					
+								}
+			
+								// 修改选中状态
+								if (!cio.getSelected().isEmpty()) {
+									sql = "update heso_cart set selected=? where account = ? and product_id = ? and subordinate = ? ";
+									argsList.clear();
+									argsList.add(cio.getSelected());
+									argsList.add(cio.getAccount());
+									argsList.add(cio.getProductId());
+									argsList.add(subordinate);
+									if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+										throw new Exception("101122");
+								}
+			
+								// 更新单品记录
+			//					if (cio.getCioList() != null) {
+			//						sql = "select * from heso_cart_detail where account = ? and product_suit_id = ?";
+			//						argsList.clear();
+			//						argsList.add(cio.getAccount());
+			//						argsList.add(cio.getProductId());
+			//						DataTable dt2 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			//						for (int i = 0; i < dt2.getRows().size(); i++) {
+			//							dr = dt2.getRows().get(i);
+			//							sql = "update heso_cart_detail set size=? where account =? and product_id=? and product_suit_id=?";
+			//							argsList.clear();
+			//							String size = "";
+			//							// 更新尺码
+			//							for (CartItemObject co : cio.getCioList()) {
+			//								if (co.getProductId().equals(dr.getString("product_id"))) {
+			//									size = co.getSize();
+			//									break;
+			//								}
+			//							}
+			//							argsList.add(size);
+			//							argsList.add(cio.getAccount());
+			//							argsList.add(dr.getString("product_id"));
+			//							argsList.add(cio.getProductId());
+			//							if (DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+			//								throw new Exception("101125");
+			//						}
+			//					}
+							}
+			}
+			// 提交事务
+			conn.commit();
+
+			// 计算购物车内货物数量
+			sql = "select sum(count) count from heso_cart where account = ?";
+			argsList.clear();
+			argsList.add(cio.getAccount());
+			dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			String productCount = dt.getRows().get(0).getString("count");
+			csro.setCount(productCount);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			csro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return csro;
+	}
+
+	/**
+	 * 购物车移除货品
+	 * 
+	 * @param account
+	 * @param productIdList
+	 * @param crt
+	 * @return
+	 */
+	public CartServiceReturnObject removeProduct(String account, ArrayList<String> productIdList) {
+		// 初始化返回对象
+		CartServiceReturnObject csro = new CartServiceReturnObject();
+		csro.setCount("0");
+
+		Connection conn = DatabaseMgr.getInstance().getConnection();
+		try {
+			conn.setAutoCommit(false);
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			for (int index = 0; index < productIdList.size(); index++) {
+				String [] productId = productIdList.get(index).split(":");
+				String sql = "select * from heso_cart where account = ? and product_id = ? and subordinate = ? ";
+				argsList.clear();
+				argsList.add(account);
+				argsList.add(productId[0]);
+				argsList.add(productId[1]);
+				DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				if (dt.getRows().size() == 0)
+					throw new Exception("100126");
+
+				// 删除原始主记录
+				sql = "delete from heso_cart where account = ? and product_id = ? and subordinate = ? ";
+				argsList.clear();
+				argsList.add(account);
+				argsList.add(productId[0]);
+				argsList.add(productId[1]);
+				DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn);
+
+				// 删除明细记录
+				sql = "delete from heso_cart_detail where account = ? and product_suit_id = ? and subordinate = ? ";
+				argsList.clear();
+				argsList.add(account);
+				argsList.add(productId[0]);
+				argsList.add(productId[1]);
+				DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn);
+			}
+			conn.commit();
+
+			// 计算购物车内货物数量
+			String sql = "select sum(count) count from heso_cart where account = ?";
+			argsList.clear();
+			argsList.add(account);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			String productCount = dt.getRows().get(0).getString("count");
+			if (productCount != null)
+				csro.setCount(productCount);
+		} catch (Exception e) {
+			// TODO: handle exception
+			csro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+			}
+		}
+		return csro;
+	}
+
+	/**
+	 * 获取购物车信息
+	 * 
+	 * @param account
+	 * @return
+	 */
+	public CartServiceReturnObject getInfo(String account) {
+		// 初始化返回对象
+		CartServiceReturnObject csro = new CartServiceReturnObject();
+		Connection conn = DatabaseMgr.getInstance().getConnection();
+		try {
+			String sql = "select * from heso_cart where account=? order by create_time desc";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(account);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			int totalcount = 0;
+			ArrayList<CartItemObject> cioList = new ArrayList<CartItemObject>();
+			for (int i = 0; i < dt.getRows().size(); i++) {
+				DataRow dr = dt.getRows().get(i);
+				CartItemObject cio = new CartItemObject();
+				cio.setProductId(dr.getString("product_id"));
+				cio.setType(dr.getString("type"));
+				cio.setName(dr.getString("name"));
+				cio.setImage(dr.getString("image"));
+				cio.setCount(dr.getString("count"));
+				cio.setPrice(dr.getString("price"));
+				cio.setAmount(dr.getString("amount"));
+				cio.setColor(dr.getString("color"));
+				cio.setSize(dr.getString("size"));
+				cio.setSelected(dr.getString("selected"));
+				cio.setSubordinate(dr.getString("subordinate"));
+				cio.setSuitId(dr.getString("suit_id"));
+				ArrayList<CartItemObject> cioDetailList = new ArrayList<CartItemObject>();
+				if (cio.getType().equals(CommonType.PRODUCT_TYPE_SUIT.getNumber().toString())) {
+					sql = "select * from heso_cart_detail where account = ? and product_suit_id = ?";
+					argsList.clear();
+					argsList.add(account);
+					argsList.add(cio.getProductId());
+					DataTable dt1 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+					for (int j = 0; j < dt1.getRows().size(); j++) {
+						DataRow dr1 = dt1.getRows().get(j);
+						CartItemObject ciodetail = new CartItemObject();
+						ciodetail.setProductId(dr1.getString("product_id"));
+						ciodetail.setType(dr1.getString("type"));
+						ciodetail.setName(dr1.getString("name"));
+						ciodetail.setImage(dr1.getString("image"));
+						ciodetail.setCount(dr1.getString("count"));
+						ciodetail.setPrice(dr1.getString("price"));
+						ciodetail.setAmount(dr1.getString("amount"));
+						ciodetail.setColor(dr1.getString("color"));
+						ciodetail.setSize(dr1.getString("size"));
+						ciodetail.setSubordinate(dr1.getString("subordinate"));
+						cioDetailList.add(ciodetail);
+					}
+				}
+				cio.setCioList(cioDetailList);
+				cioList.add(cio);
+			}
+			csro.setCioList(cioList);
+		} catch (Exception e) {
+			csro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return csro;
+	}
+
+	/**
+	 * 查询购物车套装明细
+	 * 
+	 * @param account
+	 * @param productId
+	 * @return
+	 */
+	public CartServiceReturnObject getInfoDetail(String account, String productId ,String subordinate) {
+		// 初始化返回对象
+		CartServiceReturnObject csro = new CartServiceReturnObject();
+		try {
+			ArrayList<CartItemObject> cioList = new ArrayList<CartItemObject>();
+			CartItemObject cio = new CartItemObject();
+			ArrayList<CartItemObject> cioDetailList = new ArrayList<CartItemObject>();
+			String sql = "select * from heso_cart_detail where account = ? and product_suit_id = ? and  subordinate = ? ";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(account);
+			argsList.add(productId);
+			argsList.add(subordinate);
+			DataTable dt1 = DatabaseMgr.getInstance().execSql(sql, argsList);
+			for (int j = 0; j < dt1.getRows().size(); j++) {
+				DataRow dr1 = dt1.getRows().get(j);
+				CartItemObject ciodetail = new CartItemObject();
+				ciodetail.setProductId(dr1.getString("product_id"));
+				ciodetail.setType(dr1.getString("type"));
+				ciodetail.setName(dr1.getString("name"));
+				ciodetail.setImage(dr1.getString("image"));
+				ciodetail.setCount(dr1.getString("count"));
+				ciodetail.setPrice(dr1.getString("price"));
+				ciodetail.setAmount(dr1.getString("amount"));
+				ciodetail.setColor(dr1.getString("color"));
+				ciodetail.setSize(dr1.getString("size"));
+				ciodetail.setSuitPrice(dr1.getString("suit_price"));
+				ciodetail.setSuitPromotion(dr1.getString("suit_promotion"));
+				ciodetail.setSubordinate(dr1.getString("subordinate"));
+				cioDetailList.add(ciodetail);
+			}
+			cio.setCioList(cioDetailList);
+			cioList.add(cio);
+			csro.setCioList(cioList);
+			csro.setAccount(account);
+		} catch (Exception e) {
+			csro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return csro;
+	}
+
+	/**
+	 * 购物车结算
+	 * 
+	 * @param account
+	 * @param productId
+	 * @return
+	 */
+	public ConsumeOrderReturnObject settle(String account, String innerCoin, String receiveId,String paymentTerms,String recommend ,String couponDetId ) {
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = DatabaseMgr.getInstance().getConnection();
+		try {
+			// 建立订单对象
+			ConsumeOrder order = new ConsumeOrder();
+			// 取得购物车选中商品
+			String sql = "select * from heso_cart where account = ? and selected = ?  ";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(account);
+			argsList.add(CommonType.CART_SELECT_PRODUCT.getNumber());
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList , conn);
+			if (dt.getRows().size() == 0)
+				throw new Exception("101130");
+			
+			for(int i = 0 ; i < dt.getRows().size() ; i++){
+				argsList.clear();
+				argsList.add(dt.getRows().get(i).getString("product_id"));
+				
+				if(dt.getRows().get(i).getString("type").equals("1")){
+					sql = " select product_id from heso_product where  product_id = ? and  ( status = '0' or STOCK_STATUS = '0' ) ";
+				}else if(dt.getRows().get(i).getString("type").equals("2")){
+					sql = " select product_id from heso_product where  product_id in (select PRODUCT_GOODS_ID from heso_product_detail where product_suit_id = ? ) and ( status = '0' or STOCK_STATUS = '0' ) ";
+				} 
+				DataTable stockStatus = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				if(stockStatus.getRows().size()>0){
+					throw new Exception("101131");
+				}
+				
+			}
+			
+			double amount = 0.00;
+			int count = 0;
+			ArrayList<ConsumeOrderObject> coaoList = new ArrayList<ConsumeOrderObject>();
+			// 建立订单数据
+			for (int index = 0; index < dt.getRows().size(); index++) {
+				DataRow dr = dt.getRows().get(index);
+				// 建立主数据
+				ConsumeOrderObject coao = new ConsumeOrderObject();
+				coao.setAccount(account);
+				coao.setProductId(dr.getString("product_id"));
+				coao.setType(dr.getString("type"));
+				coao.setName(dr.getString("name"));
+				coao.setImage(dr.getString("image"));
+				coao.setPrice(dr.getString("price"));
+				coao.setCount(dr.getString("count"));
+				coao.setAmount(dr.getString("amount"));
+				coao.setSuitId(dr.getString("suit_id"));
+				coao.setColor(dr.getString("color"));
+				coao.setSubordinate(dr.getString("subordinate"));
+				if(dr.getString("type").equals("1")){
+					coao.setSize(dr.getString("size"));
+				}
+				// coao.setCurrency(dr.getString("currency"));
+				// coao.setInnerCoin(dr.getString("inner_coin"));
+				// coao.setBonusPoint(dr.getString("bonus_point"));
+
+				ArrayList<ConsumeProductObject> cpoList = new ArrayList<ConsumeProductObject>();
+				sql = "select * from heso_cart_detail where account=? and  product_suit_id=? and subordinate = ? ";
+				argsList.clear();
+				argsList.add(account);
+				argsList.add(coao.getProductId());
+				argsList.add(dr.getString("subordinate"));
+				DataTable dt1 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList,conn);
+				for (int i = 0; i < dt1.getRows().size(); i++) {
+					DataRow dr1 = dt1.getRows().get(i);
+					ConsumeProductObject cpo = new ConsumeProductObject();
+					cpo.setProductId(dr1.getString("product_id"));
+					cpo.setName(dr1.getString("name"));
+					cpo.setImage(dr1.getString("image"));
+					cpo.setColor(dr1.getString("color"));
+					cpo.setCount(dr1.getString("count"));
+					cpo.setSize(dr1.getString("size"));
+					cpo.setPrice(dr1.getString("price"));
+					cpo.setAmount(dr1.getString("amount"));
+					cpo.setSuitPrice(dr1.getString("suit_price"));
+					cpo.setSuitPromotion(dr1.getString("suit_promotion"));
+					cpo.setSubordinate(dr1.getString("subordinate"));
+					cpoList.add(cpo);
+				}
+				coao.setCpoList(cpoList);
+				coaoList.add(coao);
+			}
+			sql ="select REGION_ID from heso_account_recvinfo where id = ? ";
+			argsList.clear();
+			argsList.add(receiveId);
+			DataTable dt2 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			if(dt2.getRows().size()<=0){
+				throw new Exception("101130");
+			}
+			String ri = dt2.getRows().get(0).getString("REGION_ID");
+			// 生成订单
+			coro = order.genarate(coaoList, innerCoin, receiveId,paymentTerms,recommend,couponDetId);
+			
+			String total = coro.getCooList().get(coro.getCooList().size()-2).getAmount();
+			String notSPtotal = coro.getCooList().get(coro.getCooList().size()-1).getAmount();//非特价商品总价
+			//首单优惠
+			//ConsumeOrderReturnObject coro2 = order.firstPay(total, account,coro.getOrderId());//取消首单优惠 16/11/09
+			//优惠券优惠
+			//ConsumeOrderReturnObject cop = order.couponDiscount(notSPtotal, account, coro2.getDiscount(), coro.getOrderId(), couponDetId, "1","");//从购物车支付时，不需要外单号
+			ConsumeOrderReturnObject cop = order.couponDiscount(notSPtotal, account, "0", coro.getOrderId(), couponDetId, "1","");
+			//物流计费
+			ConsumeOrderReturnObject coro1 = order.logisticsPay(ri, Double.parseDouble(total),coro.getOrderId());
+			
+			Double pay = Double.parseDouble(total)-Double.parseDouble(cop.getDiscount());
+			Double logistics = Double.parseDouble(coro1.getReccount());
+			
+			coro.getCooList().get(coro.getCooList().size()-1).setAmount(String.valueOf(pay+logistics));
+		
+			
+			// 移除购物车商品
+			if (coro.getCode().equals("000000")) {
+				ArrayList<String> strList = new ArrayList<String>();
+				for (int i = 0; i < coaoList.size(); i++) {
+					String productId = coaoList.get(i).getProductId();
+					String subordinate = coaoList.get(i).getSubordinate();
+					String ps = productId+":"+subordinate;
+					strList.add(ps);
+				}
+				removeProduct(account, strList);
+		
+				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return coro;
+	}
+
+	/**
+	 * 购物车物品全选/全不选
+	 * 
+	 * @param account
+	 * @param selected
+	 * @return
+	 */
+	public CartServiceReturnObject setAllSelected(String account, String selected) {
+		CartServiceReturnObject csro = new CartServiceReturnObject();
+		try {
+			String sql = "update heso_cart set selected=? where account = ?";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(selected);
+			argsList.add(account);
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0)
+				throw new Exception("101130");
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			csro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return csro;
+	}
+
+	
+	/**
+	 * 扣减库存
+	 * @param productId
+	 * @param count
+	 * @param size
+	 * @return
+	 */
+	public    int subStock(String productId,String count,String size){
+		try {
+			Connection conn = DatabaseMgr.getInstance().getConnection();
+			conn.setAutoCommit(false);
+			//查询商品剩余库存
+			String sql = "SELECT SIZE_STOCK FROM heso_product_size WHERE PRODUCT_ID =? AND SIZE = ?";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(productId);
+			argsList.add(size);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			int sizeStock = dt.getRows().get(0).getInt("SIZE_STOCK");//剩余库存
+			int countNum = Integer.valueOf(count);
+			if(sizeStock<countNum){
+				logger.error(">>>>>>>>>>>>>>>>>>>>>库存不足");
+				throw new Exception("10113");
+				}
+			//开始扣减库存
+			sql = "UPDATE heso_product_size SET SIZE_STOCK = ? WHERE PRODUCT_ID =? AND SIZE = ? ";
+			argsList.clear();
+			argsList.add(sizeStock-countNum);
+			argsList.add(productId);
+			argsList.add(size);
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0){
+				throw new Exception("101130");				
+			}
+			sql = "UPDATE heso_product SET  STOCK_COUNT = STOCK_COUNT -" +
+					count+ " WHERE PRODUCT_ID =? AND SIZE = ? ";
+			argsList.clear();
+			argsList.add(productId);
+			argsList.add(size);
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0){
+				throw new Exception("101130");				
+			}
+			conn.commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+ 			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+	 
+		return 0;
+	}
+	/**
+	 * 返回库存
+	 * @param productId
+	 * @param count
+	 * @param size
+	 * @return
+	 */
+	public    int addStock(String productId,String count,String size){
+		try {
+			Connection conn = DatabaseMgr.getInstance().getConnection();
+			conn.setAutoCommit(false);
+			//查询商品剩余库存
+			String sql = "SELECT SIZE_STOCK FROM heso_product_size WHERE PRODUCT_ID =? AND SIZE = ?";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(productId);
+			argsList.add(size);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			int sizeStock = dt.getRows().get(0).getInt("SIZE_STOCK");//剩余库存
+			int countNum = Integer.valueOf(count);
+			/*if(sizeStock<countNum){
+				logger.error(">>>>>>>>>>>>>>>>>>>>>库存不足");
+				throw new Exception("10113");
+				}*/
+			//开始返回库存
+			sql = "UPDATE heso_product_size SET SIZE_STOCK = ? WHERE PRODUCT_ID =? AND SIZE = ? ";
+			argsList.clear();
+			argsList.add(sizeStock+countNum);
+			argsList.add(productId);
+			argsList.add(size);
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0){
+				throw new Exception("101130");				
+			}
+			sql = "UPDATE heso_product SET  STOCK_COUNT = STOCK_COUNT +" +
+					count
+					+
+					" WHERE PRODUCT_ID =? AND SIZE = ? ";
+			argsList.clear();
+			argsList.add(productId);
+			argsList.add(size);
+			if (DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0){
+				throw new Exception("101130");				
+			}
+			conn.commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+ 			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+	 
+		return 0;
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// // TODO Auto-generated method stub
+		/*String account = "0000000000000024";
+		// 添加购物车
+		CartService cs = new CartService();
+		CartServiceReturnObject csro = null;
+		CartItemObject cio = new CartItemObject();
+		cio.setAccount("0000000000000024");
+		//cio.setProductId("16FZQZDB00011");
+		cio.setProductId("16C0164");
+		cio.setCount("1");
+		cio.setColor("黄色");
+		cio.setSize("SSS");
+		cio.setSelected("1");
+		csro = cs.setProduct(cio);
+		csro = cs.setAllSelected(account, "1");
+		System.out.println(csro.getCode());
+		System.out.println("商品总数:" + csro.getCount());
+
+		// cs.settle(account);
+		csro = cs.getInfo(account);
+		System.out.println(csro.getCioList().size());
+		CartService cartService=new CartService();
+		cartService.setProduct(cio);*/
+		String productId = "CS0002";
+		String size = "S";
+		String count = "3";
+		//addStock(productId, count, size);
+		System.out.println(">>>>>>>>>>GG");
+		// csro = cs.setProduct(account, "16FZQZDB00011", "2", "1");
+		// System.out.println(csro.getCode());
+		// System.out.println("商品总数:" + csro.getCount());
+
+		// // 移除购物车
+		// ArrayList<String> strList = new ArrayList<String>();
+		// strList.add("testsuit001");
+		// usro = us.removeCartProduct(account, strList,
+		// CommonType.CART_USER_REMOVE);
+		// System.out.println(usro.getCode());
+		// System.out.println(usro.getProductCount());
+
+		// // 查询购物车
+		// csro = cs.getInfo(account);
+		// System.out.println(csro.getCode());
+		// System.out.println("商品总数:" + csro.getCount());
+		// ArrayList<CartItemObject> cioList = csro.getCioList();
+		// for (int i = 0; i < cioList.size(); i++) {
+		// CartItemObject cio = cioList.get(i);
+		// System.out.println(cio.getProductId());
+		// System.out.println(cio.getName());
+		// System.out.println(cio.getPrice());
+		// }
+
+		// 订单生成
+		//ConsumeOrderReturnObject coro = cs.settle(account, "10", "1");
+		//System.out.println("生成订单号：" + coro.getOrderId());
+
+		// System.out.println(new JarUtil().getVersion());
+	}
+
+}

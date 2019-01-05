@@ -1,0 +1,20 @@
+2018-02-26 10:58:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 10:58:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 10:58:43 [com.heso.service.wardrobe.WardrobeService]-[ERROR] Array index out of range: 0
+ 2018-02-26 11:00:33 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 11:00:58 [com.heso.service.wardrobe.WardrobeService]-[ERROR] No operations allowed after connection closed.
+ 2018-02-26 11:01:15 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 11:01:55 [com.heso.service.wardrobe.WardrobeService]-[ERROR] No operations allowed after connection closed.
+ 2018-02-26 11:03:47 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 11:04:11 [com.heso.service.wardrobe.WardrobeService]-[ERROR] No operations allowed after connection closed.
+ 2018-02-26 11:05:05 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 11:05:19 [com.heso.service.wardrobe.WardrobeService]-[ERROR] Array index out of range: 0
+ 2018-02-26 11:05:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 11:06:27 [com.heso.service.wardrobe.WardrobeService]-[ERROR] No operations allowed after connection closed.
+ 2018-02-26 11:19:29 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 11:19:30 [com.heso.service.wardrobe.WardrobeService]-[ERROR] For input string: "1.4"
+ 2018-02-26 14:16:55 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 14:27:11 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 14:29:51 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-02-26 18:44:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

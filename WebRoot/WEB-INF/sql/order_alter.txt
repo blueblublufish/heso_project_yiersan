@@ -1,0 +1,7 @@
+ALTER TABLE heso_order_consume add channel_type INT NOT NULL DEFAULT 0 COMMENT '下单渠道，默认0为线上，1为线下';
+ALTER TABLE heso_order_consume add format_type VARCHAR(20) COMMENT '版式';
+ALTER TABLE heso_order_consume add size_type VARCHAR(20) COMMENT '衣码';
+ALTER TABLE heso_order_consume add style_type VARCHAR(20) COMMENT '风格';
+ALTER TABLE heso_order_consume add cloth_type VARCHAR(20) COMMENT '布料';
+ALTER TABLE heso_order_consume add seller VARCHAR(50) COMMENT '经手人';
+COMMIT;

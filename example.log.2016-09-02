@@ -1,0 +1,14 @@
+2016-09-02 21:54:59 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-09-02 21:55:03 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Array index out of range: 0
+ 2016-09-02 21:57:55 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-09-02 21:57:55 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Array index out of range: 0
+ 2016-09-02 21:59:43 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-09-02 21:59:43 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Array index out of range: 0
+ 2016-09-02 22:01:08 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-09-02 22:01:09 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Can't call commit when autocommit=true
+ 2016-09-02 22:01:12 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-09-02 22:01:13 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Can't call commit when autocommit=true
+ 2016-09-02 22:01:17 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-09-02 22:01:18 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Can't call commit when autocommit=true
+ 2016-09-02 22:02:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 

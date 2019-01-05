@@ -1,0 +1,10 @@
+2017-12-05 09:51:02 [com.heso.service.mall.MallService]-[ERROR] No operations allowed after connection closed.
+ 2017-12-05 10:21:40 [com.heso.service.article.ArticleService]-[ERROR] Index: 3, Size: 3
+ 2017-12-05 10:24:38 [com.heso.service.article.ArticleService]-[ERROR] 100303
+ 2017-12-05 10:25:59 [com.heso.service.article.ArticleService]-[ERROR] 100303
+ 2017-12-05 11:39:35 [com.heso.service.article.ArticleService]-[ERROR] 100104
+ 2017-12-05 11:39:35 [com.heso.service.mall.MallService]-[ERROR] 
+ 2017-12-05 11:39:35 [com.heso.service.article.ArticleService]-[ERROR] 100303
+ 2017-12-05 11:40:24 [com.heso.service.article.ArticleService]-[ERROR] 100303
+ 2017-12-05 11:46:53 [com.heso.service.article.ArticleService]-[ERROR] 100303
+ 

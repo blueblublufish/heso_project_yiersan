@@ -1,0 +1,520 @@
+package com.heso.service.yesUser;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import oracle.net.aso.d;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.heso.common.GlobalCache;
+import com.heso.common.entity.CommonType;
+import com.heso.db.DatabaseMgr;
+import com.heso.service.funds.entity.FundsServiceArgsObject;
+import com.heso.service.funds.entity.FundsServiceReturnObject;
+import com.heso.service.funds.order.entity.FundsOrderReturnObject;
+import com.heso.service.funds.order.recharge.CoinRecharge;
+import com.heso.service.funds.order.recharge.OrderRecharge;
+import com.heso.service.funds.order.recharge.PointRecharge;
+import com.heso.service.order.consume.ConsumeOrder;
+import com.heso.service.user.UserService;
+import com.heso.service.user.entity.UserDataObject;
+import com.heso.service.user.entity.UserReceiveInfoObject;
+import com.heso.service.user.entity.UserServiceReturnObject;
+import com.heso.utility.ErrorProcess;
+import com.heso.utility.MD5Util;
+import com.heso.utility.ToolsUtil;
+
+import data.DataRow;
+import data.DataTable;
+
+public class YesUserService extends UserService{
+	private static final Log logger = LogFactory.getLog(YesUserService.class);
+	
+	public String findRecvIdbyAccount(String account,String regionalId) throws Exception{
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = dbm.getConnection();
+		List<Object> list = new ArrayList<Object>();
+		ArrayList<Object> argsList = new ArrayList<Object>();
+		String sql = "select  * from heso_account_recvinfo where REGION_ID = ? and account = ? ";
+		argsList.add(regionalId);
+		argsList.add(account);
+		DataTable dt;
+		String recivedId = "";
+		
+		try {
+			dt = dbm.execSqlTrans(sql, argsList, conn);
+			if(dt.getRows().size() <=0 ){
+				throw new Exception("101930");
+			}
+			recivedId =  dt.getRows().get(0).getString("ID");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return recivedId;
+		
+	}
+	
+	/**
+	 * 自动注册
+	 * @param mobile
+	 * @param name
+	 * @param address
+	 * @param sex
+	 * @param regionId
+	 * @return
+	 */
+	public String autoRegister(String mobile,String name, String address,String sex,String regionId){
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = dbm.getConnection();
+		ArrayList<Object> argsList = new ArrayList<Object>();
+		String account = "";
+		try {
+			
+			
+			conn.setAutoCommit(false);
+
+			// 检查用户是否存在
+			String sql = "select * from heso_account where  mobile =?";
+			argsList.add(mobile);
+			DataTable dt = dbm.execSqlTrans(sql, argsList, conn);
+			if (dt.getRows().size() > 0){
+				account = dt.getRows().get(0).getString("ACCOUNT");
+				return account;
+			}
+
+			account = "in_"+dbm.getSequence("seq_account", "16");
+			if (account.isEmpty())
+				throw new Exception("000150");
+			
+			// 写用户信息表
+			sql = "insert into heso_account (account, user_id, login_password, user_type,mobile,USER_NAME,ADDRESS,SEX) values (?,?,?,?,?,?,?,?)";
+			argsList.clear();
+			argsList.add(account);
+			argsList.add(randomUserId());
+			argsList.add("123456");
+			argsList.add(1);
+			argsList.add(mobile);
+			argsList.add(name);
+			argsList.add(address);
+			argsList.add(sex);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+  
+			// 写用户个人档案表
+			sql = "insert into heso_account_profiles2 (account, birthday) values (?,?)";
+			argsList.clear();
+			argsList.add(account);
+			argsList.add("1900-01-01");
+			dbm.execNonSqlTrans(sql, argsList, conn);
+
+			// 写分账户表（3个）
+			sql = "insert into heso_currency (account) values (?)";
+			argsList.clear();
+			argsList.add(account);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+
+			sql = "insert into heso_bonus_point (account) values (?)";
+			argsList.clear();
+			argsList.add(account);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+
+			sql = "insert into heso_inner_coin (account) values (?)";
+			argsList.clear();
+			argsList.add(account);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+			
+			//插入用户等级表
+			sql = "INSERT INTO heso_account_level (ACCOUNT,USER_ID) VALUES (?,?)";
+			argsList.clear();
+			argsList.add(account);
+			argsList.add(randomUserId());
+			dbm.execNonSqlTrans(sql, argsList, conn);
+			
+			//插入用户住址表
+			sql = "insert into heso_account_recvinfo(account, name, address, mobile, telephone,region_Id) values (?,?,?,?,?,?) ";
+			argsList.clear();
+			argsList.add(account);
+			argsList.add(name);
+			argsList.add(address);
+			argsList.add(mobile);
+			argsList.add(mobile);
+			System.out.println("regionid"+regionId);
+			argsList.add(regionId);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+			conn.commit();
+			
+
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			// TODO: handle exception
+		}finally{
+
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		
+		}
+		
+		return account;
+	}
+	
+	
+	/**
+	 * 用户注册有推荐人
+	 */
+	public UserServiceReturnObject registerByUsername(String userId, String loginPassword, String userType ,String mobile ,String mobileCode ,String registerType) {
+		// 初始化返回对象
+		UserServiceReturnObject usro = new UserServiceReturnObject();
+		usro.setCode("000000");
+	
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = dbm.getConnection();
+		ArrayList<Object> argsList = new ArrayList<Object>();
+		
+		try {
+			
+			if(!ToolsUtil.authMobileCode(mobile, mobileCode)){
+				throw new Exception("100106");
+			}
+			
+			conn.setAutoCommit(false);
+
+			// 检查用户是否存在
+			String sql = "select user_id from heso_account where  mobile =?";
+			argsList.add(mobile);
+			DataTable dt = dbm.execSqlTrans(sql, argsList, conn);
+			if (dt.getRows().size() > 0){
+				usro.setCode("100101");//账户或手机号码已被注册
+				return usro;
+			}
+
+			String account = dbm.getSequence("seq_account", "16");
+			if (account.isEmpty())
+				throw new Exception("000150");
+			
+			// 写用户信息表
+			sql = "insert into heso_account (account, user_id, login_password, user_type,mobile) values (?,?,?,?,?)";
+			argsList.clear();
+			argsList.add(account);
+			argsList.add(randomUserId());
+			argsList.add(loginPassword);
+			argsList.add(userType);
+			argsList.add(mobile);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+
+			// 写用户个人档案表
+			sql = "insert into heso_account_profiles (account, birthday) values (?,?)";
+			argsList.clear();
+			argsList.add(account);
+			argsList.add("1900-01-01");
+			dbm.execNonSqlTrans(sql, argsList, conn);
+
+			// 写分账户表（3个）
+			sql = "insert into heso_currency (account) values (?)";
+			argsList.clear();
+			argsList.add(account);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+
+			sql = "insert into heso_bonus_point (account) values (?)";
+			argsList.clear();
+			argsList.add(account);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+
+			sql = "insert into heso_inner_coin (account) values (?)";
+			argsList.clear();
+			argsList.add(account);
+			dbm.execNonSqlTrans(sql, argsList, conn);
+			
+			//插入用户等级表
+			sql = "INSERT INTO heso_account_level (ACCOUNT,USER_ID) VALUES (?,?)";
+			argsList.clear();
+			argsList.add(account);
+			argsList.add(randomUserId());
+			dbm.execNonSqlTrans(sql, argsList, conn);
+			conn.commit();
+			
+			//新人优惠券领取registerType=1
+		    if(registerType.equals("1")){
+		    	
+		    	sql = "select * from heso_coupon_gen where COUPON_TYPE=0 and now()>=START_TIME and NOW()<=END_TIME ORDER BY ADD_TIME LIMIT 1";
+		    	argsList.clear();
+		    	DataTable coupDt = dbm.getInstance().execSqlTrans(sql, argsList, conn);
+		    	DataTable dtGoods = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				
+		    	if (coupDt.getRows().size() > 0){//该注册时间段有新人券可领取
+		    		
+					String coupongen_id = coupDt.getRows().get(0).getString("COUPONGEN_ID");
+					int coupongenNum = coupDt.getRows().get(0).getInt("COUPON_NUM")+1;
+				    String prefix ="000000";
+				    String det_id = coupongen_id + prefix.substring(0, 6-String.valueOf(coupongenNum).length())+String.valueOf(coupongenNum);
+					
+					sql = " INSERT INTO heso_coupon_det (COUPONGEN_ID, COUPONDET_ID, COUPON_STATE, IS_USE, ACCOUNT, USER_NAME, USE_TIME, GET_TIME, ORDER_ID) "
+						+ " VALUES (?, ?, '1', '0', ?, NULL, NULL, now(), NULL);";
+					
+					argsList.clear();
+					argsList.add(coupongen_id);
+					argsList.add(det_id);
+					argsList.add(account);
+					dbm.execNonSqlTrans(sql, argsList, conn);
+					
+					//更新主表领取数量为1
+					sql = " update heso_coupon_gen set COUPON_NUM = ? where COUPONGEN_ID = ?";
+					argsList.clear();
+					argsList.add(coupongenNum);
+					argsList.add(coupongen_id);
+					dbm.execNonSqlTrans(sql, argsList, conn);
+					
+					//COUPON_STATE 1.已使用2.已过期 3.未使用
+					//COUPON_TYPE  1-普通优惠券 0-新人专享优惠券
+					sql = " INSERT INTO heso_user_coupon (ACCOUNT, COUPONDET_ID, COUPON_STATE, COUPON_TYPE, GET_TIME, USE_TIME, ORDER_ID)" 
+						+ " VALUES (?,?, '3', '0', now(), NULL, NULL)";
+					argsList.clear();
+					argsList.add(account);
+					argsList.add(det_id);
+					dbm.execNonSqlTrans(sql, argsList, conn);
+					conn.commit();
+				}
+		    }
+		
+		/*	//赠送金币
+			FundsServiceArgsObject fsao = new FundsServiceArgsObject();
+			fsao.setAmount("5");
+			fsao.setAccountId(account);
+			FundsServiceReturnObject foro = new CoinRecharge().request(fsao);
+			fsao.setOrderId(foro.getOrderId());
+			new CoinRecharge().confirm(fsao, CommonType.CONFIRM_OK);
+			//赠送积分
+			 fsao.setAmount("100");
+			 foro = new PointRecharge().request(fsao);
+			 fsao.setOrderId(foro.getOrderId());
+			 new PointRecharge().confirm(fsao, CommonType.CONFIRM_OK);*/
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			usro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return usro;
+	}
+	
+
+	/**
+	 * 用户登录交易
+	 * 
+	 * @param loginString
+	 * @param password
+	 * @param loginIP
+	 * @return
+	 */
+	public UserServiceReturnObject login(String loginString, String password, String userType,String mobile,String mobileCode, String loginIP) {
+		// 初始化返回对象
+		UserServiceReturnObject usro = new UserServiceReturnObject();
+		usro.setCode("000000");
+		Connection conn = DatabaseMgr.getInstance().getConnection();
+		try {
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			String sql = null;
+			if(mobileCode.equals("")||mobileCode==null){
+				// 检查用户名和密码是否为空
+				if (loginString.isEmpty() || password.isEmpty())
+					throw new Exception("100111");
+				 sql = "select * from heso_account where (user_id = ? or mobile = ?) and   login_password = ? and user_type= ? ";
+				argsList.add(loginString);
+				argsList.add(loginString);
+				argsList.add(password);
+				argsList.add(userType);
+			}else{
+				if(!ToolsUtil.authMobileCode(mobile, mobileCode)){
+					throw new Exception("100106");
+				}
+				 sql = "select * from heso_account where  mobile = ?  and user_type= ? ";
+					argsList.add(mobile);
+					argsList.add(userType);
+			}
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			System.out.println(dt.getRows().size());
+			if (dt.getRows().size() != 1)
+				throw new Exception("100104");
+
+			// 取得账号
+			String account = dt.getRows().get(0).getString("account");
+
+			// 生成token
+			Object o = new Object();
+			String token = MD5Util.getMD5String(String.valueOf(o.hashCode()));
+
+			
+			UserDataObject udo = new UserDataObject();
+			udo.setToken(token);
+			udo.setUser_id(dt.getRows().get(0).getString("user_id"));
+			
+			// 设置登录token
+			GlobalCache.getInstance().setValue(GlobalCache.USER_DATA, account, udo);
+
+			// 设置登录信息（最后登录时间, 登录次数, 登录IP)
+			sql = "update heso_account set last_login_time= ?, login_times=login_times+1, last_login_ip=? where account = ?";
+			argsList.clear();
+			argsList.add(new Date());
+			argsList.add(loginIP);
+			argsList.add(account);
+			DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn);
+
+			// 设置返回数据
+			usro.setAccount(account);
+			usro.setToken(token);
+		} catch (Exception e) {
+			// TODO: handle exception
+			usro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			// e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return usro;
+	}
+	/**
+	 * 注册后的设置密码
+	 * @param moblie
+	 * @param authCode
+	 * @param newPassword
+	 * @param pswType
+	 * @return
+	 */
+	public UserServiceReturnObject setUserDatas (String account, String login_password, String UserId){
+		// 初始化返回对象
+				UserServiceReturnObject usro = new UserServiceReturnObject();
+				usro.setCode("000000");
+		Connection conn = DatabaseMgr.getInstance().getConnection();
+		try {
+		
+			String sql = "select * from heso_account where account = ? ";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(account);
+			DataTable dt = DatabaseMgr.getInstance().execSql(sql, argsList);
+			if (dt.getRows().size() != 1)
+				throw new Exception("100104");
+			DataRow dr = dt.getRows().get(0);
+			// 设置密码
+			//原密码为空，修改密码
+			if(dr.getString("LOGIN_PASSWORD") == null && !login_password.isEmpty()){
+				sql = "update heso_account set login_password =? where account = ?";
+				argsList.clear();
+				argsList.add(login_password);
+				argsList.add(account);
+				int row = DatabaseMgr.getInstance().execNonSql(sql, argsList);
+				if (row == 0)
+					throw new Exception("100105");
+			}
+			//设置UserID
+			if(!UserId.isEmpty()){
+				sql = "update heso_account set USER_ID =? where account = ?";
+				argsList.clear();
+				argsList.add(UserId);
+				argsList.add(account);
+				int row = DatabaseMgr.getInstance().execNonSql(sql, argsList);
+				if (row == 0)
+					throw new Exception("100105");
+			}
+			//修改用户等级表
+			if (!UserId.isEmpty()) {
+				sql = "update heso_account_level set USER_ID =? where account = ?";
+				argsList.clear();
+				argsList.add(account);
+				argsList.add(UserId);
+				int row = DatabaseMgr.getInstance().execNonSql(sql, argsList);
+				if (row == 0)
+					throw new Exception("100105");
+			}
+		}catch(NumberFormatException e){
+			usro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+		} 
+		catch (Exception e) {
+			// TODO: handle exception
+			usro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return usro;
+	}
+	
+	public static String randomUserId(){
+          
+        //用字符数组的方式随机  
+        String randomcode = "";  
+        String model = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";  
+        char[] m = model.toCharArray();  
+          
+        for (int j=0;j<6 ;j++ )  {  
+            char c = m[(int)(Math.random()*52)];  
+            randomcode = randomcode + c;  
+        }  
+		return "用户"+randomcode;
+	}
+	public static void main(String[] args) {
+		/*String accountString = autoRegister("1882695573","kus","mark","0","416140");
+		System.out.println("===="+accountString);*/
+		// 建立订单对象
+					ConsumeOrder order = new ConsumeOrder();
+					//order.innerOrder();	
+					
+	}
+	
+}

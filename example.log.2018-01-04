@@ -1,0 +1,31 @@
+2018-01-04 12:24:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 12:24:37 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 12:25:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 12:25:14 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 12:26:15 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 12:26:16 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 12:26:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 12:28:01 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2018-01-04 13:16:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:22:41 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 13:22:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:22:53 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SFROM heso_order_consume AS hso,heso_product AS hp,heso_account AS ha WHERE  ORD' at line 1
+ 2018-01-04 13:23:23 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:24:38 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 13:24:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:24:53 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 13:25:18 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:25:23 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 13:25:47 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:25:52 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 13:26:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:26:15 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-01-04 13:27:11 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:27:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:49:54 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 13:51:15 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 14:20:20 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 18:28:24 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-01-04 18:28:25 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101268
+ 2018-01-04 18:29:43 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

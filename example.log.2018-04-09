@@ -1,0 +1,6 @@
+2018-04-09 16:48:40 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-09 16:48:45 [com.heso.service.yesUser.YesUserService]-[ERROR] null
+ 2018-04-09 16:54:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-04-09 16:54:46 [com.heso.service.yesUser.YesUserService]-[ERROR] For input string: ""
+ 2018-04-09 16:56:07 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

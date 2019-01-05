@@ -1,0 +1,20 @@
+2016-06-04 16:27:33 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-04 16:27:34 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:34 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:34 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:34 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:35 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:35 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:35 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:35 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:35 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:27:35 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100203
+ 2016-06-04 16:37:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-04 16:37:46 [quartz.job.Upload]-[ERROR] 101506
+ 2016-06-04 16:37:46 [quartz.job.Upload]-[ERROR] 101506
+ 2016-06-04 16:40:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-04 16:40:39 [quartz.job.Upload]-[ERROR] 101506
+ 2016-06-04 18:38:37 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-06-04 18:38:37 [quartz.job.Upload]-[ERROR] 101506
+ 2016-06-04 18:38:37 [quartz.job.Upload]-[ERROR] 101506
+ 

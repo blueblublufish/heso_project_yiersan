@@ -1,0 +1,23 @@
+2018-07-11 10:13:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 10:13:15 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-07-11 10:15:23 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 10:15:25 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-07-11 10:15:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 10:16:18 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-07-11 10:18:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 17:50:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 17:50:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 18:12:37 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 18:12:38 [com.heso.service.article.ArticleService]-[ERROR] Unknown column 'hdc.READ' in 'field list'
+ 2018-07-11 18:13:00 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 18:13:09 [com.heso.service.article.ArticleService]-[ERROR] Unknown column 'hdc.READ' in 'field list'
+ 2018-07-11 18:13:58 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 18:14:15 [com.heso.service.article.ArticleService]-[ERROR] Unknown column 'hdc.READ' in 'field list'
+ 2018-07-11 18:16:46 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 18:16:48 [com.heso.service.article.ArticleService]-[ERROR] -1
+ 2018-07-11 18:16:57 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 18:17:12 [com.heso.service.article.ArticleService]-[ERROR] -1
+ 2018-07-11 18:17:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-07-11 18:17:51 [com.heso.service.article.ArticleService]-[ERROR] -1
+ 2018-07-11 18:19:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

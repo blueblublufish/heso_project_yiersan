@@ -1,0 +1,2031 @@
+package com.heso.service.order.consume;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import sun.org.mozilla.javascript.internal.ast.NewExpression;
+
+import com.heso.db.DatabaseMgr;
+import com.heso.service.cart.CartService;
+import com.heso.service.mall.entity.ProductDTO;
+import com.heso.service.mall.entity.ProductItemObject;
+import com.heso.service.order.consume.entity.ConsumeOrderObject;
+import com.heso.service.order.consume.entity.ConsumeOrderReturnObject;
+import com.heso.service.order.consume.entity.ConsumeProductObject;
+import com.heso.service.wardrobe.WardrobeService;
+import com.heso.service.wardrobe.entity.WardrobeDTO;
+import com.heso.service.wardrobe.entity.WardrobeServiceReturnObject;
+import com.heso.utility.ErrorProcess;
+import com.mchange.v1.db.sql.DriverManagerDataSource.DmdsObjectFactory;
+import com.sun.org.apache.xml.internal.utils.StopParseException;
+
+import data.DataRow;
+import data.DataTable;
+
+public class ConsumeOrder {
+	private static final Log logger = LogFactory.getLog(ConsumeOrder.class);
+
+	/**
+	 * 生成订单
+	 * 
+	 * @param coao
+	 * @param listObject
+	 * @return
+	 */
+	public ConsumeOrderReturnObject genarate(ArrayList<ConsumeOrderObject> coaoList, String innerCoin, String receiveId,String paymentTerms ,String recommend,String couponDetId) {
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		// 初始化返回对象
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		try {
+			conn = dbm.getConnection();
+			conn.setAutoCommit(false);
+			StringBuffer orderId = new StringBuffer();
+			List<String> orderIds = new ArrayList<String>();
+			ArrayList<ConsumeOrderObject> cooList = new ArrayList<ConsumeOrderObject>();
+			BigDecimal total = new BigDecimal(0) ;
+			BigDecimal notSPtotal = new BigDecimal(0) ;//非特价商品总额，不在优惠券优惠范围
+			for (ConsumeOrderObject coao : coaoList) {
+				// 获取用户账户信息
+				String sql = "select * from heso_account where account = ?";
+				List<Object> argsList = new ArrayList<Object>();
+				argsList.add(coao.getAccount());
+				DataTable dt = dbm.execSqlTrans(sql, argsList, conn);
+				if (dt.getRows().size() == 0)
+					throw new Exception("100100");
+
+				// 取序列
+				String seqId = dbm.getSequence("seq_order", "16");
+				orderIds.add(seqId);
+				if (seqId.isEmpty())
+					throw new Exception("000150");
+
+				sql = "insert into heso_order_consume(order_id, account, product_Id,type,name,image,color,size,price,count,amount, currency, inner_coin, bonus_point, receive_id , payment_terms ,from_suit ,recommend, couponDet_Id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				argsList.clear();
+				argsList.add(seqId);
+				argsList.add(coao.getAccount());
+				argsList.add(coao.getProductId());
+				argsList.add(coao.getType());
+				argsList.add(coao.getName());
+				argsList.add(coao.getImage());
+				argsList.add(coao.getColor());
+				argsList.add(coao.getSize());
+				argsList.add(coao.getPrice());
+				argsList.add(coao.getCount());
+				argsList.add(coao.getAmount());
+				argsList.add(coao.getCurrency());
+				argsList.add(coao.getInnerCoin());
+				argsList.add(coao.getBonusPoint());
+				argsList.add(receiveId);
+				argsList.add(paymentTerms);
+				argsList.add(coao.getSuitId());
+				argsList.add(recommend);
+				argsList.add(couponDetId);//增加优惠券使用子表ID
+				int rows = dbm.execNonSqlTrans(sql, argsList, conn);
+				if (rows <= 0)
+					throw new Exception("100150");
+
+				ArrayList<ConsumeProductObject> copList = coao.getCpoList();
+				for (ConsumeProductObject cpo : copList) {
+					sql = "insert into heso_order_consume_detail values(?,?,?,?,?,?,?,?,?,?,?,?)";
+					argsList.clear();
+					argsList.add(seqId);
+					argsList.add(cpo.getProductId());
+					argsList.add(cpo.getName());
+					argsList.add(cpo.getImage());
+					argsList.add(cpo.getColor());
+					argsList.add(cpo.getSize());
+					argsList.add(cpo.getCount());
+					argsList.add(cpo.getPrice());
+					argsList.add(cpo.getAmount());
+					argsList.add(cpo.getSuitPrice());
+					argsList.add(cpo.getSuitPromotion());
+					argsList.add("0");
+					rows = dbm.execNonSqlTrans(sql, argsList, conn);
+					if (rows <= 0)
+						throw new Exception("100151");
+				}
+				
+				ConsumeOrderObject coo = new ConsumeOrderObject();
+				coo.setOrderId(seqId);
+				coo.setPaymentTerms(paymentTerms);
+				total  = total.add( new BigDecimal(coao.getAmount())); 
+				
+				if(!coao.getProductId().contains("SPE")){
+					notSPtotal = notSPtotal.add(new BigDecimal(coao.getAmount()));
+				}
+				
+				cooList.add(coo);
+				orderId.append(seqId+";");
+				
+				
+				
+				
+			}
+			
+			//创建支付订单
+			String sql = "insert into heso_order_pay (order_pay , pay_type , wai_order , order_money ,CREATE_TIME) values (? , ? , ? , ? , SYSDATE()) ";
+			List<Object> argsList = new ArrayList<Object>();
+			argsList.add(orderId.toString());
+			argsList.add(paymentTerms);
+			String waiOrder = dbm.getSequence("seq_order", "16");
+			argsList.add(waiOrder);
+			argsList.add(total);
+			 if(dbm.execNonSqlTrans(sql, argsList, conn) <= 0 ){
+				 throw new Exception("100151");
+			 }
+			 
+			//更新用户优惠券表   modify by djh
+			if(!couponDetId.equals("") && couponDetId!=""){
+				
+				if(couponDetId.contains(","))
+					couponDetId = "'" + couponDetId.replace(",", "','") + "'";
+				else
+					couponDetId = "'"+couponDetId+"'";
+				
+				String sOrderId = orderId.toString().substring(0,orderId.toString().length());
+				if(sOrderId.contains(";")){
+					sOrderId = sOrderId.replace(";", ",");
+				}
+				
+				sql = "UPDATE heso_user_coupon SET COUPON_STATE=1,USE_TIME=now(),ORDER_ID=? WHERE ACCOUNT=? AND COUPONDET_ID IN ("+couponDetId+")";
+				argsList.clear();
+				argsList.add(sOrderId);
+				argsList.add(coaoList.get(0).getAccount());
+				if(DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0 ){
+					throw new Exception("100151");
+				}
+				
+				//更新优惠券子表使用状态等。
+				sql = "update heso_coupon_det set IS_USE=1,ACCOUNT=?,USE_TIME=NOW(),ORDER_ID=? where COUPONDET_ID in ("+couponDetId+")";
+				argsList.clear();
+				argsList.add(coaoList.get(0).getAccount());
+				argsList.add(sOrderId);
+				if(DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0 ){
+					throw new Exception("100151");
+				}
+			}
+			 
+			 conn.commit();
+			 //添加地址
+			 updateLoadAdd(receiveId, coaoList.get(0).getAccount(), orderIds);
+			 
+			ConsumeOrderObject coo1 = new ConsumeOrderObject();
+			coo1.setAmount(String.valueOf(total));//原来总价
+			cooList.add(coo1);
+
+			ConsumeOrderObject coo2 = new ConsumeOrderObject();
+			coo2.setAmount(String.valueOf(notSPtotal));//非特价商品总价
+			cooList.add(coo2);
+			
+			coro.setCooList(cooList);
+			coro.setOrderId(waiOrder);
+		} catch (Exception e) {
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coro;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * 商家 添加备注
+	 * @param orderId
+	 * @param desc
+	 * @return
+	 */
+	public  ConsumeOrderReturnObject addDesc(String orderId,String desc){
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		// 初始化返回对象
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		List<Object> argsList = new ArrayList<Object>();
+		try {
+			conn = dbm.getConnection();
+			String sql = "update heso_order_consume set REMARKS = ? where ORDER_ID = ?";
+			argsList.add(desc);
+			argsList.add(orderId);
+			if(dbm.execNonSqlTrans(sql, argsList, conn) <= 0 ){
+				throw new Exception("100151");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try { 
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	
+	public  ConsumeOrderReturnObject createServiceOrder(String serviceId,String account,String designerId,String addressId,String mobile){
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		// 初始化返回对象
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		List<Object> argsList = new ArrayList<Object>();
+		try {
+			conn = dbm.getConnection();
+			String sql = "insert into heso_order_consume (order_id, account, CURRENCY , INNER_COIN , BONUS_POINT , PRODUCT_ID , NAME , status , image,CHANGE_TYPE) "
+					   + "values (?,?,?,?,?,?,?,?,?,?) ";
+ 		 
+			if(dbm.execNonSqlTrans(sql, argsList, conn) <= 0 ){
+				throw new Exception("100151");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try { 
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coro;
+	}
+	
+	/**
+	 * 生成订单2内部
+	 * 
+	 * @param coao
+	 * @param listObject
+	 * @return
+	 */
+	public ConsumeOrderReturnObject genarate2(ArrayList<ConsumeOrderObject> coaoList, String innerCoin, String receiveId,String paymentTerms ,String recommend,String couponDetId) {
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		// 初始化返回对象
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		try {
+			conn = dbm.getConnection();
+			conn.setAutoCommit(false);
+			StringBuffer orderId = new StringBuffer();
+			List<String> orderIds = new ArrayList<String>();
+			ArrayList<ConsumeOrderObject> cooList = new ArrayList<ConsumeOrderObject>();
+			BigDecimal total = new BigDecimal(0) ;
+			BigDecimal notSPtotal = new BigDecimal(0) ;//非特价商品总额，不在优惠券优惠范围
+			for (ConsumeOrderObject coao : coaoList) {
+				// 获取用户账户信息
+				String sql = "select * from heso_account where account = ?";
+				List<Object> argsList = new ArrayList<Object>();
+				argsList.add(coao.getAccount());
+				DataTable dt = dbm.execSqlTrans(sql, argsList, conn);
+				if (dt.getRows().size() == 0)
+					throw new Exception("100100");
+
+				// 取序列
+				String seqId = dbm.getSequence("seq_order", "16");
+				orderIds.add(seqId);
+				if (seqId.isEmpty())
+					throw new Exception("000150");
+
+				sql = "insert into heso_order_consume(order_id, account, product_Id,type,name,image," +
+						"color,size,price,count,amount, currency, inner_coin, bonus_point, receive_id , " +
+						"payment_terms ,from_suit ,recommend, couponDet_Id,channel_type,format_type," +
+						"size_type,style_type,cloth_type,seller,remark) " +
+						"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				argsList.clear();
+				argsList.add(seqId);
+				argsList.add(coao.getAccount());
+				argsList.add(coao.getProductId());
+				argsList.add(coao.getType());
+				argsList.add(coao.getName());
+				argsList.add(coao.getImage());
+				argsList.add(coao.getColor());
+				argsList.add(coao.getSize());
+				argsList.add(coao.getPrice());
+				argsList.add(coao.getCount());
+				argsList.add(coao.getAmount());
+				argsList.add(coao.getCurrency());
+				argsList.add(coao.getInnerCoin());
+				argsList.add(coao.getBonusPoint());
+				argsList.add(receiveId);
+				argsList.add(paymentTerms);//支付方式
+				argsList.add(coao.getSuitId());
+				argsList.add(recommend);//推荐人
+				argsList.add(couponDetId);
+				//20171122
+				argsList.add(coao.getChannelType());
+				argsList.add(coao.getFormatType());
+				argsList.add(coao.getSizeType());
+				argsList.add(coao.getStyleType());
+				argsList.add(coao.getClothType());
+				argsList.add(coao.getSeller());
+				argsList.add(coao.getRemark());
+				//
+				int rows = dbm.execNonSql(sql, argsList);
+				if (rows <= 0)
+					throw new Exception("100150");
+				coro.setOrderId(seqId);
+
+				ArrayList<ConsumeProductObject> copList = coao.getCpoList();
+				if(copList != null){
+					for (ConsumeProductObject cpo : copList) {
+						sql = "insert into heso_order_consume_detail values(?,?,?,?,?,?,?,?,?,?,?,?)";
+						argsList.clear();
+						argsList.add(seqId);
+						argsList.add(cpo.getProductId());
+						argsList.add(cpo.getName());
+						argsList.add(cpo.getImage());
+						argsList.add(cpo.getColor());
+						argsList.add(cpo.getSize());
+						argsList.add(cpo.getCount());
+						argsList.add(cpo.getPrice());
+						argsList.add(cpo.getAmount());
+						argsList.add(cpo.getSuitPrice());
+						argsList.add(cpo.getSuitPromotion());
+						argsList.add("0");
+						//
+						rows = dbm.execNonSql(sql, argsList);
+						if (rows <= 0)
+							throw new Exception("100151");
+					}
+				}
+				
+				
+				ConsumeOrderObject coo = new ConsumeOrderObject();
+				coo.setOrderId(seqId);
+				coo.setPaymentTerms(paymentTerms);
+				total  = total.add( new BigDecimal(coao.getAmount())); 
+				
+				if(!coao.getProductId().contains("SPE")){
+					notSPtotal = notSPtotal.add(new BigDecimal(coao.getAmount()));
+				}
+				
+				cooList.add(coo);
+				orderId.append(seqId+";");
+				
+			}
+			
+			//创建支付订单
+			String sql = "insert into heso_order_pay (order_pay , pay_type , wai_order , order_money ,CREATE_TIME) values (? , ? , ? , ? , SYSDATE()) ";
+			List<Object> argsList = new ArrayList<Object>();
+			argsList.add(orderId.toString());
+			argsList.add(paymentTerms);
+			String waiOrder = dbm.getSequence("seq_order", "16");
+			argsList.add(waiOrder);
+			argsList.add(total);
+			//
+			int y = dbm.execNonSql(sql, argsList) ;
+			 if( y <= 0 ){
+				 throw new Exception("100152");
+			 }
+			 
+			//更新用户优惠券表   modify by djh
+			if(!couponDetId.equals("") && couponDetId!=""){
+				
+				if(couponDetId.contains(","))
+					couponDetId = "'" + couponDetId.replace(",", "','") + "'";
+				else
+					couponDetId = "'"+couponDetId+"'";
+				
+				String sOrderId = orderId.toString().substring(0,orderId.toString().length());
+				if(sOrderId.contains(";")){
+					sOrderId = sOrderId.replace(";", ",");
+				}
+				
+				sql = "UPDATE heso_user_coupon SET COUPON_STATE=1,USE_TIME=now(),ORDER_ID=? WHERE ACCOUNT=? AND COUPONDET_ID IN ("+couponDetId+")";
+				argsList.clear();
+				argsList.add(sOrderId);
+				argsList.add(coaoList.get(0).getAccount());
+				//
+				if(DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0 ){
+					throw new Exception("100151");
+				}
+				
+				//更新优惠券子表使用状态等。
+				sql = "update heso_coupon_det set IS_USE=1,ACCOUNT=?,USE_TIME=NOW(),ORDER_ID=? where COUPONDET_ID in ("+couponDetId+")";
+				argsList.clear();
+				argsList.add(coaoList.get(0).getAccount());
+				argsList.add(sOrderId);
+				//
+				if(DatabaseMgr.getInstance().execNonSql(sql, argsList) <= 0 ){
+					throw new Exception("100151");
+				}
+			}
+			 
+			  conn.commit();
+			 //添加地址
+			 updateLoadAdd(receiveId, coaoList.get(0).getAccount(), orderIds);
+			 
+			ConsumeOrderObject coo1 = new ConsumeOrderObject();
+			coo1.setAmount(String.valueOf(total));//原来总价
+			cooList.add(coo1);
+
+			ConsumeOrderObject coo2 = new ConsumeOrderObject();
+			coo2.setAmount(String.valueOf(notSPtotal));//非特价商品总价
+			cooList.add(coo2);
+			
+			coro.setCooList(cooList);
+		} catch (Exception e) {
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coro;
+	}
+	
+	
+	public ConsumeOrderReturnObject genarate3(ArrayList<ConsumeOrderObject> coaoList, String innerCoin, String receiveId,String paymentTerms ,String recommend,String couponDetId) {
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		// 初始化返回对象
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		try {
+			conn = dbm.getConnection();
+			conn.setAutoCommit(false);
+			StringBuffer orderId = new StringBuffer();
+			List<String> orderIds = new ArrayList<String>();
+			ArrayList<ConsumeOrderObject> cooList = new ArrayList<ConsumeOrderObject>();
+			BigDecimal total = new BigDecimal(0) ;
+			BigDecimal notSPtotal = new BigDecimal(0) ;//非特价商品总额，不在优惠券优惠范围
+			for (ConsumeOrderObject coao : coaoList) {
+				// 获取用户账户信息
+				String sql = "select * from heso_account where account = ?";
+				List<Object> argsList = new ArrayList<Object>();
+				argsList.add(coao.getAccount());
+				DataTable dt = dbm.execSqlTrans(sql, argsList, conn);
+				if (dt.getRows().size() == 0)
+					throw new Exception("100100");
+
+				// 取序列
+				String seqId = dbm.getSequence("seq_order", "16");
+				orderIds.add(seqId);
+				if (seqId.isEmpty())
+					throw new Exception("000150");
+
+				sql = "insert into heso_order_consume(order_id, account, product_Id,type,name," +
+						"price,count,amount, currency, inner_coin, bonus_point, receive_id , " +
+						"payment_terms ,from_suit ,recommend, couponDet_Id,channel_type,format_type," +
+						"size_type,style_type,cloth_type,seller,remark) " +
+						"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				
+			}
+		  
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return coro;
+	}
+	/**
+	 *  获取生成订单信息
+	 */
+	public ConsumeOrderReturnObject getInfo(String account, String receiveId ){
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		try {
+			
+			String sql = " select amount , payment_terms , order_id from heso_order_consume  where account = ? and receive_id = ? pay_status = '0' and status = '0' ";
+			List<Object>list= new ArrayList<Object>();
+			list.add(account);
+			list.add(receiveId);
+			DataTable dt = DatabaseMgr.getInstance().execSql(sql, list);
+			
+			if (dt.getRows().size() == 0)
+				throw new Exception("100300");
+
+			ArrayList<ConsumeOrderObject> cooList = new ArrayList<ConsumeOrderObject>();
+
+			for (int i = 0; i < dt.getRows().size(); i++) {
+				DataRow dr = dt.getRows().get(i);
+				ConsumeOrderObject coo = new ConsumeOrderObject();
+				coo.setOrderId(dr.getString("order_id"));
+				coo.setPaymentTerms(dr.getString("payment_terms"));
+				coo.setAmount(dr.getString("amount"));
+				cooList.add(coo);
+			}
+			coro.setCooList(cooList);
+		} catch (Exception e) {
+			// TODO: handle exception
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return coro;
+	}
+	/**
+	 * 获取订单列表
+	 * 
+	 * @param account
+	 * @return
+	 */
+	public ConsumeOrderReturnObject getInfo(String account, String orderId, String payStatus, String sendStatus, String returnStatus, String showStatus, int recStart, int recCount) {
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		try {
+			conn = DatabaseMgr.getInstance().getConnection();
+			// 获取记录总数
+			String sql = "select count(*) from heso_order_consume where account=? and CHANGE_TYPE = '0' ";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.add(account);
+			if (!orderId.isEmpty()) {
+				sql += " and order_id=? ";
+				argsList.add(orderId);
+			}
+			if (!payStatus.isEmpty()) {
+				sql += " and pay_status=? ";
+				argsList.add(payStatus);
+			}
+			if (!sendStatus.isEmpty()) {
+				sql += " and send_status=? ";
+				argsList.add(sendStatus);
+			}
+			if (!returnStatus.isEmpty()) {
+				sql += " and return_status=? ";
+				argsList.add(payStatus);
+			}
+			if (!showStatus.isEmpty()) {
+				sql += " and show_status=? ";
+				argsList.add(showStatus);
+			}
+			sql += " and status = '0' ";
+			
+			coro.setReccount(DatabaseMgr.getInstance().execSqlTrans(sql, argsList,conn).getRows().get(0).getString(0));
+			if (coro.getReccount().equals("0"))
+				throw new Exception("101300");
+		 
+			sql = "select * from heso_order_consume where account=? and CHANGE_TYPE = '0' ";
+			argsList.clear();
+			argsList.add(account);
+			if (!orderId.isEmpty()) {
+				sql += " and order_id=? ";
+				argsList.add(orderId);
+			}
+			if (!payStatus.isEmpty()) {
+				sql += " and pay_status=? ";
+				argsList.add(payStatus);
+			}
+			if (!sendStatus.isEmpty()) {
+				sql += " and send_status=? ";
+				argsList.add(sendStatus);
+			}
+			if (!returnStatus.isEmpty()) {
+				sql += " and return_status=? ";
+				argsList.add(payStatus);
+			}
+			if (!showStatus.isEmpty()) {
+				sql += " and show_status=? ";
+				argsList.add(showStatus);
+			}
+			sql += " and status = '0' order by create_time desc limit ?, ?";
+			argsList.add(recStart);
+			argsList.add(recCount);
+
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			if (dt.getRows().size() == 0)
+				throw new Exception("100300");
+
+			ArrayList<ConsumeOrderObject> cooList = new ArrayList<ConsumeOrderObject>();
+
+			for (int i = 0; i < dt.getRows().size(); i++) {
+				DataRow dr = dt.getRows().get(i);
+				ConsumeOrderObject coo = new ConsumeOrderObject();
+				coo.setOrderId(dr.getString("order_id"));
+				coo.setAccount(dr.getString("account"));
+				coo.setCreateTime(dr.getString("create_time"));
+				coo.setProductId(dr.getString("product_id"));
+				coo.setType(dr.getString("type"));
+				coo.setName(dr.getString("name"));
+				coo.setImage(dr.getString("image"));
+				coo.setColor(dr.getString("color"));
+				coo.setSize(dr.getString("size"));
+				coo.setPrice(dr.getString("price"));
+				coo.setCount(dr.getString("count"));
+				coo.setAmount(dr.getString("amount"));
+				coo.setCurrency(dr.getString("currency"));
+				coo.setInnerCoin(dr.getString("inner_coin")); 
+				coo.setBonusPoint(dr.getString("bonus_point"));
+				coo.setPayTime(dr.getString("pay_time"));
+				coo.setPayStatus(dr.getString("pay_status"));
+				coo.setSendStatus(dr.getString("send_status"));
+				coo.setReturnStatus(dr.getString("return_status"));
+				coo.setReceiveId(dr.getString("receive_id"));
+				coo.setLogistCom(dr.getString("logist_com"));
+				coo.setTrackingNum(dr.getString("tracking_num"));
+				coo.setShowStatus(dr.getString("show_status"));
+				coo.setSuitId(dr.getString("from_suit"));
+				coo.setPointType(dr.getString("POINT_TYPE"));
+				coo.setSendTime(dr.getString("SEND_TIME"));
+				cooList.add(coo);
+			}
+			coro.setCooList(cooList);
+		} catch (Exception e) {
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return coro;
+	}
+
+	/**
+	 * 获取订单明细
+	 * 
+	 * @param orderId
+	 * @return
+	 */
+	public   ConsumeOrderReturnObject getDetail(String orderId) {
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		String sql = "select * from heso_order_consume_detail where order_id=? ";
+		ArrayList<Object> argsList = new ArrayList<Object>();
+		argsList.add(orderId);
+
+		try {
+			DataTable dt = DatabaseMgr.getInstance().execSql(sql, argsList);
+			if (dt.getRows().size() == 0)
+				throw new Exception("100300");
+
+			ArrayList<ConsumeOrderObject> cooList = new ArrayList<ConsumeOrderObject>();
+			for (int i = 0; i < dt.getRows().size(); i++) {
+				DataRow dr = dt.getRows().get(i);
+				ConsumeOrderObject coo = new ConsumeOrderObject();
+				coo.setOrderId(dr.getString("order_id"));
+				coo.setProductId(dr.getString("product_id"));
+				coo.setName(dr.getString("name"));
+				coo.setImage(dr.getString("image"));
+				coo.setColor(dr.getString("color"));
+				coo.setSize(dr.getString("size"));
+				coo.setPrice(dr.getString("price"));
+				coo.setCount(dr.getString("count"));
+				coo.setAmount(dr.getString("amount"));
+				cooList.add(coo);
+			}
+			coro.setCooList(cooList);
+		} catch (Exception e) {
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return coro;
+	}
+	/**
+	 * 确认收货
+	 */
+	public ConsumeOrderReturnObject confirmReceive (String orderId){
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = DatabaseMgr.getInstance().getConnection();
+		try {
+			//查询该订单是否已支付和已发货
+			String sql = " select send_status from heso_order_consume where order_Id = ? and pay_status = '1' and send_status = '1' ";
+			List<Object> argsList = new ArrayList<Object>();
+			argsList.add(orderId);
+			if(DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn).getRows().size() <= 0)
+				throw new Exception("101122");
+			sql = " update heso_order_consume set send_status = '3' where order_Id = ? ";
+			if(DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0)
+				throw new Exception("101123");
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return coro;
+	}
+	
+	/**
+	 * 订单支付
+	 */
+	public ConsumeOrderReturnObject payOrder(String account , List <String> orderIds ){
+		Connection conn = null;
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		try {
+			conn = DatabaseMgr.getInstance().getConnection();
+			
+			String sql = " select receive_id, amount , order_id ,payment_terms , rogion_id from heso_order_consume where account = ? and pay_status = '0' and order_id in(  ";
+			List<Object> agesData = new ArrayList<Object>();
+			agesData.add(account);
+			
+			for(int i =1 ; i<orderIds.size();i++){
+				sql += " ? , ";
+				agesData.add(orderIds.get(i));
+			}
+			sql += "? ) ";
+			agesData.add(orderIds.get(0));
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, agesData, conn);
+			
+			if(dt.getRows().size() <= 0)
+				throw new Exception("101617");
+			
+			//判断订单是否存在不同的支付方式或存在不同的收货地址
+			
+			int reciveId0 =  dt.getRows().get(0).getInt("rogion_id");
+			
+			int payment0 = dt.getRows().get(0).getInt("payment_terms");
+			
+			for(int i = 1 ;i <dt.getRows().size();i++){
+				int reciveIdi = dt.getRows().get(i).getInt("rogion_id");
+				int paymenti = dt.getRows().get(i).getInt("payment_terms");
+				if(reciveId0 != reciveIdi || payment0 != paymenti){
+						throw new Exception("101910");
+				}
+			}
+			
+			ArrayList<ConsumeOrderObject>list = new ArrayList<ConsumeOrderObject>();
+			Double total  = 0.0; 
+			StringBuffer orderIdStr = new StringBuffer();
+			for(int i =0;i<dt.getRows().size();i++){ 
+					    String orderId = orderIds.get(i);
+					   
+					    orderIdStr.append(orderId+";");
+						ConsumeOrderObject coo = new ConsumeOrderObject();
+						total = total + new BigDecimal(dt.getRows().get(i).getString("amount")).doubleValue() ;
+						coo.setAmount(dt.getRows().get(i).getString("amount"));
+						coo.setOrderId(orderId);
+						coo.setPaymentTerms(dt.getRows().get(i).getString("payment_terms"));
+						list.add(coo);
+					}
+			
+			//创建支付订单
+			 sql = "insert into heso_order_pay (order_pay , pay_type , wai_order , order_money , create_time) values (? , ? , ? , ? , SYSDATE()) ";
+			List<Object> argsList = new ArrayList<Object>();
+			argsList.add(orderIdStr.toString());
+			argsList.add(dt.getRows().get(0).getString("payment_terms"));
+			String waiOrder = DatabaseMgr.getInstance().getSequence("seq_order", "16");
+			argsList.add(waiOrder);
+			argsList.add(total);
+			 if(DatabaseMgr.getInstance().execNonSqlTrans(sql, argsList, conn) <= 0 ){
+				 throw new Exception("100151");
+			 }
+			 
+				//查询收货地址
+				sql ="select REGION_ID from heso_account_recvinfo where id = ? ";
+				agesData.clear();
+				agesData.add(dt.getRows().get(0).getString("RECEIVE_ID"));
+				DataTable dt1 = DatabaseMgr.getInstance().execSqlTrans(sql, agesData, conn);
+				 coro = new ConsumeOrder().logisticsPay(dt1.getRows().get(0).getString("REGION_ID"),total,waiOrder);
+				 //查询优惠价
+				 //ConsumeOrderReturnObject coro1 = new ConsumeOrder().firstPay(String.valueOf(total), account ,waiOrder);//取消首单优惠 16/11/09
+				 //查询优惠券
+				 //ConsumeOrderReturnObject cop = new ConsumeOrder().couponDiscount(coro1.getReccount(), account, coro1.getDiscount(), orderIdStr.toString(), "", "2",waiOrder);//这里要传入原单号，不是外单号
+				 ConsumeOrderReturnObject cop = new ConsumeOrder().couponDiscount(String.valueOf(total), account, "0", orderIdStr.toString(), "", "2",waiOrder);
+				total = (new BigDecimal(cop.getReccount()).add(new BigDecimal(coro.getReccount()))).doubleValue();
+		
+			ConsumeOrderObject coo1 = new ConsumeOrderObject();
+			coo1.setAmount(String.valueOf(total));
+			list.add(coo1);
+			coro.setCooList(list);
+			coro.setOrderId(waiOrder);
+//			updateLoadAdd(String.valueOf(reciveId0), account, or);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return coro;
+	}
+	
+	
+	
+	public   ConsumeOrderReturnObject bookService(String accountId,String productId,String count ,String payType,String designerId,String reciveId,String remarks ,String desigmerServices){
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		try {
+			conn = dbm.getConnection();
+			conn.setAutoCommit(false);
+			//根据地址ID查找详细地址
+			String sql = "SELECT * FROM heso_account_recvinfo where ID = ?";
+			List<Object> argsList = new ArrayList<Object>();
+			argsList.add(reciveId);
+			DataTable dt = dbm.execSqlTrans(sql, argsList, conn);	
+			if (dt.getRows().size() == 0){
+				logger.error(">>>>>>>>预约服务：查询详细地址失败");
+				throw new Exception("001093");
+			}
+			String accountName = dt.getRows().get(0).getString("NAME");
+			String address = dt.getRows().get(0).getString("ADDRESS");
+			String mobile = dt.getRows().get(0).getString("MOBILE");
+			
+			String region_id = dt.getRows().get(0).getString("REGION_ID");
+			//查找服务与对应设计师价格
+			sql = "SELECT hmp.name ,hsd.price  FROM heso_member_product as  hmp,heso_service_designer as hsd where hmp.ID = ? AND hmp.ID = hsd.SERVICEID AND hsd.DESIGNERID = ?";
+			argsList.clear();
+			argsList.add(productId);
+			argsList.add(designerId);
+			DataTable dt1 = dbm.execSqlTrans(sql, argsList, conn);
+			if(dt1.getRows().size() == 0){
+				logger.error(">>>>>>>>>预约服务：查询服务对应设计师价格失败");
+				throw new Exception("100100");
+			}
+			String serviceName = dt1.getRows().get(0).getString("NAME");
+			String price = dt1.getRows().get(0).getString("price");
+			//加入订单列表
+			String seqId = dbm.getSequence("seq_order", "16");
+			sql = "insert into heso_order_consume(order_id, account, product_Id,type,name," +
+					"price,count,amount, receive_id , " +
+					"payment_terms ," +
+					"seller,remark) " +
+					"values (?,?,?,?,?,?,?,?,?,?,?,?)";
+			argsList.clear();
+			argsList.add(seqId);
+			argsList.add(accountId);
+			argsList.add(productId);
+			argsList.add("0");
+			argsList.add(serviceName);
+			argsList.add(price);
+			double priceDouble = Double.valueOf(price);
+			double amount = priceDouble * Integer.valueOf(count);
+			argsList.add(count);
+			argsList.add(amount);
+			argsList.add(reciveId);
+			argsList.add("");
+			argsList.add(designerId);
+			argsList.add(remarks);
+			int rows = dbm.execNonSql(sql, argsList);
+			if (rows <= 0){
+				logger.error(">>>>>>>>>预约服务：新增订单失败");
+				throw new Exception("001093");
+			}
+			
+ 			//修改设计师日程表
+			sql = "UPDATE heso_designer_place as hdp SET  orderId = ? ,STATUS= ? ,ACCOUNT= ?,SERVICEID=? WHERE  ID in ("+
+ 			desigmerServices +")";
+			argsList.clear();
+			argsList.add(seqId);
+			argsList.add("1");
+			argsList.add(accountId);
+			argsList.add(productId);
+			int dt2 = dbm.execNonSqlTrans(sql, argsList, conn);
+			if(dt2 <=0){
+				logger.error(">>>>>>>>预约服务：修改设计师日程表失败");
+				throw new Exception("001093");
+			}
+			
+			//创建支付订单表
+			sql = "insert into heso_order_pay (order_pay , pay_type , wai_order , order_money ,CREATE_TIME) values (? , ? , ? , ? , SYSDATE()) ";
+			argsList.clear();
+			argsList.add(seqId);
+			argsList.add(payType);
+			String waiOrder = dbm.getSequence("seq_order", "16");
+			argsList.add(waiOrder);
+			argsList.add(amount);
+			//
+			int y = dbm.execNonSql(sql, argsList) ;
+			 if( y <= 0 ){
+				 throw new Exception("001093");
+			 }
+			 
+			 conn.commit();
+			 
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			
+		}finally{
+			try { 
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coro;
+
+	}
+	/**
+	 * 完成订单支付
+	 * @param type
+	 * @param orderIds
+	 * @param account
+	 * @return
+	 */
+	public ConsumeOrderReturnObject payFinish(String type , String orderId, String payTime){
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		try {
+			conn = DatabaseMgr.getInstance().getConnection();
+			conn.setAutoCommit(false);
+			if("000000".equals(type)){
+				//查询订单是否存在
+				String sql = " select order_pay from heso_order_pay where wai_order  = ?  and is_pay=0";
+				List<Object> list = new ArrayList<Object>();
+				list.add(orderId);
+				DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, list, conn);
+				if(dt.getRows().size() <= 0 )
+					throw new Exception("101268");
+				String [] orderIds = dt.getRows().get(0).getString("order_pay").split(";");
+				//更新支付状态，支付时间
+				StringBuffer buSql = new StringBuffer(" update heso_order_consume set pay_status = '1' , pay_time = SYSDATE(), status = '0' where  order_id in ( ? ");
+				list.clear();
+//				list.add(payTime);
+				list.add(orderIds[0]);
+				for(int i = 1 ;  i  < orderIds.length; i++){
+					buSql.append(", ? ");
+					list.add(orderIds[i]);
+				}
+				buSql.append(" ) ");
+				if(	DatabaseMgr.getInstance().execNonSqlTrans(buSql.toString(), list, conn)<= 0){
+					throw new Exception("101268");
+				}
+				
+				sql = "update heso_order_pay set is_pay ='1' , pay_time = SYSDATE() where  wai_order = ? ";
+				list.clear();
+//				list.add(payTime);
+				list.add(orderId);
+				DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn);
+				 
+				sql = "update heso_discount set status = '1' where  order_id = ? ";
+				list.clear();
+				list.add(orderId);
+				DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn);
+				
+				/*for(ConsumeOrderObject coo :coro.getCooList()){
+					addWardrobeByProductId(coo.getProductId(), coo.getAccount());
+					
+				}*/
+			}else{ 
+				coro.setCode("101269");
+			}
+			conn.commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return coro;
+	}
+	/**
+	 * 物流支付
+	 * @param regionalId
+	 * @return
+	 */
+	public ConsumeOrderReturnObject logisticsPay (String regionalId,Double amount,String orderId){
+		Connection conn = null;
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		try {
+			conn = DatabaseMgr.getInstance().getConnection();
+			String sql = " select PRICE from heso_deliver_fee where FINAL_PROVINCE like ";
+			List<Object> list = new ArrayList<Object>();
+			String regional = regionalId.substring(0,2);
+			
+			switch (Integer.parseInt(regional)) {
+			case 65:
+				sql+= " '%"+"新疆"+"%' ";
+				break;
+			case 54:
+				sql+=" '%"+"西藏"+"%' ";
+				break;
+			case 71:
+				sql+=" '%"+"台湾"+"%' ";
+				break;
+			case 81:
+				sql+=" '%"+"香港"+"%' ";
+				break;
+			case 82:
+				sql+=" '%"+"澳门"+"%' ";
+				break;
+			case 99:
+				sql+=" '%"+"其他"+"%' ";
+				break;
+			default:
+				if(amount<299){
+					sql = "select PRICE from heso_deliver_fee where FINAL_PROVINCE = ( select REGION_NAME from heso_region where REGION_CODE = ? ) ";
+					list.add(regional+="0000");
+					break;
+				}else{
+					coro.setReccount("0");
+					return coro;
+				}
+				
+			}
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, list, conn);
+			if(orderId != null || !orderId.isEmpty()){
+					sql = "update heso_order_pay set freight = ? where wai_order = ? ";
+					list.clear();
+					list.add(dt.getRows().get(0).getString("price"));
+					list.add(orderId);
+					if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+						throw new Exception("100151");
+			}
+			coro.setReccount(dt.getRows().get(0).getString("price"));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return coro;
+	}
+	/**
+	 * 首单优惠
+	 * @param amount
+	 * @param account
+	 * @return
+	 */
+	public ConsumeOrderReturnObject firstPay(String amount,String account,String orderId){
+		Connection conn = null;
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		try {
+			conn = DatabaseMgr.getInstance().getConnection();
+			String sql = "select order_id from heso_discount where account = ? and status = '1' and type= '1' ";
+			List<Object> list = new ArrayList<Object>();
+			list.add(account);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+			Double total = 0.0;
+			Double dAmount = Double.parseDouble(amount);
+			if(dt.getRows().size() > 0){
+				coro.setReccount(dAmount.toString());
+				return coro;
+			}
+			if(dAmount >= 300 && dAmount < 600){
+				total =  new BigDecimal(dAmount - 8).doubleValue();
+				coro.setDiscount("8");
+			}else if(dAmount >= 600 && dAmount < 1000){
+				total = new BigDecimal(dAmount - 18).doubleValue();
+				coro.setDiscount("18");
+			}else if(dAmount >= 1000 && dAmount < 1500 ){
+				total = new BigDecimal( dAmount - 38).doubleValue();
+				coro.setDiscount("38");
+			}else if(dAmount >= 1500 && dAmount < 2000){
+				total = new BigDecimal(dAmount - 58).doubleValue();
+				coro.setDiscount("58");
+			}else if(dAmount >= 2000 && dAmount < 3000){
+				total = new BigDecimal(dAmount - 88).doubleValue();
+				coro.setDiscount("88");
+			}else if(dAmount >= 3000){
+				total = new BigDecimal(dAmount - 138).doubleValue();
+				coro.setDiscount("138");
+			}else {
+				total = dAmount;
+				coro.setDiscount("0");
+			}
+			
+			if(orderId !=null || !orderId.isEmpty()){
+				sql = "update heso_order_pay set discount = ? where wai_order = ? ";
+				list.clear();
+				list.add(coro.getDiscount());
+				list.add(orderId);
+				if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+					throw new Exception("100151");
+				}
+				
+				sql = "insert into heso_discount (account , discount_money , type , order_id ) values (? , ? , ? , ?) ";
+				list.clear();
+				list.add(account);
+				list.add(coro.getDiscount());
+				list.add("1");//1-首单优惠,2-优惠券优惠
+				list.add(orderId);
+				if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+					throw new Exception("100151");
+				}
+			}
+
+			coro.setReccount(String.valueOf(total));
+		} catch (Exception e) {
+			// TODO: handle exception
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn != null){}
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return coro;
+	}
+	
+	/**
+	 * 重新更新支付表和折扣表(优惠券折扣使用的公共方法)
+	 * @param coro 优惠券折扣实体
+	 * @param orderId 订单号
+	 * @param account 账号
+	 * @param coupPrice 优惠金额
+	 * @param conn 当前连接
+	 * @throws Exception
+	 */
+	private void reUpdatePayAndDiscount(ConsumeOrderReturnObject coro,String orderId,String account,Double coupPrice,Connection conn) throws Exception{
+		List<Object> list = new ArrayList<Object>();
+		String sql = "";
+		
+		//重新更新支付表
+		sql = "update heso_order_pay set discount = ? where wai_order = ? ";
+		list.clear();
+		list.add(coro.getDiscount());
+		list.add(orderId);
+		if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+			throw new Exception("100151");
+		}
+		
+		sql = "insert into heso_discount (account , discount_money , type , order_id ) values (? , ? , ? , ?) ";
+		list.clear();
+		list.add(account);
+		list.add(coupPrice);
+		list.add("2");//1-首单优惠,2-优惠券优惠
+		list.add(orderId);
+		if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+			throw new Exception("100151");
+		}
+		
+	}
+	
+	/**
+	 * 根据外单号获取原订单号(优惠券折扣使用的公共方法)
+	 * @param orderId 外单号
+	 * @param conn  当前连接
+	 * @return 返回原订单号，如 001','002
+	 * @throws Exception
+	 */
+	private String getOriginalOrder(String orderId,Connection conn) throws Exception{
+		List<Object> list = new ArrayList<Object>();
+		String sql = "";
+		
+		sql = " SELECT * from heso_order_pay  where wai_order = ?";
+		list.clear();
+		list.add(orderId);
+		DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+		if(dt.getRows().size()==0)
+			throw new Exception("100151");
+		
+		String originallyOrderId = dt.getRows().get(0).getString("order_pay");//原订单，多个订单时以";"分割
+		if(originallyOrderId.contains(";")){
+			originallyOrderId = originallyOrderId.replace(";", "','");
+		}
+		
+		return originallyOrderId;
+	}
+	
+	/**
+	 * 当前购物车提交商品只有1个,直接更新heso_order_consume
+	 * @param dt 获取商品的结果集
+	 * @param coupPrice 优惠金额
+	 * @param account 账号
+	 * @param conn 当前连接
+	 * @throws Exception
+	 */
+	private void updateOrderConsume(DataTable dt,Double coupPrice,String account,Connection conn)throws Exception{
+		List<Object> list = new ArrayList<Object>();
+		String sql = "";
+		
+		String tempOrderId = dt.getRows().get(0).getString("ORDER_ID");//每个商品订单号
+		
+		//更新订单表优惠券总优惠金额
+		sql = " update heso_order_consume set coupon_amount=? where order_id=? and account=?";
+		list.clear();
+		list.add(coupPrice);
+		list.add(tempOrderId);
+		list.add(account);
+		
+		if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+			throw new Exception("100151");
+		}
+	}
+	
+	
+	
+	public   List<ProductDTO> findProductById(String productId) throws Exception{
+		List<ProductDTO> listObjects = new ArrayList<ProductDTO>();
+		DataRow dr = null;
+		Connection conn = DatabaseMgr.getInstance().getConnection();
+		// 获取商品信息
+		String sql = " select name ,type , images , img_front , STOCK_COUNT," +
+						  " case when type='1' then if(DISCOUNT_PRICE = 0,price,DISCOUNT_PRICE) when type = '2' then SUIT_PRICE end price ,color " +
+				          " from heso_product where product_id = ? ";
+		ArrayList<Object> argsList = new ArrayList<Object>();
+		argsList.add(productId);
+		DataTable dt;
+		try { 
+			dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			if (dt.getRows().size() == 0){
+				logger.error(">>>>>>>>>>>>>查找商品，找不到该商品："+ productId);
+				throw new Exception("101120");
+			}
+			String price = dt.getRows().get(0).getString("price");
+			String type = dt.getRows().get(0).getString("type");
+			String stock = dt.getRows().get(0).getString("STOCK_COUNT");
+			String name = dt.getRows().get(0).getString("name");
+			ProductDTO productDTO = new ProductDTO();
+			productDTO.setProdctId(productId);
+			productDTO.setPrice(price);
+			productDTO.setStock(stock);
+			productDTO.setType(type);
+			productDTO.setProName(name);
+			listObjects.add(productDTO);
+			
+			if("2".equals(type)){
+				sql = "select * from heso_product where PRODUCT_ID in (select b.product_goods_id from heso_product a, heso_product_detail b where a.product_id = b.product_suit_id and b.product_suit_id =? ) ";
+				argsList.clear();
+				argsList.add(productId);
+				DataTable dt1 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				for (int i = 0; i < dt1.getRows().size(); i++) {
+					 dr = dt1.getRows().get(i);
+					 String pprice = dr.getString("price");
+					 String ptype = dr.getString("type");
+					 String pproductId = dr.getString("PRODUCT_ID");
+					 String pstock = dr.getString("STOCK_COUNT");
+					 String pname = dr.getString("name");
+					 ProductDTO DTO = new ProductDTO();
+					 DTO.setPrice(pprice);
+					 DTO.setProdctId(pproductId);
+					 DTO.setStock(pstock);
+					 DTO.setType(ptype);
+					 DTO.setProName(pname);
+					 listObjects.add(DTO);
+				}
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		
+		}
+		
+
+		
+		return listObjects;
+		
+	}
+	
+	public  ConsumeOrderReturnObject innerOrder2(ArrayList<ConsumeOrderObject> coaoList,String account,String productId,String innerCoin,String receiveId,
+			String paymentTerms,String recommend){
+
+	    WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		String couponDetId = "";
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		try {
+			String ri = receiveId;
+			
+			
+			conn = dbm.getConnection();
+			//conn.setAutoCommit(false);
+			StringBuffer orderId = new StringBuffer();
+			List<String> orderIds = new ArrayList<String>();
+			ArrayList<ConsumeOrderObject> cooList = new ArrayList<ConsumeOrderObject>();
+			BigDecimal total = new BigDecimal(0) ;
+			BigDecimal notSPtotal = new BigDecimal(0) ;//非特价商品总额，不在优惠券优惠范围
+			for (ConsumeOrderObject coao : coaoList) {
+				// 获取用户账户信息
+				String sql = "select * from heso_account where account = ?";
+				List<Object> argsList = new ArrayList<Object>();
+				argsList.add(coao.getAccount());
+				DataTable dt = dbm.execSqlTrans(sql, argsList, conn);
+				if (dt.getRows().size() == 0)
+					throw new Exception("100100");
+
+				// 取序列
+				String seqId = dbm.getSequence("seq_order", "16");
+				orderIds.add(seqId);
+				if (seqId.isEmpty())
+					throw new Exception("000150");
+
+				sql = "insert into heso_order_consume(order_id, account, product_Id,type,name,image," +
+						"color,size,price,count,amount, currency, inner_coin, bonus_point, receive_id , " +
+						"payment_terms ,from_suit ,recommend, couponDet_Id,channel_type,format_type," +
+						"size_type,style_type,cloth_type,seller,remark) " +
+						"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				argsList.clear();
+				argsList.add(seqId);
+				argsList.add(coao.getAccount());
+				argsList.add(coao.getProductId());
+				argsList.add(coao.getType());
+				argsList.add(coao.getName());
+				argsList.add(coao.getImage());
+				argsList.add(coao.getColor());
+				argsList.add(coao.getSize());
+				argsList.add(coao.getPrice());
+				argsList.add(coao.getCount());
+				argsList.add(coao.getAmount());
+				argsList.add(coao.getCurrency());
+				argsList.add(coao.getInnerCoin());
+				argsList.add(coao.getBonusPoint());
+				argsList.add(receiveId);
+				argsList.add(paymentTerms);//支付方式
+				argsList.add(coao.getSuitId());
+				argsList.add(recommend);//推荐人
+				argsList.add(couponDetId);
+				//20171122
+				argsList.add(coao.getChannelType());
+				argsList.add(coao.getFormatType());
+				argsList.add(coao.getSizeType());
+				argsList.add(coao.getStyleType());
+				argsList.add(coao.getClothType());
+				argsList.add(coao.getSeller());
+				argsList.add(coao.getRemark());
+				//
+				int rows = dbm.execNonSql(sql, argsList);
+				if (rows <= 0)
+					throw new Exception("100150");
+				coro.setOrderId(seqId);
+
+				ArrayList<ConsumeProductObject> copList = coao.getCpoList();
+				if(copList != null){
+					for (ConsumeProductObject cpo : copList) {
+						sql = "insert into heso_order_consume_detail values(?,?,?,?,?,?,?,?,?,?,?,?)";
+						argsList.clear();
+						argsList.add(seqId);
+						argsList.add(cpo.getProductId());
+						argsList.add(cpo.getName());
+						argsList.add(cpo.getImage());
+						argsList.add(cpo.getColor());
+						argsList.add(cpo.getSize());
+						argsList.add(cpo.getCount());
+						argsList.add(cpo.getPrice());
+						argsList.add(cpo.getAmount());
+						argsList.add(cpo.getSuitPrice());
+						argsList.add(cpo.getSuitPromotion());
+						argsList.add("0");
+						//
+						rows = dbm.execNonSql(sql, argsList);
+						if (rows <= 0)
+							throw new Exception("100151");
+					}
+				}
+				
+				
+				ConsumeOrderObject coo = new ConsumeOrderObject();
+				coo.setOrderId(seqId);
+				coo.setPaymentTerms(paymentTerms);
+				total  = total.add( new BigDecimal(coao.getAmount())); 
+				
+				if(!coao.getProductId().contains("SPE")){
+					notSPtotal = notSPtotal.add(new BigDecimal(coao.getAmount()));
+				}
+				
+				cooList.add(coo);
+				orderId.append(seqId+";");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return  coro;
+		
+	}
+	
+	public   ConsumeOrderReturnObject innerOrder(ArrayList<ConsumeOrderObject> coaoList,String account,String productId,String innerCoin,String receiveId,
+			String paymentTerms,String recommend){
+		
+		//double amount = 0.00;
+		//int count = 0;
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		String couponDetId = "";
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = dbm.getConnection();
+		// 建立订单对象
+		ConsumeOrder order = new ConsumeOrder();
+		// 取得购物车选中商品
+		//String sql = "";
+		//ArrayList<Object> argsList = new ArrayList<Object>();
+				
+	/*	ArrayList<ConsumeOrderObject> coaoList = new ArrayList<ConsumeOrderObject>();
+		ConsumeOrderObject coao = new ConsumeOrderObject();
+		coao.setAccount(account);
+		coao.setColor(color);
+		coao.setName(productName);
+		coao.setProductId(productId);
+		coao.setRemark(decs);
+		coao.setSize(size);
+		coao.setType("1");
+ 		coao.setImage("");
+		coao.setPrice(amount);
+		coao.setCount(count);
+		coao.setAmount(amount);
+		coao.setSuitId("");
+		coao.setSubordinate("");
+		coao.setChannelType(channelType);
+		coao.setFormatType(formatType);
+		coao.setSeller(seller);
+		coao.setSizeType(sizeType);
+		coao.setClothType(clothType);
+		coao.setStyleType(styleType);
+		
+		coaoList.add(coao);*/
+		
+		/*double amount = 0.00;
+		int count = 0;*/
+		try {
+			//新建用户详细信息表数据
+			
+			
+			String ri = receiveId;			
+		
+			//conn.setAutoCommit(false);
+			
+			
+			
+			
+			
+			// 生成订单
+			coro = order.genarate2(coaoList, innerCoin, receiveId,paymentTerms,recommend,couponDetId);
+			
+			String total = coro.getCooList().get(coro.getCooList().size()-2).getAmount();
+			String notSPtotal = coro.getCooList().get(coro.getCooList().size()-1).getAmount();//非特价商品总价
+			//首单优惠
+			//ConsumeOrderReturnObject coro2 = order.firstPay(total, account,coro.getOrderId());//取消首单优惠 16/11/09
+			//优惠券优惠
+			//ConsumeOrderReturnObject cop = order.couponDiscount(notSPtotal, account, coro2.getDiscount(), coro.getOrderId(), couponDetId, "1","");//从购物车支付时，不需要外单号
+			ConsumeOrderReturnObject cop = order.couponDiscount(notSPtotal, account, "0", coro.getOrderId(), couponDetId, "1","");
+			//物流计费
+			ConsumeOrderReturnObject coro1 = order.logisticsPay(ri, Double.parseDouble(total),coro.getOrderId());
+			
+			Double pay = Double.parseDouble(total)-Double.parseDouble(cop.getDiscount());
+			Double logistics = Double.parseDouble(coro1.getReccount());
+			
+			coro.getCooList().get(coro.getCooList().size()-1).setAmount(String.valueOf(pay+logistics));
+		/*	String total = coro.getCooList().get(coro.getCooList().size()-2).getAmount();
+			String notSPtotal = coro.getCooList().get(coro.getCooList().size()-1).getAmount();//非特价商品总价
+		*/	//首单优惠 
+			//ConsumeOrderReturnObject coro2 = order.firstPay(total, account,coro.getOrderId());//取消首单优惠 16/11/09
+			//优惠券优惠
+			//ConsumeOrderReturnObject cop = order.couponDiscount(notSPtotal, account, coro2.getDiscount(), coro.getOrderId(), couponDetId, "1","");//从购物车支付时，不需要外单号
+			
+			//ConsumeOrderReturnObject cop = order.couponDiscount(notSPtotal, account, "0", coro.getOrderId(), couponDetId, "1","");
+			//物流计费
+			//ConsumeOrderReturnObject coro1 = order.logisticsPay(ri, Double.parseDouble(total),coro.getOrderId());
+			
+			/*Double pay = Double.parseDouble(total)-Double.parseDouble(cop.getDiscount());
+			Double logistics = Double.parseDouble(coro1.getReccount());
+			
+			coro.getCooList().get(coro.getCooList().size()-1).setAmount(String.valueOf(pay+logistics));
+			*/
+		} catch (Exception e) {
+			// TODO: handle exception
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn != null){}
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coro;
+	}
+	
+	
+	/**
+	 * 查询使用优惠券优惠价格
+	 * @param amount 非特价商品总价
+	 * @param account
+	 * @param orderId 为外单号，heso_order_pay的wai_orderId
+	 * @param couponDetId
+	 * @return
+	 */
+	public ConsumeOrderReturnObject couponDiscount(String amount,String account,String firstPayAmount,String orderId,String couponDetId,String type,String waiorderId){
+		Connection conn = null;
+		String sql = "";
+		
+		double total = 0;
+		if(type.equals("1"))//购物车支付页面
+			total = Double.parseDouble(amount)-Double.parseDouble(firstPayAmount);//该订单(非特价商品总额)减去首单优惠之后的金额
+		else if(type.equals("2")) //订单支付页面
+			total = Double.parseDouble(amount);//已扣除首单优惠
+		
+		List<Object> list = new ArrayList<Object>();
+		conn = DatabaseMgr.getInstance().getConnection();
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		DecimalFormat df = new DecimalFormat("#.00");
+		try {
+			conn = DatabaseMgr.getInstance().getConnection();
+			conn.setAutoCommit(false);
+			
+			if(type.equals("1")){//购物车里提交
+				if(!couponDetId.trim().equals("")){
+					if(couponDetId.contains(","))
+						couponDetId = "'" + couponDetId.replace(",", "','") + "'";
+					else
+						couponDetId = "'" + couponDetId + "'";
+					
+					//检测是否有现金券是否和折扣券、满减券混合使用，新人券和普通优惠券均为现金券
+					sql = " SELECT CASE WHEN COUPON_TYPE in (0,1) THEN 0 ELSE 1 END AS c_type FROM heso_coupon_gen where COUPONGEN_ID in ("
+						+" select COUPONGEN_ID from heso_coupon_det where COUPONDET_ID IN ("+couponDetId+"))"
+						+" GROUP BY CASE WHEN COUPON_TYPE in (0,1) THEN 0 ELSE 1 END;";
+					list.clear();
+					DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+					if(dt.getRows().size()>=2)
+						throw new Exception("100151");
+					
+					if(dt.getRows().get(0).getInt("c_type")==0){//新人现金券和普通优惠现金券,这两种券可以同时使用
+						
+						sql = " SELECT SUM(COUPON_PRICE) PRICE FROM heso_coupon_gen where COUPONGEN_ID in ("
+							+  " select COUPONGEN_ID from heso_coupon_det where COUPONDET_ID IN ("+couponDetId+")) ";
+						list.clear();
+						dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+						if(dt.getRows().size()==0)
+							throw new Exception("100151");
+						
+						Double coupPrice = dt.getRows().get(0).getDouble("PRICE");
+						
+						if(coupPrice>total*0.3){//不超过非折扣商品总额的30%
+							coupPrice = Double.parseDouble(df.format(total*0.3));
+						}
+						total = total - coupPrice;
+						coro.setDiscount(String.valueOf(Double.parseDouble(firstPayAmount)+coupPrice));
+						
+						// 重新更新支付表和折扣表
+						reUpdatePayAndDiscount(coro, orderId, account, coupPrice, conn);
+						
+						//-------------------更新每个订单表的优惠券优惠金额
+						String originallyOrderId = getOriginalOrder(orderId, conn);
+						
+						sql = " SELECT * from heso_order_consume  where ORDER_ID in ('"+originallyOrderId+"') AND PRODUCT_ID NOT LIKE '%SPE%' ORDER BY AMOUNT ASC";//一定保证最小金额先分配优惠券金额,且排除掉特价商品
+						list.clear();
+						dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+						
+						//当前提交订单中，商品数超过2时，进行优惠券金额分配：
+						if(dt.getRows().size()>1){
+							double avgCoupPrice = Double.parseDouble(df.format(coupPrice/dt.getRows().size()));//计算平均优惠券金额
+							double lastCoupPrice = coupPrice;//剩余金额
+							
+							for(int i=0;i<dt.getRows().size();i++){
+								String tempOrderId = dt.getRows().get(i).getString("ORDER_ID");//每个商品订单号
+								double maxAmount = Double.parseDouble(df.format( dt.getRows().get(i).getDouble("AMOUNT")*0.3 ));//该商品最大优惠金额，四舍五入保留2位小数
+								
+								//更新订单表优惠券总优惠金额
+								sql = " update heso_order_consume set coupon_amount=? where order_id=? and account=?";
+								list.clear();
+								
+								if(maxAmount>avgCoupPrice){//商品最大优惠金额大于平均优惠金额，则该商品的优惠金额为平均优惠金额,否则优惠金额为该商品最大优惠金额。
+									
+									if(i!=dt.getRows().size()-1){//判断是否为最后一个商品，是则把剩余的优惠金额归入该商品中
+										list.add(avgCoupPrice);
+										lastCoupPrice = lastCoupPrice - avgCoupPrice;
+									}else
+										list.add(lastCoupPrice);
+									
+								}else{
+									if(i!=dt.getRows().size()-1){
+										list.add(maxAmount);
+										lastCoupPrice = lastCoupPrice - maxAmount;
+									}else
+										list.add(lastCoupPrice);
+								}
+								
+								list.add(tempOrderId);
+								list.add(account);
+								if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+									throw new Exception("100151");
+								}
+							}
+							
+						}else if(dt.getRows().size()==1){//当前购物车提交商品只有1个,直接更新
+							updateOrderConsume(dt, coupPrice, account, conn);
+						}
+					}else{	//折扣券或是满减券
+						
+						sql = " SELECT COUPON_TYPE FROM heso_coupon_gen where COUPONGEN_ID in ("
+						   +  " select COUPONGEN_ID from heso_coupon_det where COUPONDET_ID IN ("+couponDetId+")) ";
+						list.clear();
+						dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+						if(dt.getRows().size()==0||dt.getRows().size()>=2)  //找不到该优惠子券号或是折扣券和满减券同时使用、多张优惠券一起使用
+							throw new Exception("100151");
+						
+						Double coupPrice = null;
+						sql = " SELECT * FROM heso_coupon_gen where COUPONGEN_ID in ("
+						   +  " select COUPONGEN_ID from heso_coupon_det where COUPONDET_ID IN ("+couponDetId+")) ";
+						list.clear();
+						dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+						
+						int min_consumption = dt.getRows().get(0).getInt("MIN_CONSUMPTION");
+						double discount_rate = dt.getRows().get(0).getDouble("DISCOUNT_RATE");
+						double tmp_coupPrice = dt.getRows().get(0).getDouble("COUPON_PRICE");
+						
+						if(dt.getRows().get(0).getInt("COUPON_TYPE")==2){	//折扣券
+							
+							if(total<min_consumption){//该订单非折扣商品总金额不满足最低消费金额时，不打折
+								coupPrice = 0.00;
+							}else{	//折扣金额为 该订单非折扣商品总金额*（1-折扣率）,四舍五入保留2位
+								coupPrice = Double.parseDouble(df.format(total*(1-discount_rate)));
+							}
+							
+							total = total - coupPrice;
+							coro.setDiscount(String.valueOf(Double.parseDouble(firstPayAmount)+coupPrice));
+							
+							// 重新更新支付表和折扣表
+							reUpdatePayAndDiscount(coro, orderId, account, coupPrice, conn);
+							
+							//更新折扣券对应的子券实际折扣金额,此处的couponDetId一定是一张券
+							sql = " update heso_coupon_det set DISCOUNT_PRICE=? where COUPONDET_ID IN ("+couponDetId+") ";
+							list.clear();
+							list.add(coupPrice);
+							if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+								throw new Exception("100151");
+							}
+							
+							//-------------------更新每个订单表的优惠券优惠金额
+							String originallyOrderId = getOriginalOrder(orderId, conn);
+							
+							sql = " SELECT * from heso_order_consume  where ORDER_ID in ('"+originallyOrderId+"') AND PRODUCT_ID NOT LIKE '%SPE%' ORDER BY AMOUNT ASC";//一定保证最小金额先分配优惠券金额,且排除掉特价商品
+							list.clear();
+							dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+							
+							//当前提交订单中，商品数超过2时，进行优惠券金额分配：
+							if(dt.getRows().size()>1){
+								double lastCoupPrice = coupPrice;//剩余金额
+								double avgCoupPrice = 0.00;//每个商品折扣金额
+								
+								for(int i=0;i<dt.getRows().size();i++){
+									String tempOrderId = dt.getRows().get(i).getString("ORDER_ID");//每个商品订单号
+									
+									//更新订单表优惠券总优惠金额
+									sql = " update heso_order_consume set coupon_amount=? where order_id=? and account=?";
+									list.clear();
+									
+									if(i!=dt.getRows().size()-1){//判断是否为最后一个商品，是则把剩余的优惠金额归入该商品中
+										avgCoupPrice = Double.parseDouble(df.format(dt.getRows().get(i).getDouble("AMOUNT")*(1-discount_rate)));
+										lastCoupPrice = lastCoupPrice - avgCoupPrice;
+										list.add(avgCoupPrice);
+									}else{
+										list.add(lastCoupPrice);
+									}
+									
+									list.add(tempOrderId);
+									list.add(account);
+									if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+										throw new Exception("100151");
+									}
+								}
+								
+							}else if(dt.getRows().size()==1){//当前购物车提交商品只有1个,直接更新
+								updateOrderConsume(dt, coupPrice, account, conn);
+							}
+							
+						}else if(dt.getRows().get(0).getInt("COUPON_TYPE")==3){	//满减券
+							
+							if(total<min_consumption){//该订单非折扣商品总金额不满足最低消费金额时，不满减
+								coupPrice = 0.00;
+							}else{	
+								coupPrice = tmp_coupPrice;
+							}
+							
+							total = total - coupPrice;
+							coro.setDiscount(String.valueOf(Double.parseDouble(firstPayAmount)+coupPrice));
+							
+							// 重新更新支付表和折扣表
+							reUpdatePayAndDiscount(coro, orderId, account, coupPrice, conn);
+							//-------------------更新每个订单表的优惠券优惠金额
+							String originallyOrderId = getOriginalOrder(orderId, conn);
+							
+							sql = " SELECT * from heso_order_consume  where ORDER_ID in ('"+originallyOrderId+"') AND PRODUCT_ID NOT LIKE '%SPE%' ORDER BY AMOUNT ASC";//一定保证最小金额先分配优惠券金额,且排除掉特价商品
+							list.clear();
+							dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+							
+							//当前提交订单中，商品数超过2时，进行优惠券金额分配：
+							if(dt.getRows().size()>1){
+								double lastCoupPrice = coupPrice;//剩余金额
+								double avgCoupPrice = 0.00;//每个商品单独优惠金额
+								
+								for(int i=0;i<dt.getRows().size();i++){
+									String tempOrderId = dt.getRows().get(i).getString("ORDER_ID");//每个商品订单号
+									
+									//更新订单表优惠券总优惠金额
+									sql = " update heso_order_consume set coupon_amount=? where order_id=? and account=?";
+									list.clear();
+									
+									if(coupPrice==0){//不满足最低消费金额
+										list.add(coupPrice);
+									}else {
+										if(i!=dt.getRows().size()-1){//判断是否为最后一个商品，是则把剩余的优惠金额归入该商品中
+											avgCoupPrice = Double.parseDouble(df.format(dt.getRows().get(i).getDouble("AMOUNT")/(total+coupPrice)*coupPrice)); //此处total已经减去了coupPrice,所以要加上才是非折扣商品总价
+											lastCoupPrice = lastCoupPrice - avgCoupPrice;
+											list.add(avgCoupPrice);
+										}else{
+											list.add(lastCoupPrice);
+										}
+									}
+									
+									list.add(tempOrderId);
+									list.add(account);
+									if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn) <= 0 ){
+										throw new Exception("100151");
+									}
+								}
+								
+							}else if(dt.getRows().size()==1){//当前购物车提交商品只有1个,直接更新
+								updateOrderConsume(dt, coupPrice, account, conn);
+							}
+						}
+						
+					}
+					
+				}else{//没有选择优惠券时：
+					coro.setDiscount(String.valueOf(Double.parseDouble(firstPayAmount)));
+				}
+				
+				coro.setReccount(String.valueOf(total));//非折扣商品金额-优惠券金额-首单
+				
+			}else if(type.equals("2")){//支付页面提交,因为页面不提交优惠券子表ID，需从数据库查询
+				
+				if(orderId.contains(";")){
+					orderId = "'" + orderId.replace(";", "','") + "'";
+				}else
+					orderId = "'" + orderId + "'";
+				
+				sql = "SELECT * from heso_order_consume where ACCOUNT=? and ORDER_ID in (" + orderId +")";
+				list.clear();
+				list.add(account);
+				DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, list,conn);
+				if(dt.getRows().size()==0)
+					throw new Exception("100151");
+				
+				//获取优惠券优惠金额,这里无需考虑特价商品的优惠金额，因为在购物车的时候已经分配好优惠券金额
+				double coupPrice = 0;
+				for(int i=0;i<dt.getRows().size();i++){
+					coupPrice = coupPrice + dt.getRows().get(i).getDouble("COUPON_AMOUNT");
+				}
+				
+				if(firstPayAmount.equals("0")||firstPayAmount.equals("")||firstPayAmount==null)
+					coro.setDiscount(String.valueOf(coupPrice));
+				else
+					coro.setDiscount(String.valueOf(Double.parseDouble(firstPayAmount)+coupPrice));
+				
+				//重新更新支付表
+				reUpdatePayAndDiscount(coro, waiorderId, account, coupPrice, conn);
+				
+				coro.setReccount(String.valueOf(total-coupPrice));//已减去首单优惠商品金额-优惠券金额
+				
+			}
+			
+			conn.commit();
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn != null){}
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return coro;
+	}
+	
+	/**
+	 * 支付将订单商品添加进衣橱
+	 * @param productId
+	 * @param account
+	 */
+	public void addWardrobeByProductId(String productId ,String account){
+		
+		List<WardrobeDTO> wardrobeDTOs = new ArrayList<WardrobeDTO>();
+		Connection conn = null;
+		ArrayList<String> list = new ArrayList<String>();
+		Map<String, String> map = new HashMap<String, String>();
+		String suitFlag = "1";
+		ArrayList<Object> arglist = new ArrayList<Object>();
+ 		try{
+			conn = DatabaseMgr.getInstance().getConnection();
+			String sql = "SELECT PRODUCT_ID  FROM heso_order_consume WHERE ORDER_ID = ?";
+			arglist.add(productId);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, arglist, conn);
+			if(dt.getRows().size()>0){
+				String suitProductId = dt.getRows().get(0).getString("PRODUCT_ID");
+				list.add(suitProductId);
+			}
+			sql = "SELECT PRODUCT_ID   FROM heso_order_consume_detail WHERE ORDER_ID = ?";
+			DataTable dt1 = DatabaseMgr.getInstance().execSqlTrans(sql, arglist, conn);
+			if(dt1.getRows().size()>0){
+				for(int x= 0;x<dt1.getRows().size();x++){
+					String detailProductId = dt1.getRows().get(x).getString("PRODUCT_ID");
+					list.add(detailProductId);
+				}
+			}
+			for(String id : list){
+				WardrobeDTO wardrobeDTO = new WardrobeDTO();
+				sql = "SELECT IMG_FRONT,TYPE,SCENE,STYLE,COLOR,CATEGORY FROM heso_product WHERE PRODUCT_ID = ?";
+				arglist.clear();
+				arglist.add(id);
+				DataTable dt2 = DatabaseMgr.getInstance().execSqlTrans(sql, arglist, conn);
+				wardrobeDTO.setImage(dt2.getRows().get(0).getString("IMG_FRONT"));
+				wardrobeDTO.setColor(dt2.getRows().get(0).getString("COLOR"));
+				wardrobeDTO.setSuit(dt2.getRows().get(0).getString("TYPE"));
+				wardrobeDTO.setScene(dt2.getRows().get(0).getString("SCENE"));
+				wardrobeDTO.setStyle(dt2.getRows().get(0).getString("STYLE"));
+				wardrobeDTO.setType(dt2.getRows().get(0).getString("CATEGORY"));
+				wardrobeDTO.setAccount(account);
+				wardrobeDTO.setCharater("");
+				wardrobeDTO.setCloth("");
+				wardrobeDTO.setOutline("");
+				wardrobeDTO.setPattern("");
+				wardrobeDTO.setUplaod(account);
+				wardrobeDTOs.add(wardrobeDTO);
+			}
+			new WardrobeService().addMyWardrobe(wardrobeDTOs);
+				
+		}catch (Exception e) {
+			
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			if(conn != null){}
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+	}
+	
+	/**
+	 * 把收货地址加入到订单表
+	 * @param regionalId
+	 * @param account
+	 */
+	public void updateLoadAdd(String regionalId ,String account ,List<String> orderIds){
+		Connection conn = null;
+		List<Object> list = new ArrayList<Object>();
+		try {
+			conn = DatabaseMgr.getInstance().getConnection();
+			conn.setAutoCommit(false);
+			
+				StringBuffer sb = new StringBuffer("select  name , address , mobile , region_id from heso_account_recvinfo where id = ? and account = ? ");
+				list.add(regionalId);
+				list.add(account);
+				DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sb.toString(), list, conn);
+				if(dt.getRows().size() <=0 ){
+					 throw new Exception("101930");
+				}
+				sb.delete(0, sb.length());
+					sb.append("update heso_order_consume set delivery_address = ? , delivery_name = ? , rogion_id = ?, delivery_phone = ? " +
+							         "where account = ? and pay_status = '0' and order_id in( ? ");
+					list.clear();
+					list.add(dt.getRows().get(0).getString("address"));
+					list.add(dt.getRows().get(0).getString("name"));
+					list.add(dt.getRows().get(0).getString("region_id"));
+					list.add(dt.getRows().get(0).getString("mobile"));
+					list.add(account);
+					list.add(orderIds.get(0));
+					for(int i = 1 ;i<orderIds.size();i++){
+						sb.append(", ?");
+						list.add(orderIds.get(i));
+					}
+					sb.append(")");
+					if(DatabaseMgr.getInstance().execNonSqlTrans(sb.toString(), list, conn) <= 0 ){
+						throw new Exception("101930");
+					}
+					
+			
+		
+			conn.commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally{
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		/*ConsumeOrderReturnObject object = getDetail("0000000000000217");
+		for(ConsumeOrderObject obj: object.getCooList()){
+			
+			System.out.println("===="+obj.getOrderId());
+		}*/
+		/*ConsumeOrderReturnObject object2 = innerOrder("in_0000000000000895", "shoojf", "1", "228", "1", "1", "衣服", "22", "2", "破的", "1", "11", 
+				"0", "banshi", "dadada", "魔幻", "布", "545444646");
+		System.out.println("====");
+	*/
+		try {
+			//bookService("qqqqq", "11", "2", "2", "1111111", "2", "wu", "1,2");
+			//addDesc("0000000000002949", "我是商家备注");
+			System.out.println("---");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
+

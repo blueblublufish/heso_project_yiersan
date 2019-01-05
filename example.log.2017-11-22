@@ -1,0 +1,36 @@
+2017-11-22 09:07:55 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2017-11-22 15:40:09 [com.heso.service.yesUser.YesUserService]-[ERROR] Duplicate entry '0000000000000884' for key 'PRIMARY'
+ 2017-11-22 15:42:19 [com.heso.service.yesUser.YesUserService]-[ERROR] No operations allowed after connection closed.
+ 2017-11-22 15:42:19 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] A PooledConnection that has already signalled a Connection error is still in use!
+ 2017-11-22 15:42:19 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] Another error has occurred [ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state. ] which will not be reported to listeners!
+ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:888)
+	at com.mysql.jdbc.Connection.getMutex(Connection.java:3755)
+	at com.mysql.jdbc.Connection.rollback(Connection.java:5251)
+	at com.mchange.v2.c3p0.impl.NewProxyConnection.rollback(NewProxyConnection.java:860)
+	at com.heso.service.yesUser.YesUserService.autoRegister(YesUserService.java:102)
+	at com.heso.service.yesUser.YesUserService.main(YesUserService.java:444)
+2017-11-22 15:49:17 [com.heso.service.yesUser.YesUserService]-[ERROR] Duplicate entry '0000000000000886' for key 'PRIMARY'
+ 2017-11-22 15:53:17 [com.heso.service.yesUser.YesUserService]-[ERROR] Duplicate entry '0000000000000887' for key 'PRIMARY'
+ 2017-11-22 17:43:23 [com.heso.service.yesUser.YesUserService]-[ERROR] 
+ 2017-11-22 17:44:14 [com.heso.service.yesUser.YesUserService]-[ERROR] Data truncation: Data too long for column 'SEX' at row 1
+ 2017-11-22 18:22:48 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101130
+ 2017-11-22 18:26:29 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:26:29 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2017-11-22 18:27:25 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:30:35 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:36:43 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:37:54 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No value specified for parameter 26
+ 2017-11-22 18:38:55 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:39:34 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'size_type' in 'field list'
+ 2017-11-22 18:41:03 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:41:56 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:44:04 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:45:56 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Column 'TYPE' cannot be null
+ 2017-11-22 18:47:59 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:48:27 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Unknown column 'format_type' in 'field list'
+ 2017-11-22 18:58:10 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Incorrect integer value: '' for column 'pay_type' at row 1
+ 2017-11-22 19:23:30 [com.heso.service.yesUser.YesUserService]-[ERROR] Parameter index out of range (5 > number of parameters, which is 4).
+ 2017-11-22 19:30:25 [com.heso.service.yesUser.YesUserService]-[ERROR] No value specified for parameter 6
+ 2017-11-22 19:31:26 [com.heso.service.yesUser.YesUserService]-[ERROR] Unknown column 'regionId' in 'field list'
+ 

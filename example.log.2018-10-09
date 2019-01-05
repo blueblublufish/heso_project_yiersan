@@ -1,0 +1,113 @@
+2018-10-10 08:11:59 [com.mchange.v2.async.ThreadPoolAsynchronousRunner]-[WARN] com.mchange.v2.async.ThreadPoolAsynchronousRunner$DeadlockDetector@235a4daf -- APPARENT DEADLOCK!!! Creating emergency threads for unassigned pending tasks!
+ 2018-10-10 08:11:59 [com.mchange.v2.async.ThreadPoolAsynchronousRunner]-[WARN] com.mchange.v2.async.ThreadPoolAsynchronousRunner$DeadlockDetector@235a4daf -- APPARENT DEADLOCK!!! Complete Status: 
+	Managed Threads: 3
+	Active Threads: 3
+	Active Tasks: 
+		com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@5556d74f
+			on thread: C3P0PooledConnectionPoolManager[identityToken->1bqsinl9yoihcqddmmbhp|2e71207, dataSourceName->datasource_1]-HelperThread-#2
+		com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@3851af4e
+			on thread: C3P0PooledConnectionPoolManager[identityToken->1bqsinl9yoihcqddmmbhp|2e71207, dataSourceName->datasource_1]-HelperThread-#1
+		com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@7acc46c4
+			on thread: C3P0PooledConnectionPoolManager[identityToken->1bqsinl9yoihcqddmmbhp|2e71207, dataSourceName->datasource_1]-HelperThread-#0
+	Pending Tasks: 
+		com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@793a2cd7
+		com.mchange.v2.resourcepool.BasicResourcePool$1DestroyResourceTask@5a56156e
+		com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@49991717
+Pool thread stack traces:
+	Thread[C3P0PooledConnectionPoolManager[identityToken->1bqsinl9yoihcqddmmbhp|2e71207, dataSourceName->datasource_1]-HelperThread-#2,5,main]
+		java.net.DualStackPlainSocketImpl.connect0(Native Method)
+		java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+		java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+		java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+		java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+		java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+		java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+		java.net.Socket.connect(Socket.java:579)
+		java.net.Socket.connect(Socket.java:528)
+		java.net.Socket.<init>(Socket.java:425)
+		java.net.Socket.<init>(Socket.java:241)
+		com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:256)
+		com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:271)
+		com.mysql.jdbc.Connection.createNewIO(Connection.java:2771)
+		com.mysql.jdbc.Connection.<init>(Connection.java:1555)
+		com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
+		com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
+		com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
+		com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
+		com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
+		com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
+	Thread[C3P0PooledConnectionPoolManager[identityToken->1bqsinl9yoihcqddmmbhp|2e71207, dataSourceName->datasource_1]-HelperThread-#0,5,main]
+		java.net.DualStackPlainSocketImpl.connect0(Native Method)
+		java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+		java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+		java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+		java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+		java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+		java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+		java.net.Socket.connect(Socket.java:579)
+		java.net.Socket.connect(Socket.java:528)
+		java.net.Socket.<init>(Socket.java:425)
+		java.net.Socket.<init>(Socket.java:241)
+		com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:256)
+		com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:271)
+		com.mysql.jdbc.Connection.createNewIO(Connection.java:2771)
+		com.mysql.jdbc.Connection.<init>(Connection.java:1555)
+		com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
+		com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
+		com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
+		com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
+		com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
+		com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
+	Thread[C3P0PooledConnectionPoolManager[identityToken->1bqsinl9yoihcqddmmbhp|2e71207, dataSourceName->datasource_1]-HelperThread-#1,5,main]
+		java.net.DualStackPlainSocketImpl.connect0(Native Method)
+		java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+		java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+		java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+		java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+		java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+		java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+		java.net.Socket.connect(Socket.java:579)
+		java.net.Socket.connect(Socket.java:528)
+		java.net.Socket.<init>(Socket.java:425)
+		java.net.Socket.<init>(Socket.java:241)
+		com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:256)
+		com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:271)
+		com.mysql.jdbc.Connection.createNewIO(Connection.java:2771)
+		com.mysql.jdbc.Connection.<init>(Connection.java:1555)
+		com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
+		com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
+		com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
+		com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
+		com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
+		com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
+
+
+ 2018-10-10 10:59:52 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:09:47 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:11:53 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:13:33 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:15:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:16:49 [com.heso.service.article.ArticleService]-[ERROR] No operations allowed after connection closed.
+ 2018-10-10 14:16:56 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:17:10 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:17:44 [com.heso.service.article.ArticleService]-[ERROR] No operations allowed after connection closed.
+ 2018-10-10 14:18:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:20:17 [com.heso.service.article.ArticleService]-[ERROR] No operations allowed after connection closed.
+ 2018-10-10 14:20:33 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:21:06 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:23:23 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 14:25:15 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-10-10 17:09:58 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

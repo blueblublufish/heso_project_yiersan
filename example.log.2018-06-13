@@ -1,0 +1,5 @@
+2018-06-13 17:51:16 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-13 17:51:17 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Can not issue executeUpdate() for SELECTs
+ 2018-06-13 17:51:54 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-13 18:32:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

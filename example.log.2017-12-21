@@ -1,0 +1,6 @@
+2017-12-16 12:57:48 [com.heso.service.expert.ExpertService]-[ERROR] 101265
+ 2017-12-16 12:58:44 [com.heso.service.expert.ExpertService]-[ERROR] 101265
+ 2017-12-16 13:22:30 [com.heso.service.expert.ExpertService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%1% and SEX = '0' and type = 2 and status = '1'' at line 1
+ 2017-12-16 13:23:54 [com.heso.service.expert.ExpertService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%1% and SEX = '0' and type = 2 and status = '1'' at line 1
+ 2017-12-21 17:44:00 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 

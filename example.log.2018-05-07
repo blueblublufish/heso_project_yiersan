@@ -1,0 +1,13 @@
+2018-05-07 12:04:07 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-07 14:21:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-07 14:54:40 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-07 16:12:59 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-07 16:13:00 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] For input string: "1275.5"
+ 2018-05-07 16:14:00 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-07 16:14:17 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] For input string: "1275.5"
+ 2018-05-07 16:19:55 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-07 16:20:01 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] For input string: "1275.5"
+ 2018-05-07 16:31:58 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-07 17:44:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-05-07 17:44:20 [com.heso.service.yesUser.YesUserService]-[ERROR] Data truncation: Data too long for column 'ISDEFAULT' at row 1
+ 

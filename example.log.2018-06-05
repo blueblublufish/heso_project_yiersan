@@ -1,0 +1,5 @@
+2018-06-05 13:53:02 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-05 13:53:27 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 100151
+ 2018-06-05 13:53:27 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
+ 2018-06-05 14:29:54 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

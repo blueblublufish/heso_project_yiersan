@@ -1,0 +1,361 @@
+package com.heso.transaction.outer;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Node;
+import com.heso.data.TransDataProcess;
+import com.heso.service.mall.entity.ProductDTO;
+import com.heso.service.mall.entity.ProductsDTO;
+import com.heso.service.order.consume.ConsumeOrder;
+import com.heso.service.order.consume.entity.ConsumeOrderObject;
+import com.heso.service.order.consume.entity.ConsumeOrderReturnObject;
+import com.heso.service.order.consume.entity.ConsumeProductObject;
+import com.heso.service.yesUser.YesUserService;
+import com.heso.transaction.AbstractInterfaceClass;
+/**
+ * 线下订单生成接口
+ * @author  www
+ *
+ */
+public class Transaction_001080 extends AbstractInterfaceClass {
+
+		private static final Log logger = LogFactory.getLog(Transaction_001080.class);
+		
+		@Override
+		public String execute(Node xmlBody, String IPAddress) {
+			try {
+			
+				//取出数据
+				//注册新用户
+				String phoneNum = xmlBody.selectSingleNode("mobile").getText();
+				String address = xmlBody.selectSingleNode("address").getText();
+				String sex = xmlBody.selectSingleNode("sex").getText();
+				String userName = xmlBody.selectSingleNode("userName").getText();
+				String regionId = xmlBody.selectSingleNode("regionId").getText();
+				
+				String innerCoin = xmlBody.selectSingleNode("innerCoin").getText();
+ 				String paymentTerms = xmlBody.selectSingleNode("paymentTerms").getText();
+				String recommend = xmlBody.selectSingleNode("recommend").getText();
+				String productName = xmlBody.selectSingleNode("productName").getText();
+				String color = xmlBody.selectSingleNode("color").getText();
+				String decs = xmlBody.selectSingleNode("desc").getText();
+				
+			
+				String productId = xmlBody.selectSingleNode("productId").getText();
+				String count = xmlBody.selectSingleNode("count").getText();
+				String size = xmlBody.selectSingleNode("size").getText();
+				String price = xmlBody.selectSingleNode("price").getText();
+				
+				//新增字段
+				String channelType = xmlBody.selectSingleNode("channelType").getText();
+				String formatType = xmlBody.selectSingleNode("formatType").getText();
+				String sizeType = xmlBody.selectSingleNode("sizeType").getText();
+				String styleType = xmlBody.selectSingleNode("styleType").getText();
+				String clothType = xmlBody.selectSingleNode("clothType").getText();
+				String seller = xmlBody.selectSingleNode("seller").getText();
+				
+				List<Node> listPNodes = xmlBody.selectNodes("productItem");
+				List<ProductsDTO> productsDTOs = new ArrayList<ProductsDTO>();
+				if(listPNodes!=null){
+					for(Node pnode : listPNodes){
+						ProductsDTO productsDTO = new ProductsDTO();
+						productsDTO.setProdctId(pnode.selectSingleNode("productId").getText());
+						productsDTO.setColor(pnode.selectSingleNode("color").getText());
+						productsDTO.setCount(pnode.selectSingleNode("count").getText());
+						productsDTO.setSize(pnode.selectSingleNode("size").getText());						
+						productsDTOs.add(productsDTO);
+						List<Node> listNodes = pnode.selectNodes("productDetail");
+						List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
+						if (listNodes != null) {
+							for (Node node : listNodes) {
+								ProductDTO productDTO = new ProductDTO();
+								productDTO.setProdctId(node.selectSingleNode("productId").getText());
+								productDTO.setSize(node.selectSingleNode("size").getText());
+								productDTO.setCount(node.selectSingleNode("pcount").getText());
+								productDTO.setColor(node.selectSingleNode("color").getText());
+								productDTOs.add(productDTO);
+							}
+							productsDTO.setProductDTOs(productDTOs);
+						}
+					}
+					
+				}
+				
+			 
+				
+				 
+				
+				//自动注册
+				String account = new YesUserService().autoRegister(phoneNum,userName,address,sex,regionId);
+				String reciveId = new YesUserService().findRecvIdbyAccount(account, regionId);
+				ConsumeOrder order = new ConsumeOrder();
+				ArrayList<ConsumeOrderObject> coaoList = new ArrayList<ConsumeOrderObject>();
+
+				//若是线上订单，查询商品，添加进入订单
+				if("0".equals(channelType)){
+					for(ProductsDTO productsDTO : productsDTOs){
+						ConsumeOrderObject coao = new ConsumeOrderObject();
+						List<ProductDTO> dtos = order.findProductById(productsDTO.getProdctId());
+						if(dtos.size()==0||dtos==null){
+						}else if(dtos.size()==1){
+							//单品
+							productName = dtos.get(0).getProName();
+							price = dtos.get(0).getPrice();
+							coao.setAccount(account);
+							coao.setColor(color);
+							coao.setName(productName);
+							coao.setProductId(productsDTO.getProdctId());
+							coao.setRemark(decs);
+							coao.setSize(productsDTO.getSize());
+							coao.setType("1");
+					 		coao.setImage("");
+					 		coao.setChannelType(channelType);
+					 		Integer ordercount = Integer.parseInt(productsDTO.getCount());
+					 		float orderamout = ordercount * new BigDecimal(price).floatValue();
+							coao.setPrice(price);
+							coao.setCount(productsDTO.getCount());
+							coao.setAmount(orderamout+"");
+							coao.setSuitId("");
+							coao.setSubordinate("");
+						
+						}else{
+							//套装
+							productName = dtos.get(0).getProName();
+							price = dtos.get(0).getPrice();
+							coao.setAccount(account);
+							coao.setColor(color);
+							coao.setName(productName);
+							coao.setProductId(productsDTO.getProdctId());
+							coao.setRemark(decs);
+							coao.setSize(productsDTO.getSize());
+							coao.setType("1");
+					 		coao.setImage("");
+					 		coao.setChannelType(channelType);
+					 		Integer ordercount = Integer.parseInt(productsDTO.getCount());
+					 		float orderamout = ordercount * new BigDecimal(price).floatValue();
+							coao.setPrice(price);
+							coao.setCount(productsDTO.getCount());
+							coao.setAmount(orderamout+"");
+							coao.setSuitId("");
+							coao.setSubordinate("");
+							ArrayList<ConsumeProductObject> cpoList = new ArrayList<ConsumeProductObject>();
+							productName = dtos.get(0).getProName();
+							dtos.remove(0);
+							for(ProductDTO dto : dtos){
+								for(ProductDTO dto2 : productsDTO.getProductDTOs()){
+									if(dto.getProdctId().equals(dto2.getProdctId())){
+										ConsumeProductObject cpo = new ConsumeProductObject();
+										cpo.setProductId(dto.getProdctId());
+										cpo.setName(dto.getProName());
+										cpo.setColor(dto2.getColor());
+										cpo.setCount(dto2.getCount());
+										cpo.setPrice(dto.getPrice());
+										cpo.setSize(dto2.getSize());
+										Integer countInt = Integer.parseInt(count);
+	 									float amountt = countInt * new BigDecimal(dto.getPrice()).floatValue();
+	 									cpo.setAmount(amountt+"");
+	 									cpo.setSuitPrice(dto.getPrice());
+	 									cpo.setSuitPromotion("0");
+	 									cpo.setSubordinate("0");
+	 									cpoList.add(cpo);
+									}
+								}	
+							}
+							coao.setCpoList(cpoList);
+						}
+						coaoList.add(coao);
+					}
+				
+				}else{
+					ConsumeOrderObject coao0 = new ConsumeOrderObject();
+					coao0.setAccount(account);
+					coao0.setColor(color);
+					coao0.setName(productName);
+					coao0.setProductId(productId);
+					coao0.setRemark(decs);
+					coao0.setSize(size);
+					coao0.setType("1");
+					
+			 		coao0.setImage("");
+			 		Integer ordercount = Integer.parseInt(count);
+			 		float orderamout = ordercount * new BigDecimal(price).floatValue();
+					coao0.setPrice(price);
+					coao0.setCount(count);
+					coao0.setAmount(orderamout+"");
+					coao0.setSuitId("");
+					coao0.setSubordinate("");
+					coao0.setChannelType(channelType);
+					coao0.setFormatType(formatType);
+					coao0.setSeller(seller);
+					coao0.setSizeType(sizeType);
+					coao0.setClothType(clothType);
+					coao0.setStyleType(styleType);
+					//coao0.setCpoList(cpoList);
+					coaoList.add(coao0);
+				}
+				//建立订单对象
+				/*ConsumeOrderObject coao0 = new ConsumeOrderObject();
+				coao0.setAccount(account);
+				coao0.setColor(color);
+				coao0.setName(productName);
+				coao0.setProductId(productId);
+				coao0.setRemark(decs);
+				coao0.setSize(size);
+				coao0.setType("1");
+				
+		 		coao0.setImage("");
+		 		Integer ordercount = Integer.parseInt(count);
+		 		float orderamout = ordercount * new BigDecimal(price).floatValue();
+				coao0.setPrice(price);
+				coao0.setCount(count);
+				coao0.setAmount(orderamout+"");
+				coao0.setSuitId("");
+				coao0.setSubordinate("");
+				coao0.setChannelType(channelType);
+				coao0.setFormatType(formatType);
+				coao0.setSeller(seller);
+				coao0.setSizeType(sizeType);
+				coao0.setClothType(clothType);
+				coao0.setStyleType(styleType);
+				//coao0.setCpoList(cpoList);
+				coaoList.add(coao0);*/
+				
+				
+				// 建立订单对象
+				ConsumeOrderReturnObject coaos = order.innerOrder(coaoList,account, productId, "", reciveId, "1", "");
+				
+				// 设置返回数据
+				StringBuffer sb = new StringBuffer();
+				//ConsumeOrderReturnObject coro = new ConsumeOrder().getInfo(account, coaos.getOrderId(), "0", "0", "0", "3", 0, 2);
+
+				if (coaos.getCode().equals("000000")) {
+					sb.append("<recCount>" + coaos.getReccount() + "</recCount>");
+					//ssb.append("");
+					/*for (ConsumeOrderObject coo : coro.getCooList()) {
+						sb.append("<orderItem>");
+						sb.append("<orderId>" + coo.getOrderId() + "</orderId>");
+						sb.append("<account>" + coo.getAccount() + "</account>");
+						sb.append("<createTime>" + coo.getCreateTime() + "</createTime>");
+						sb.append("<productId>" + coo.getProductId() + "</productId>");
+						sb.append("<type>" + coo.getType() + "</type>");
+						sb.append("<name>" + coo.getName() + "</name>");
+						sb.append("<image>" + coo.getImage() + "</image>");
+						sb.append("<count>" + coo.getCount() + "</count>");
+						sb.append("<price>" + coo.getPrice() + "</price>");
+						sb.append("<amount>" + coo.getAmount() + "</amount>");
+						sb.append("<color>" + coo.getColor() + "</color>");
+						sb.append("<size>" + coo.getSize() + "</size>");
+						sb.append("<payTime>" + coo.getPayTime() + "</payTime>");
+						sb.append("<payStatus>" + coo.getPayStatus() + "</payStatus>");
+						sb.append("<currency>" + coo.getCurrency() + "</currency>");
+						sb.append("<innerCoin>" + coo.getInnerCoin() + "</innerCoin>");
+						sb.append("<BonunPoint>" + coo.getBonusPoint() + "</BonunPoint>");
+						sb.append("<sendStatus>" + coo.getSendStatus() + "</sendStatus>");
+						sb.append("<returnStatus>" + coo.getReturnStatus() + "</returnStatus>");
+						sb.append("<receiveId>" + coo.getReceiveId() + "</receiveId>");
+						sb.append("<logistCom>"+coo.getLogistCom()+"</logistCom>");
+						sb.append("<trackingNum>"+coo.getTrackingNum()+"</trackingNum>");
+						sb.append("<showStatus>"+coo.getShowStatus()+"</showStatus>");
+						sb.append("<suitId>"+coo.getSuitId()+"</suitId>");
+						sb.append("</orderItem>");
+					}*/
+				}
+
+				String xmlBodyStr = super.buildResp(coaos.getCode(), sb.toString());
+				return xmlBodyStr;
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return super.ERROR_RETURN;
+		
+		}
+		public static void main(String[] args) {
+			
+			StringBuffer sb = new StringBuffer();
+			sb.append("<?xml version='1.0' encoding='utf-8'?>");
+			sb.append("<message>");
+			sb.append("<head>");
+			sb.append("<type>001080</type>");
+			sb.append("<messageId>1</messageId>");
+			sb.append("<agentId>001</agentId>");
+			sb.append("<digest>MD5数字签名</digest>");
+			sb.append("</head>");
+			sb.append("<body>");
+			sb.append("<account>in_0000000000000895</account>");
+			sb.append("<token>0</token>");
+			sb.append("<productId>16C0022</productId>");
+			sb.append("<count>1</count>");
+			sb.append("<size>S</size>");
+			sb.append("<price>1000</price>");
+			sb.append("<selected>1</selected>");
+			sb.append("<innerCoin></innerCoin>");
+			sb.append("<paymentTerms>1</paymentTerms>");
+			sb.append("<recommend></recommend>");
+			sb.append("<productName>gfgfg</productName>");
+			sb.append("<color>green</color>");
+			sb.append("<desc>这个666</desc>");
+			//sb.append("<receiveId></receiveId>");
+			sb.append("<regionId>441241</regionId>");
+			//
+			sb.append("<mobile>19645123315</mobile>");
+			sb.append("<address>mark</address>");
+			sb.append("<sex>0</sex>");
+			sb.append("<userName>Hukkke</userName>");
+			
+	//
+			sb.append("<channelType>0</channelType>");
+			sb.append("<formatType>66</formatType>");
+			sb.append("<sizeType>XI</sizeType>");
+			sb.append("<styleType>cool</styleType>");
+			sb.append("<clothType>nelong</clothType>");
+			sb.append("<seller>4545454</seller>");
+			
+			sb.append("<productItem>");
+			sb.append("<productId>1234567</productId>");
+			sb.append("<count>1</count>");
+			sb.append("<size>ss</size>");
+			sb.append("<color>red</color>");
+			sb.append("<productDetail>");
+			sb.append("<productId>W17D0004</productId>");
+			sb.append("<pcount>1</pcount>");
+			sb.append("<size>qq</size>");
+			sb.append("<color>gg</color>");
+			sb.append("</productDetail>");
+			sb.append("<productDetail>");
+			sb.append("<productId>W17B0002</productId>");
+			sb.append("<pcount>1</pcount>");
+			sb.append("<size>qq</size>");
+			sb.append("<color>gg</color>");
+			sb.append("</productDetail>");
+			sb.append("<productDetail>");
+			sb.append("<productId>W17T0007</productId>");
+			sb.append("<pcount>1</pcount>");
+			sb.append("<size>qq</size>");
+			sb.append("<color>gg</color>");
+			sb.append("</productDetail>");
+			sb.append("<productDetail>");
+			sb.append("<productId>W17T0009</productId>");
+			sb.append("<pcount>1</pcount>");
+			sb.append("<size>qq</size>");
+			sb.append("<color>gg</color>");
+			sb.append("</productDetail>");
+			sb.append("</productItem>");
+	
+			
+			
+		
+			sb.append("</body>");
+			sb.append("</message>");
+
+			try {
+				new TransDataProcess().execute(sb.toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+}

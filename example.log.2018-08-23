@@ -1,0 +1,37 @@
+2018-08-23 14:31:18 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 14:31:20 [com.heso.service.mall.MallService]-[ERROR] <<<<<<<<<<<<<
+ 2018-08-23 14:31:35 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 14:31:46 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 14:33:17 [com.heso.service.expert.ExpertService]-[ERROR] No operations allowed after connection closed.
+ 2018-08-23 14:35:40 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 14:36:12 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 14:37:46 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 14:38:29 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 15:05:55 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 15:06:18 [com.heso.service.expert.ExpertService]-[ERROR] No operations allowed after connection closed.
+ 2018-08-23 15:50:27 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 15:50:30 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Column count doesn't match value count at row 1
+ 2018-08-23 15:50:31 [com.heso.service.cart.CartService]-[ERROR] 
+ 2018-08-23 15:51:22 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 15:51:30 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Column count doesn't match value count at row 1
+ 2018-08-23 15:51:43 [com.heso.service.cart.CartService]-[ERROR] 
+ 2018-08-23 15:51:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 15:52:27 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2018-08-23 15:52:27 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] A PooledConnection that has already signalled a Connection error is still in use!
+ 2018-08-23 15:52:27 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] Another error has occurred [ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state. ] which will not be reported to listeners!
+ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:888)
+	at com.mysql.jdbc.Connection.getMutex(Connection.java:3755)
+	at com.mysql.jdbc.Connection.rollback(Connection.java:5251)
+	at com.mchange.v2.c3p0.impl.NewProxyConnection.rollback(NewProxyConnection.java:860)
+	at com.heso.service.order.consume.ConsumeOrder.genarate(ConsumeOrder.java:235)
+	at com.heso.service.cart.CartService.settle(CartService.java:1048)
+	at com.heso.transaction.outer.Transaction_001024.execute(Transaction_001024.java:48)
+	at com.heso.data.TransDataProcess.execute(TransDataProcess.java:101)
+	at com.heso.transaction.outer.Transaction_001138.main(Transaction_001138.java:110)
+2018-08-23 15:52:57 [com.heso.service.cart.CartService]-[ERROR] 
+ 2018-08-23 15:53:03 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-08-23 15:53:26 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Column count doesn't match value count at row 1
+ 2018-08-23 15:53:45 [com.heso.service.cart.CartService]-[ERROR] 
+ 2018-08-23 15:56:18 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 

@@ -1,0 +1,5 @@
+2017-12-07 14:16:26 [com.heso.service.mall.MallService]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''1,2,3'' at line 1
+ 2017-12-07 14:17:11 [com.heso.service.mall.MallService]-[ERROR] Parameter index out of range (1 > number of parameters, which is 0).
+ 2017-12-07 14:31:08 [com.heso.service.mall.MallService]-[ERROR] Invalid argument value: java.lang.ArrayIndexOutOfBoundsException
+ 2017-12-07 16:31:38 [com.heso.service.mall.MallService]-[ERROR] 
+ 

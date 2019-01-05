@@ -1,0 +1,64 @@
+package com.heso.service.mall.entity;
+
+import java.util.List;
+
+public class ProductsDTO {
+	private String prodctId;
+	private String stock;
+	private String type;
+	private String price;
+	private String size;
+	private String count;
+	private String color;
+	private List<ProductDTO> productDTOs;
+	public String getProdctId() {
+		return prodctId;
+	}
+	public void setProdctId(String prodctId) {
+		this.prodctId = prodctId;
+	}
+	public String getStock() {
+		return stock;
+	}
+	public void setStock(String stock) {
+		this.stock = stock;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
+	public String getCount() {
+		return count;
+	}
+	public void setCount(String count) {
+		this.count = count;
+	}
+	public String getColor() {
+		return color;
+	} 
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public List<ProductDTO> getProductDTOs() {
+		return productDTOs;
+	}
+	public void setProductDTOs(List<ProductDTO> productDTOs) {
+		this.productDTOs = productDTOs;
+	}
+	
+
+}

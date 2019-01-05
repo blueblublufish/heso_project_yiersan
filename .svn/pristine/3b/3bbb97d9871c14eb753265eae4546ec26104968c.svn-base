@@ -1,0 +1,53 @@
+package com.heso.transaction.outer;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Node;
+
+import com.heso.service.account.YiErSanAccountService;
+import com.heso.service.message.entity.MessageObject;
+import com.heso.service.message.entity.MessageServiceReturnObject;
+import com.heso.service.sms.YRSSms;
+import com.heso.service.user.entity.UserDataObject;
+import com.heso.service.user.entity.UserServiceReturnObject;
+import com.heso.service.yesUser.YesUserService;
+import com.heso.transaction.AbstractInterfaceClass;
+
+/**用户登录
+ * @author xujun
+ *
+ */
+public class Transaction_001922 extends AbstractInterfaceClass {
+	private static final Log logger = LogFactory.getLog(Transaction_001922.class);
+	@Override
+	public String execute(Node xmlBody, String IPAddress) {
+		// TODO Auto-generated method stub
+		try {
+
+			// 取出数据
+			String userId= xmlBody.selectSingleNode("userId").getText();
+			String password = xmlBody.selectSingleNode("password").getText();
+			String userType = xmlBody.selectSingleNode("userType").getText();
+			String mobile = xmlBody.selectSingleNode("mobile").getText();
+			String  mobileCode = xmlBody.selectSingleNode("mobileCode").getText();
+			
+			// 进行登陆交易
+			UserServiceReturnObject usro = new YesUserService().login(userId, password, userType,mobile,mobileCode, IPAddress);
+
+			// 设置返回数据
+			StringBuffer sb = new StringBuffer();
+			if (usro.getCode().equals("000000")) {
+				sb.append("<account>" + usro.getAccount() + "</account>");
+				sb.append("<token>" + usro.getToken() + "</token>");
+			}
+			String xmlBodyStr = super.buildResp(usro.getCode(), sb.toString());
+			return xmlBodyStr;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return super.ERROR_RETURN;
+	}
+
+}

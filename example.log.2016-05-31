@@ -1,0 +1,34 @@
+2016-05-31 18:00:38 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:00:39 [quartz.job.Upload]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'group by org_order_id' at line 1
+ 2016-05-31 18:03:13 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:03:14 [quartz.job.Upload]-[ERROR] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'group by org_order_id' at line 1
+ 2016-05-31 18:03:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:03:51 [quartz.job.Upload]-[ERROR] -1
+ 2016-05-31 18:08:43 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:08:44 [quartz.job.Upload]-[ERROR] -1
+ 2016-05-31 18:12:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:12:19 [quartz.job.Upload]-[ERROR] -1
+ 2016-05-31 18:14:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:14:22 [quartz.job.Upload]-[ERROR] -1
+ 2016-05-31 18:16:03 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:16:04 [quartz.job.Upload]-[ERROR] -1
+ 2016-05-31 18:21:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:21:37 [quartz.job.Upload]-[ERROR] -1
+ 2016-05-31 18:22:51 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:22:55 [quartz.job.Upload]-[ERROR] Parameter index out of range (1 > number of parameters, which is 0).
+ 2016-05-31 18:25:00 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:25:24 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:31:34 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:31:35 [com.heso.service.funds.FundsService]-[ERROR] 100102
+ 2016-05-31 18:31:35 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100102
+ 2016-05-31 18:31:35 [quartz.job.Upload]-[ERROR] 101507
+ 2016-05-31 18:33:43 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 18:33:44 [com.heso.service.funds.FundsService]-[ERROR] 100102
+ 2016-05-31 18:33:44 [com.heso.service.funds.order.recharge.OrderRecharge]-[ERROR] 100102
+ 2016-05-31 18:33:44 [quartz.job.Upload]-[ERROR] 101507
+ 2016-05-31 18:36:40 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 19:34:07 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 19:34:08 [quartz.job.Upload]-[ERROR] -1
+ 2016-05-31 19:34:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: characterEncoding
+ 2016-05-31 19:34:43 [quartz.job.Upload]-[ERROR] Can't call commit when autocommit=true
+ 

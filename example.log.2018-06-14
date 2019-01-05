@@ -1,0 +1,11 @@
+2018-06-14 09:41:49 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-14 09:41:51 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] MissingPhoneNumbers : PhoneNumbers is mandatory for this action.
+RequestId : 05B4D0A9-7BA7-473B-BEDE-5C3A747E79FB
+ 2018-06-14 09:42:31 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-14 09:44:20 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] MissingPhoneNumbers : PhoneNumbers is mandatory for this action.
+RequestId : AEB356C4-9904-49C2-8F4D-B5AC6F405466
+ 2018-06-14 09:44:40 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-14 09:52:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2018-06-14 09:52:29 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] No operations allowed after connection closed.
+ 2018-06-14 09:52:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 
