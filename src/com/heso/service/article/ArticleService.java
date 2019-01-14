@@ -196,7 +196,7 @@ public class ArticleService {
 				 
 		 
 				DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
-				List<ArticleCommentDTO> memberList = new ArrayList<>();
+				List<ArticleCommentDTO> memberList = new ArrayList<ArticleCommentDTO>();
 				for(int i = 0;i<dtt.getRows().size();i++){
 					DataRow dRow = dtt.getRows().get(i);
 					ArticleCommentDTO dto = new ArticleCommentDTO();
@@ -257,7 +257,7 @@ public class ArticleService {
 				
 				for(ArticleCommentDTO aDto:memberList){
 					ArticleCommentDTO articleCommentDTO = new ArticleCommentDTO();
-					List<ArticleCommentDTO> classList = new ArrayList<>();
+					List<ArticleCommentDTO> classList = new ArrayList<ArticleCommentDTO>();
 					sql = "SELECT hdc.flag, hd.desc as admindesc,hd.admin_id,hdc.id,hdc.IS_YUGAO,hdc.BELONG_SERVICE,hdc.READ_COUNT,hdc.IMGDESC,hdc.DESC,hdc.videoname," +
 							"hdc.videolength,hdc.videosrc,hdc.like,hdc.videoimage,hdc.createtime,hd.name,hd.image " +
 							"FROM heso_designer_class as hdc,heso_admin as hd WHERE  hdc.designerid = hd.admin_id AND hdc.id in ( " +
@@ -372,7 +372,7 @@ public class ArticleService {
 					argsList.add(productId);
 				}
 				DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
-				List<ArticleCommentDTO> memberList = new ArrayList<>();
+				List<ArticleCommentDTO> memberList = new ArrayList<ArticleCommentDTO>();
 				for(int i = 0;i<dtt.getRows().size();i++){
 					DataRow dRow = dtt.getRows().get(i);
 					ArticleCommentDTO dto = new ArticleCommentDTO();
@@ -433,7 +433,7 @@ public class ArticleService {
 				
 				for(ArticleCommentDTO aDto:memberList){
 					ArticleCommentDTO articleCommentDTO = new ArticleCommentDTO();
-					List<ArticleCommentDTO> classList = new ArrayList<>();
+					List<ArticleCommentDTO> classList = new ArrayList<ArticleCommentDTO>();
 					sql = "SELECT hdc.flag, hd.desc as admindesc,hd.admin_id,hdc.id,hdc.IS_YUGAO,hdc.BELONG_SERVICE,hdc.READ_COUNT,hdc.IMGDESC,hdc.DESC,hdc.videoname," +
 							"hdc.videolength,hdc.videosrc,hdc.like,hdc.videoimage,hdc.createtime,hd.name,hd.image " +
 							"FROM heso_designer_class as hdc,heso_admin as hd WHERE  hdc.designerid = hd.admin_id AND hdc.id in ( " +
@@ -530,7 +530,7 @@ public class ArticleService {
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		MallServiceReturnObject msro = new MallServiceReturnObject();
 		Connection conn = DatabaseMgr.getInstance().getConnection();
-		Map<String, List<String>> map = new HashMap<>();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		
 		try {
 			ArrayList<Object> argsList = new ArrayList<Object>();
@@ -538,7 +538,7 @@ public class ArticleService {
 			DataTable dtt = dbm.execSqlTrans(sql, argsList, conn);
 			int d = dtt.getRows().size();
 			for(int i = 0;i<dtt.getRows().size();i++){
-				List<String> list = new ArrayList<>();
+				List<String> list = new ArrayList<String>();
 				String value = dtt.getRows().get(i).getString("VALUE");
 				String id = dtt.getRows().get(i).getString("ID");
 					String label = dtt.getRows().get(i).getString("LABEL");
@@ -656,9 +656,9 @@ public class ArticleService {
 		/*MallServiceReturnObject manmsro = new MallServiceReturnObject();
 		MallServiceReturnObject womenmsro = new MallServiceReturnObject();*/
 		Connection conn = DatabaseMgr.getInstance().getConnection();
-		Map<String, List<String>> map = new HashMap<>();
-		List<RecommendProducts> manreList = new ArrayList<>();
-		List<RecommendProducts> womenreList = new ArrayList<>();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		List<RecommendProducts> manreList = new ArrayList<RecommendProducts>();
+		List<RecommendProducts> womenreList = new ArrayList<RecommendProducts>();
 		try {
 			
 			
@@ -763,7 +763,7 @@ public class ArticleService {
 	}
 	
 	public  static  List<String> getStyleName(String ids,Map<String, List<String>> map,String sex){
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		String wstyle1 ="";
 		String wstyle2 ="";
 		String[] sourceStrArray = ids.split(",");

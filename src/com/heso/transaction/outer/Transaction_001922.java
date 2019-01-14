@@ -46,6 +46,7 @@ public class Transaction_001922 extends AbstractInterfaceClass {
 				sb.append("<account>" + usro.getAccount() + "</account>");
 				sb.append("<token>" + usro.getToken() + "</token>");
 				sb.append("<userId>" + usro.getProductCount() + "</userId>");
+				sb.append("<sex>" + usro.getBalance() + "</sex>");
 			}
 			String xmlBodyStr = super.buildResp(usro.getCode(), sb.toString());
 			return xmlBodyStr;

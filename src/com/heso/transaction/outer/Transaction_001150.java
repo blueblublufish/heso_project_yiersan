@@ -127,7 +127,7 @@ public class Transaction_001150 extends AbstractInterfaceClass {
 	public static void main(String[] args) {
 		StringBuffer sb = new StringBuffer();
 		StringBuffer ss = new StringBuffer();
-		ss.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>001115</type><messageId>1</messageId><agentId>001</agentId><digest>MD5数字签名</digest></head><body><name>废弃</name><phone>12345636612</phone><regionId>440701</regionId><address>市区</address><sex>0</sex><birthType>1</birthType><birthday></birthday><birthday2></birthday2><companyName>22</companyName><carree>1</carree><identity>2</identity><scene>1</scene><sceneForMan>2</sceneForMan><wantipstyle1>1</wantipstyle1><wantipstyle2>1</wantipstyle2><suitColor>1</suitColor><notSuitColor>3</notSuitColor><sense>2</sense><straight>1</straight><bodyStyle>2</bodyStyle><bodynotsuit>6</bodynotsuit><ipStyle1>1</ipStyle1><ipStyle2>1</ipStyle2></body></message>");
+		ss.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>001150</type><messageId>1</messageId><agentId>001</agentId><digest>MD5数字签名</digest></head><body><sex></sex><page>1</page><pageSize>5</pageSize><style></style><scene></scene><productName>17O0003</productName><pinlei></pinlei><supplier></supplier><paixu></paixu></body></message>");
 		sb.append("<?xml version='1.0' encoding='utf-8'?>");
 		sb.append("<message>");
 		sb.append("<head>");

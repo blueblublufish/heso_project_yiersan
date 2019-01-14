@@ -59,7 +59,7 @@ public class WardrobeService {
 		WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		Connection conn = null;
-		ArrayList<WardrobeDTO> wardrobeList = new ArrayList<>();
+		ArrayList<WardrobeDTO> wardrobeList = new ArrayList<WardrobeDTO>();
 		try {
 			conn = dbm.getConnection();
 			
@@ -181,7 +181,7 @@ public class WardrobeService {
 
 	//衣橱诊断报告 单品数量统计
 	public   List<ReportDTO>  wardrobeReport2(String account ,String sex) {
- 		List<ReportDTO> dtos = new ArrayList<>();
+ 		List<ReportDTO> dtos = new ArrayList<ReportDTO>();
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		Connection conn = null;
   		try {
@@ -195,7 +195,7 @@ public class WardrobeService {
 			//单品统计
 			//上衣数量
 			sql = "SELECT COUNT(ID) FROM heso_user_wardrobe WHERE  account = ? AND type = '1'";
-			List<String> list = new ArrayList<>();
+			List<String> list = new ArrayList<String>();
 			argsList.clear();
 			argsList.add(account);
 			DataTable dt  = dbm.execSqlTrans(sql, argsList, conn);
@@ -309,7 +309,7 @@ public class WardrobeService {
 	
 	//衣橱诊断报告 上衣下装统计
 	public    List<ReportDTO>  wardrobeReport4(String account ,String sex) {
- 		List<ReportDTO> dtos = new ArrayList<>();
+ 		List<ReportDTO> dtos = new ArrayList<ReportDTO>();
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		Connection conn = null;
   		try {
@@ -372,7 +372,7 @@ public class WardrobeService {
 	
 	//衣橱诊断报告 场景数量统计
 		public  List<ReportDTO>  wardrobeReport3(String account ,String sex) {
-	 		List<ReportDTO> dtos = new ArrayList<>();
+	 		List<ReportDTO> dtos = new ArrayList<ReportDTO>();
 			DatabaseMgr dbm = DatabaseMgr.getInstance();
 			Connection conn = null;
 			String countflag = "0"; 
@@ -653,10 +653,10 @@ public class WardrobeService {
 		}
     //衣橱诊断报告 二级单品最低配置清单
 	public   List<List<String>> wardrobeReport(String account ,String sex) {
-		List<List<String>> lists = new ArrayList<>();
+		List<List<String>> lists = new ArrayList<List<String>>();
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		Connection conn = null;
-		List<ReportDTO> list = new ArrayList<>();
+		List<ReportDTO> list = new ArrayList<ReportDTO>();
 	 
 		try {
 			conn = dbm.getConnection();
@@ -675,7 +675,7 @@ public class WardrobeService {
 				argsList.add(account);
 				DataTable dt1 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt1.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list1 = new ArrayList<>();
+				List<String> list1 = new ArrayList<String>();
 				list1.add("风衣");
 				list1.add("shangyi");
 				list1.add("13");
@@ -693,7 +693,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt2 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt2.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list2 = new ArrayList<>();
+				List<String> list2 = new ArrayList<String>();
 				list2.add("夹克");
 				list2.add("shangyi");
 				list2.add("14");
@@ -714,7 +714,7 @@ public class WardrobeService {
 				count = dt3.getRows().get(0).getInt("COUNT(ID)");
 				 
 				countup = countup + count ;
-				List<String> list3 = new ArrayList<>();
+				List<String> list3 = new ArrayList<String>();
 				list3.add("衬衣");
 				list3.add("shangyi");
 				list3.add("19,20");
@@ -733,7 +733,7 @@ public class WardrobeService {
 				DataTable dt4 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt4.getRows().get(0).getInt("COUNT(ID)");
 				countup = countup + count ;
-				List<String> list4 = new ArrayList<>();
+				List<String> list4 = new ArrayList<String>();
 				list4.add("T恤");
 				list4.add("shangyi");
 				list4.add("21,22");
@@ -751,7 +751,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt5 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt5.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list5 = new ArrayList<>();
+				List<String> list5 = new ArrayList<String>();
 				list5.add("套西");
 				list5.add("zhuhe");
 				list5.add("1");
@@ -770,7 +770,7 @@ public class WardrobeService {
 				DataTable dt6 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt6.getRows().get(0).getInt("COUNT(ID)");
 				countdown = countdown + count;
-				List<String> list6 = new ArrayList<>();
+				List<String> list6 = new ArrayList<String>();
 				list6.add("休闲裤");
 				list6.add("kuzhuang");
 				list6.add("4");
@@ -788,7 +788,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt7 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt7.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list7 = new ArrayList<>();
+				List<String> list7 = new ArrayList<String>();
 				list7.add("领带");
 				list7.add("peishi");
 				list7.add("4");
@@ -806,7 +806,7 @@ public class WardrobeService {
 			//	argsList.add(account);
 				DataTable dt8 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt8.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list8 = new ArrayList<>();
+				List<String> list8 = new ArrayList<String>();
 				list8.add("口袋方巾");
 				list8.add("peishi");
 				list8.add("5");
@@ -824,7 +824,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt9 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt9.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list9 = new ArrayList<>();
+				List<String> list9 = new ArrayList<String>();
 				list9.add("袖扣");
 				list9.add("peishi");
 				list9.add("7");
@@ -842,7 +842,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt10 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt10.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list10 = new ArrayList<>();
+				List<String> list10 = new ArrayList<String>();
 				list10.add("皮带/腰带");
 				list10.add("peishi");
 				list10.add("8");
@@ -860,7 +860,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt11 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt11.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list11 = new ArrayList<>();
+				List<String> list11 = new ArrayList<String>();
 				list11.add("包包");
 				list11.add("peishi");
 				list11.add("9");
@@ -878,7 +878,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt12 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt12.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list12 = new ArrayList<>();
+				List<String> list12 = new ArrayList<String>();
 				list12.add("手表");
 				list12.add("peishi");
 				list12.add("10");
@@ -896,7 +896,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt13 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt13.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list13 = new ArrayList<>();
+				List<String> list13 = new ArrayList<String>();
 				list13.add("太阳眼镜");
 				list13.add("peishi");
 				list13.add("14");
@@ -914,7 +914,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt14 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt14.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list14 = new ArrayList<>();
+				List<String> list14 = new ArrayList<String>();
 				list14.add("凉鞋");
 				list14.add("xielei");
 				list14.add("1");
@@ -932,7 +932,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt15 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt15.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list15 = new ArrayList<>();
+				List<String> list15 = new ArrayList<String>();
 				list15.add("单皮鞋");
 				list15.add("xielei");
 				list15.add("2");
@@ -950,7 +950,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt16 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt16.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list16 = new ArrayList<>();
+				List<String> list16 = new ArrayList<String>();
 				list16.add("休闲鞋");
 				list16.add("xielei");
 				list16.add("4");
@@ -968,7 +968,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt17 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt17.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list17 = new ArrayList<>();
+				List<String> list17 = new ArrayList<String>();
 				list17.add("运动袜");
 				list17.add("wazi");
 				list17.add("2");
@@ -986,7 +986,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt18 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt18.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list18 = new ArrayList<>();
+				List<String> list18 = new ArrayList<String>();
 				list18.add("西装袜");
 				list18.add("wazi");
 				list18.add("5");
@@ -1005,7 +1005,7 @@ public class WardrobeService {
 				DataTable dt19 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt19.getRows().get(0).getInt("COUNT(ID)");
 				countup = countup + count ;
-				List<String> list19 = new ArrayList<>();
+				List<String> list19 = new ArrayList<String>();
 				list19.add("Polo");
 				list19.add("shangyi");
 				list19.add("9,10");
@@ -1024,7 +1024,7 @@ public class WardrobeService {
 				DataTable dt20 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt20.getRows().get(0).getInt("COUNT(ID)");
 				countup = countup + count ;
-				List<String> list20 = new ArrayList<>();
+				List<String> list20 = new ArrayList<String>();
 				list20.add("西装");
 				list20.add("shangyi");
 				list20.add("2");
@@ -1051,7 +1051,7 @@ public class WardrobeService {
 				argsList.add(account);
 				DataTable dt1 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt1.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list1 = new ArrayList<>();
+				List<String> list1 = new ArrayList<String>();
 				list1.clear();
 				list1.add("风衣");
 				list1.add("shangyi");
@@ -1070,7 +1070,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt2 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt2.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list2 = new ArrayList<>();
+				List<String> list2 = new ArrayList<String>();
 				list2.add("夹克");
 				list2.add("shangyi");
 				list2.add("14");
@@ -1089,7 +1089,7 @@ public class WardrobeService {
 				DataTable dt3 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt3.getRows().get(0).getInt("COUNT(ID)");
 				countup = countup + count ;
-				List<String> list3 = new ArrayList<>();
+				List<String> list3 = new ArrayList<String>();
 				list3.add("衬衣");
 				list3.add("shangyi");
 				list3.add("19,20");
@@ -1108,7 +1108,7 @@ public class WardrobeService {
 				DataTable dt4 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt4.getRows().get(0).getInt("COUNT(ID)");
 				countup = countup + count ;
-				List<String> list4 = new ArrayList<>();
+				List<String> list4 = new ArrayList<String>();
 				list4.add("T恤");
 				list4.add("shangyi");
 				list4.add("21,22");
@@ -1126,7 +1126,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt5 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt5.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list5 = new ArrayList<>();
+				List<String> list5 = new ArrayList<String>();
 				list5.add("套西");
 				list5.add("zhuhe");
 				list5.add("1");
@@ -1146,7 +1146,7 @@ public class WardrobeService {
 				DataTable dt6 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt6.getRows().get(0).getInt("COUNT(ID)");
 				countup = countup + count ;
-				List<String> list6 = new ArrayList<>();
+				List<String> list6 = new ArrayList<String>();
 				list6.add("吊带");
 				list6.add("shangyi");
 				list6.add("5");
@@ -1164,7 +1164,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt7 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt7.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list7 = new ArrayList<>();
+				List<String> list7 = new ArrayList<String>();
 				list7.add("休闲裤");
 				list7.add("kuzhuang");
 				list7.add("4");
@@ -1183,7 +1183,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt8 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt8.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list8 = new ArrayList<>();
+				List<String> list8 = new ArrayList<String>();
 				list8.add("晚礼服");
 				list8.add("qunzhuang");
 				list8.add("3");
@@ -1201,7 +1201,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt9 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt9.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list9 = new ArrayList<>();
+				List<String> list9 = new ArrayList<String>();
 				list9.add("半身裙");
 				list9.add("qunzhuang");
 				list9.add("1,2");
@@ -1219,7 +1219,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt10 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt10.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list10 = new ArrayList<>();
+				List<String> list10 = new ArrayList<String>();
 				list10.add("帽子");
 				list10.add("peishi");
 				list10.add("1");
@@ -1237,7 +1237,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt11 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt11.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list11 = new ArrayList<>();
+				List<String> list11 = new ArrayList<String>();
 				list11.add("丝巾");
 				list11.add("peishi");
 				list11.add("2");
@@ -1255,7 +1255,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt12 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt12.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list12 = new ArrayList<>();
+				List<String> list12 = new ArrayList<String>();
 				list12.add("丝巾扣");
 				list12.add("peishi");
 				list12.add("6");
@@ -1274,7 +1274,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt13 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt13.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list13 = new ArrayList<>();
+				List<String> list13 = new ArrayList<String>();
 				list13.add("皮带/腰带");
 				list13.add("peishi");
 				list13.add("8");
@@ -1293,7 +1293,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt14 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt14.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list14 = new ArrayList<>();
+				List<String> list14 = new ArrayList<String>();
 				list14.add("手表");
 				list14.add("peishi");
 				list14.add("10");
@@ -1311,7 +1311,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt15 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt15.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list15 = new ArrayList<>();
+				List<String> list15 = new ArrayList<String>();
 				list15.add("戒指");
 				list15.add("peishi");
 				list15.add("11");
@@ -1330,7 +1330,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt16 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt16.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list16 = new ArrayList<>();
+				List<String> list16 = new ArrayList<String>();
 				list16.add("手镯");
 				list16.add("peishi");
 				list16.add("12");
@@ -1348,7 +1348,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt17 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt17.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list17 = new ArrayList<>();
+				List<String> list17 = new ArrayList<String>();
 				list17.add("耳环");
 				list17.add("peishi");
 				list17.add("13");
@@ -1366,7 +1366,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt18 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt18.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list18 = new ArrayList<>();
+				List<String> list18 = new ArrayList<String>();
 				list18.add("太阳眼镜");
 				list18.add("peishi");
 				list18.add("14");
@@ -1384,7 +1384,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt19 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt19.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list19 = new ArrayList<>();
+				List<String> list19 = new ArrayList<String>();
 				list19.add("胸针/胸花");
 				list19.add("peishi");
 				list19.add("16");
@@ -1402,7 +1402,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt20 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt20.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list20 = new ArrayList<>();
+				List<String> list20 = new ArrayList<String>();
 				list20.add("项链");
 				list20.add("peishi");
 				list20.add("17");
@@ -1420,7 +1420,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt21 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt21.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list21 = new ArrayList<>();
+				List<String> list21 = new ArrayList<String>();
 				list21.add("凉鞋");
 				list21.add("xielei");
 				list21.add("1");
@@ -1438,7 +1438,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt22 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt22.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list22 = new ArrayList<>();
+				List<String> list22 = new ArrayList<String>();
 				list22.add("单皮鞋");
 				list22.add("xielei");
 				list22.add("2");
@@ -1456,7 +1456,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt23 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt23.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list23 = new ArrayList<>();
+				List<String> list23 = new ArrayList<String>();
 				list23.add("休闲鞋");
 				list23.add("xielei");
 				list23.add("4");
@@ -1474,7 +1474,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt24 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt24.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list24 = new ArrayList<>();
+				List<String> list24 = new ArrayList<String>();
 				list24.add("运动袜");
 				list24.add("wazi");
 				list24.add("2");
@@ -1492,7 +1492,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt25 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt25.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list25 = new ArrayList<>();
+				List<String> list25 = new ArrayList<String>();
 				list25.add("裤袜(丝)");
 				list25.add("wazi");
 				list25.add("3");
@@ -1510,7 +1510,7 @@ public class WardrobeService {
 				//argsList.add(account);
 				DataTable dt26 = dbm.execSqlTrans(sql, argsList, conn);
 				count = dt26.getRows().get(0).getInt("COUNT(ID)");
-				List<String> list26 = new ArrayList<>();
+				List<String> list26 = new ArrayList<String>();
 				list26.add("连衣裙");
 				list26.add("qunzhuang");
 				list26.add("4");
@@ -1565,11 +1565,11 @@ public class WardrobeService {
 	}
 	
 	
-	public static List<CheckRecord>   checkYichuBiaoqianOrder(String account,String orderId){
+	public  List<CheckRecord>   checkYichuBiaoqianOrder(String account,String orderId){
 		
 		WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
 		ArrayList<WardrobeDTO> dtos = new ArrayList<WardrobeDTO>();
-		List<CheckRecord> crlist = new ArrayList<>();
+		List<CheckRecord> crlist = new ArrayList<CheckRecord>();
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		Connection conn = null;
 		try {
@@ -1846,7 +1846,7 @@ public class WardrobeService {
 	}
 
 	public static List<String> getStyleName2(String ids, Map<String, List<String>> map) {
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		String wstyle1 = "";
 		String wstyle2 = "";
 		String[] sourceStrArray = ids.split(",");
@@ -1892,7 +1892,7 @@ public class WardrobeService {
 		ArrayList<Object> argsList = new ArrayList<Object>();
 		Connection conn = null;
 		ArrayList<WardrobeDTO> wardrobeDTOs = new ArrayList<WardrobeDTO>();
-		Map<String, List<String>> map = new HashMap<>();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		try {
 			conn = dbm.getConnection();
 			String sql = "SELECT sex FROM heso_account WHERE account  = ?";
@@ -1907,7 +1907,7 @@ public class WardrobeService {
 					argsList, conn); 
 			int d = dtt.getRows().size();
 			for (int i = 0; i < dtt.getRows().size(); i++) {
-				List<String> list = new ArrayList<>();
+				List<String> list = new ArrayList<String>();
 				String value = dtt.getRows().get(i).getString("VALUE");
 				String id = dtt.getRows().get(i).getString("ID");
  				String label = dtt.getRows().get(i).getString("LABEL");
@@ -2045,6 +2045,210 @@ public class WardrobeService {
 		return wsro;
 	}
 
+	
+	
+	
+	
+	public  WardrobeDTO findWardrobeDTO (String  id){
+		WardrobeDTO dto = new WardrobeDTO();
+		WardrobeServiceReturnObject wsro = new WardrobeServiceReturnObject();
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		Connection conn = null;
+		try {
+			conn = dbm.getConnection();
+			String sql = "SELECT * FROM heso_user_wardrobe WHERE id = ?";
+			ArrayList<Object> argsList = new ArrayList<Object>();
+			argsList.clear();
+			argsList.add(id);
+			DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql,
+					argsList, conn);
+			
+			if(dt.getRows().size()<=0){
+				return dto;
+			}
+			String account = dt.getRows().get(0).getString("account");
+			
+			sql = "SELECT sex FROM heso_account WHERE account  = ?";
+			argsList.clear();
+			argsList.add(account);
+			DataTable dtt3 = DatabaseMgr.getInstance().execSqlTrans(sql,
+					argsList, conn);
+			String sex = dtt3.getRows().get(0).getString("sex");
+			
+			Map<String, List<String>> map = new HashMap<String, List<String>>();
+			
+			sql = "SELECT ID, VALUE,LABEL,NAME,SEX FROM heso_type WHERE KEYWORD = 'style' ";
+			argsList.clear();
+			DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql,
+					argsList, conn);
+			int d = dtt.getRows().size();
+			for (int i = 0; i < dtt.getRows().size(); i++) {
+				List<String> list = new ArrayList<String>();
+				String value = dtt.getRows().get(i).getString("VALUE");
+				String iid = dtt.getRows().get(i).getString("ID");
+				 
+				String label = dtt.getRows().get(i).getString("LABEL");
+				String name = dtt.getRows().get(i).getString("NAME");
+				if("1".equals(sex)){
+					list.add(value.trim());					
+				}else {
+					list.add(name.trim());
+				} 
+				list.add(label.trim());
+				map.put(iid, list);
+			}
+			
+			DataRow dr1 = dt.getRows().get(0);
+			String waccount = dr1.getString("ACCOUNT");
+			String wimage = dr1.getString("IMAGE");
+			String wtype = dr1.getString("TYPE");
+			
+			sql = "SELECT * FROM heso_type WHERE id = ? AND keyword = 'category'";
+			argsList.clear();
+			argsList.add(wtype);
+			DataTable dtttt = DatabaseMgr.getInstance().execSqlTrans(sql,
+					argsList, conn);
+			String categoryName = "";
+			String secondType = "";
+			String secondName = "";
+			String secondId = "";
+			if(dtttt.getRows().size()>0){
+				categoryName = dtttt.getRows().get(0).getString("NAME");
+				secondType = dtttt.getRows().get(0).getString("VALUE");
+				secondId = dr1.getString(secondType);
+				if(secondId!=null){
+					sql = "SELECT * FROM heso_category_type where category_type = ? AND ID = ? ";
+					argsList.clear();
+					argsList.add(secondType);
+					argsList.add(secondId);
+					DataTable dttttt = DatabaseMgr.getInstance().execSqlTrans(sql,
+							argsList, conn);
+					if(dtttt.getRows().size()>0){
+						secondName = dttttt.getRows().get(0).getString("NAME");
+					}
+					
+				}
+			}
+ 			
+			
+			
+			
+			
+			String wcloth = dr1.getString("CLOTH")==null?"":dr1.getString("CLOTH");
+			String wscene = dr1.getString("SCENE")==null?"":dr1.getString("SCENE");
+			String wstyle = dr1.getString("STYLE")==null?"":dr1.getString("STYLE");
+			String wseason = dr1.getString("SEASON")==null?"":dr1.getString("SEASON");
+			
+			
+			String wstyle1 = "";
+			String wstyle2 = "";
+			if (!wstyle.isEmpty()) {
+				List<String> list = getStyleName2(wstyle, map);
+				wstyle1 = list.get(0);
+				wstyle2 = list.get(1);
+			}
+			String wcolor = dr1.getString("COLOR");
+			String wsuit = dr1.getString("SUIT");
+			String wupload = dr1.getString("UPLOAD");
+			String wisGood = dr1.getString("IS_GOOD");
+			String wname = dr1.getString("NAME");
+		 
+			
+			String styleIds = stringForSql(wstyle);
+			if(!styleIds.equals("''")){
+				sql = "SELECT KEYWORD,GROUP_CONCAT(NAME) AS strname FROM heso_type WHERE keyWord = 'style' AND id in (" +
+						styleIds +
+						") AND (SEX = '2' or SEX = '" +
+						sex +
+						"')";
+				argsList.clear();
+				DataTable dtStyle = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				if(dtStyle.getRows().size()>0){
+					dto.setStyleName(dtStyle.getRows().get(0).getString("strname"));
+				}else {
+					dto.setStyleName("");
+				}
+			}else {
+				dto.setStyleName("");
+			}
+		  
+			
+			String senceIds = stringForSql(wscene);
+			if(!senceIds.equals("''")){
+				sql = "SELECT KEYWORD,GROUP_CONCAT(NAME) AS strname FROM heso_type WHERE keyWord = 'scene' AND id in (" +
+						senceIds +
+						") AND (SEX = '2' or SEX = '" +
+						sex +
+						"')";
+				argsList.clear();
+				DataTable dtStyle = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				if(dtStyle.getRows().size()>0){
+					dto.setSceneName(dtStyle.getRows().get(0).getString("strname"));
+				}else {
+					dto.setSceneName("");
+				}
+			}else {
+				dto.setSceneName("");
+			}
+			
+			String seasonIds = stringForSql(wseason);
+			if(!seasonIds.equals("''")){
+				sql = "SELECT KEYWORD,GROUP_CONCAT(NAME) AS strname FROM heso_type WHERE keyWord = 'season' AND id in (" +
+						seasonIds +
+						") AND (SEX = '2' or SEX = '" +
+						sex +
+						"')";
+				argsList.clear();
+				DataTable dtStyle = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+				if(dtStyle.getRows().size()>0){
+					dto.setSeasonName(dtStyle.getRows().get(0).getString("strname"));
+				}else {
+					dto.setSeasonName("");
+				}
+			}else {
+				dto.setSeasonName("");
+			}
+			
+			
+			dto.setAccount(waccount);
+			dto.setLabel(wstyle2);
+			dto.setImpression(wstyle1);
+			dto.setImage(wimage);
+			dto.setType(wtype);
+			dto.setCloth(wcloth);
+			dto.setScene(wscene);
+			dto.setStyle(wstyle);
+			dto.setColor(wcolor);
+			dto.setSuit(wsuit);
+			dto.setUplaod(wupload);
+			dto.setId(id);
+			dto.setIsGood(wisGood);
+			dto.setName(wname);
+			dto.setSex(sex);
+			dto.setSeason(wseason);
+			
+			dto.setSecondType(secondType);
+			dto.setSecondTypeId(secondId);
+			//dto.setSeasonName(seasonName);
+			dto.setSecondTypeName(secondName);
+			dto.setCategoryName(categoryName);
+			logger.info(">>>>>>>>>>>更新衣橱物品成功");
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return dto;
+		
+		
+		
+	}
 	/**
 	 * 单品
 	 * @param account
@@ -2070,7 +2274,7 @@ public class WardrobeService {
 		Connection conn = null;
 		ArrayList<WardrobeDTO> wardrobeDTOs = new ArrayList<WardrobeDTO>();
 		ArrayList<WardrobeDTO> BwardrobeDTOs = new ArrayList<WardrobeDTO>();
-		Map<String, List<String>> map = new HashMap<>();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		try { 
 			conn = dbm.getConnection();
 			String sql = "SELECT sex FROM heso_account WHERE account  = ?";
@@ -2086,7 +2290,7 @@ public class WardrobeService {
 					argsList, conn);
 			int d = dtt.getRows().size();
 			for (int i = 0; i < dtt.getRows().size(); i++) {
-				List<String> list = new ArrayList<>();
+				List<String> list = new ArrayList<String>();
 				String value = dtt.getRows().get(i).getString("VALUE");
 				String id = dtt.getRows().get(i).getString("ID");
 				 
@@ -2205,6 +2409,7 @@ public class WardrobeService {
 							String id = dr1.getString("ID");
 							String wisGood = dr1.getString("IS_GOOD");
 							String wname = dr1.getString("NAME");
+							String wseason = dr1.getString("SEASON");
 							String secondType = dr1.getString(category);
 							
 							WardrobeDTO dto = new WardrobeDTO();
@@ -2215,17 +2420,25 @@ public class WardrobeService {
 							dto.setImage(wimage);
 							dto.setSecondTypeName(category);
 							dto.setSecondType(secondType);
+							
+							//类型
 							dto.setType(wtype);
 							dto.setCloth(wcloth);
+							//场景
 							dto.setScene(wscene);
+							//风格
 							dto.setStyle(wstyle);
 							dto.setColor(wcolor);
 							dto.setSuit(wsuit);
 							dto.setUplaod(wupload);
+							//身形
 							dto.setPattern(wpattern);
 							dto.setOutline(woutline);
 							dto.setId(id);
+							//性格
 							dto.setCharater(wcharater);
+							//季节
+							dto.setSeason(wseason);
 							dto.setIsGood(wisGood);
 							dto.setName(wname);
 							BwardrobeDTOs.add(dto);
@@ -2299,6 +2512,7 @@ public class WardrobeService {
 					String wcloth = dr1.getString("CLOTH");
 					String wscene = dr1.getString("SCENE");
 					String wstyle = dr1.getString("STYLE");
+					String wseason = dr1.getString("SEASON");
 					/*
 					 * sql =
 					 * "SELECT VALUE,LABEL FROM heso_type WHERE KEYWORD = 'style' AND ID in("
@@ -2373,7 +2587,7 @@ public class WardrobeService {
 		Connection conn = null;
 		ArrayList<WardrobeDTO> wardrobeDTOs = new ArrayList<WardrobeDTO>();
 		ArrayList<WardrobeDTO> BwardrobeDTOs = new ArrayList<WardrobeDTO>();
-		Map<String, List<String>> map = new HashMap<>();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		try {  
 			conn = dbm.getConnection();
 			String sql = "";
@@ -2385,7 +2599,7 @@ public class WardrobeService {
 					argsList, conn);
 			int d = dtt.getRows().size();
 			for (int i = 0; i < dtt.getRows().size(); i++) {
-				List<String> list = new ArrayList<>();
+				List<String> list = new ArrayList<String>();
 				String value = dtt.getRows().get(i).getString("VALUE");
 				String id = dtt.getRows().get(i).getString("ID");
 				 
@@ -3042,6 +3256,27 @@ public class WardrobeService {
 		return new WardrobeServiceReturnObject();
 	}
 
+	
+	public static String stringForSql(String ids) {
+		
+		String [] str = ids.split(",");
+		
+		String result = "";
+		
+		for(int i = 0;i<str.length;i++){
+			String id = str[i];
+			if(!id.isEmpty()&&!id.equals("")){
+				result= result + "'" +
+						id
+						+
+						"',";
+			}
+		}
+		result = result + "''";
+		
+		return result;
+	}
+	
 	public static void main(String[] args) {
 		List<TripsuitDTO> dtos = new ArrayList<TripsuitDTO>();
 		TripsuitDTO dto = new TripsuitDTO();
@@ -3084,7 +3319,7 @@ public class WardrobeService {
 		dto3.setCharater("");
 		dto3.setIsGood("");
 		dto3.setName("");
-		List<WardrobeDTO> dotsDtos = new ArrayList<>();
+		List<WardrobeDTO> dotsDtos = new ArrayList<WardrobeDTO>();
 		dotsDtos.add(dto3);
 		/*
 		 * WardrobeServiceReturnObject wObject =
@@ -3099,13 +3334,13 @@ public class WardrobeService {
 		// "", "", "", "", "", "", "","","");
 		String ids = "1,2";
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		list.add("Ming1");
 		list.add("kuu1");
-		List<String> list2 = new ArrayList<>();
+		List<String> list2 = new ArrayList<String>();
 		list2.add("ming2");
 		list2.add("kuu2");
-		List<String> list3 = new ArrayList<>();
+		List<String> list3 = new ArrayList<String>();
 		list3.add("ming3");
 		list3.add("kuu3");
 		map.put("1", list);
@@ -3150,7 +3385,7 @@ public class WardrobeService {
 		// wardrobeServiceReturnObject=getTypeAndCount("0000000000000909","2","0");
 		//List<ReportDTO>  dtos2 =	wardrobeReport2("0000000000000909", "2");
 		//List<ReportDTO>  dtos2 = wardrobeReport3 ("0000000000000909", "0");
-		List<CheckRecord> crleCheckRecords = checkYichuBiaoqianOrder("0000000000000964", "");
- 		System.out.println("----");
+		//WardrobeDTO dto4 = findWardrobeDTO("3045");
+		System.out.println("----");
 	}
 }

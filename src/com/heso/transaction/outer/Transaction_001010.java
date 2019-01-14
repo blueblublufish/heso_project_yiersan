@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Node;
-
+import com.heso.service.mall.entity.SizeAndColor;
 import com.heso.common.GlobalCache;
 import com.heso.data.TransDataProcess;
 import com.heso.service.mall.MallService;
@@ -18,10 +18,10 @@ import com.heso.transaction.AbstractInterfaceClass;
 import com.heso.utility.StringTools;
 
 /**
- * 获取单品信息
+ * 获取单品信息 
  * 
- * @author xujun
- * 
+ * @author xujun 
+ *  
  */
 public class Transaction_001010 extends AbstractInterfaceClass {
 	private static final Log logger = LogFactory.getLog(Transaction_001010.class);
@@ -65,6 +65,27 @@ public class Transaction_001010 extends AbstractInterfaceClass {
 					sb.append("<image>"+image+"</image>");
 				}
 				sb.append("</imageList>");
+				sb.append("<itemStock>"+item.getItemStock()+"</itemStock>");
+				for(SizeAndColor sac:item.getSizeColor()){
+					sb.append("<itemSize>"); 
+					sb.append("<colorId>"+sac.getColorId()+"</colorId>");
+					sb.append("<colorType>"+sac.getColorType()+"</colorType>");
+					sb.append("<sizeId>"+sac.getId()+"</sizeId>");
+					sb.append("<sizeStock>"+ sac.getInStock()+"</sizeStock>");
+					sb.append("<outStock>"+sac.getOutStock()+"</outStock>");
+					sb.append("<itemid>"+sac.getProductId()+"</itemid>");
+					sb.append("<size>"+sac.getSize()+"</size>");
+					sb.append("<image>"+sac.getImage()+"</image>");
+					sb.append("</itemSize>");
+				}
+				for(SizeAndColor sacc : item.getColors()){
+					sb.append("<itemColor>");
+					sb.append("<colorId>"+sacc.getColorId()+"</colorId>");
+					sb.append("<colorType>"+sacc.getColorType()+"</colorType>");
+ 					sb.append("<image>"+sacc.getImage()+"</image>");
+					sb.append("</itemColor>");
+				}
+				
 
 			}
 
@@ -92,7 +113,7 @@ public class Transaction_001010 extends AbstractInterfaceClass {
 		sb.append("<digest>MD5数字签名</digest>");
 		sb.append("</head>");
 		sb.append("<body>");
- 		sb.append("<productId>E17T0017</productId>");
+ 		sb.append("<productId>D17O0002</productId>");
 		sb.append("<token>0</token>");	
 		sb.append("</body>");
 		sb.append("</message>");

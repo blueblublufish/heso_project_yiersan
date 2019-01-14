@@ -1619,7 +1619,7 @@ public class MallService {
 					DataTable dtItem = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 					String itemStock = "0";
 					int zeroStock = 0;
-					List<SizeAndColor> sizeList = new ArrayList<>();
+					List<SizeAndColor> sizeList = new ArrayList<SizeAndColor>();
 					for(int z = 0; z<dtItem.getRows().size();z++){
 						DataRow drItem = dtItem.getRows().get(z);
 						SizeAndColor sac = new SizeAndColor();
@@ -1649,7 +1649,7 @@ public class MallService {
 					argsList.add(itemid);
 					DataTable dtItemColor = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 					int s = dtItemColor.getRows().size();
-					List<SizeAndColor> coList = new ArrayList<>();
+					List<SizeAndColor> coList = new ArrayList<SizeAndColor>();
 					for(int x=0;x<dtItemColor.getRows().size();x++){
 						DataRow dRow = dtItemColor.getRows().get(x);
  						SizeAndColor sac = new SizeAndColor();
@@ -1728,14 +1728,14 @@ public class MallService {
 	 * @param productId
 	 * @return
 	 */
-	public MallServiceReturnObject getGoodsInfo(String productId) {
+	public MallServiceReturnObject getGoodsInfo(String itemid) {
 		MallServiceReturnObject msro = new MallServiceReturnObject();
 		try {
 			// 获取套装列表
 			String sql = "select * from heso_product where product_id = ? and type = 1 and status = 1 ";
-	
+			Connection conn = DatabaseMgr.getInstance().getConnection();
 			ArrayList<Object> argsList = new ArrayList<Object>();
-			argsList.add(productId);
+			argsList.add(itemid);
 			DataTable dt = DatabaseMgr.getInstance().execSql(sql, argsList);
 			ArrayList<ProductItemObject> pioGoodsList = new ArrayList<ProductItemObject>();
 			if (dt.getRows().size() == 0)
@@ -1762,7 +1762,7 @@ public class MallService {
 			pioGoods.setBrand(dr.getString("brand"));
 			pioGoods.setWashingType(dr.getString("washing_type"));
 			String image = dr.getString("IMAGES");
-			ArrayList<String> imagesList = new ArrayList<>();
+			ArrayList<String> imagesList = new ArrayList<String>();
 			//GOODS_DES
 			String[] imastr =  image.split(",");
 			for(int i = 0;i<imastr.length;i++){
@@ -1779,7 +1779,88 @@ public class MallService {
 			pioGoods.setImageList(imagesList);
 			// 添加单品列表
 			pioGoods.setGoodDes(dr.getString("GOODS_DES"));
+			int productZeroStock = 0;
+			 
+			sql = "SELECT ID,PRODUCT_ID,SIZE,IMAGE,COLOR_ID,COLOR_TYPE,SIZE_STOCK,OUT_STOCK FROM heso_product_size WHERE PRODUCT_ID = ?";
+			argsList.clear();
+			argsList.add(itemid);
+			DataTable dtItem = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			String itemStock = "0";
+			int zeroStock = 0;  
+			List<SizeAndColor> sizeList = new ArrayList<SizeAndColor>();
+			for(int z = 0; z<dtItem.getRows().size();z++){
+				DataRow drItem = dtItem.getRows().get(z);   
+				SizeAndColor sac = new SizeAndColor();
+				String colorId = drItem.getString("COLOR_ID");
+				String colorType = drItem.getString("COLOR_TYPE");
+				String size = drItem.getString("SIZE");
+				String image2 = drItem.getString("IMAGE");
+				String sizeStock = drItem.getString("SIZE_STOCK");
+				String outStock = drItem.getString("OUT_STOCK");
+				String sizeId = drItem.getString("ID"); 
+				
+				sac.setColorId(colorId);
+				sac.setColorType(colorType);
+				sac.setId(sizeId);
+				sac.setInStock(sizeStock);
+				sac.setOutStock(outStock);
+				sac.setProductId(itemid);
+				sac.setSize(size);
+				sac.setImage(image2);
+				sizeList.add(sac);
+				if(outStock.equals("0")&&(sizeStock.equals("0")||sizeStock.equals("-1"))){
+					zeroStock ++;
+				}
+			}
+			sql = "select COLOR_TYPE,IMAGE,COLOR_ID from heso_product_size WHERE PRODUCT_ID = ? group by COLOR_ID";
+			argsList.clear();
+			argsList.add(itemid);
+			DataTable dtItemColor = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
+			int s = dtItemColor.getRows().size();
+			List<SizeAndColor> coList = new ArrayList<SizeAndColor>();
+			for(int x=0;x<dtItemColor.getRows().size();x++){
+				DataRow dRow = dtItemColor.getRows().get(x);
+					SizeAndColor sac = new SizeAndColor();
+				String colorId = dRow.getString("COLOR_ID");
+				String colorType = dRow.getString("COLOR_TYPE");
+					String image1 = dRow.getString("IMAGE");
+				sac.setColorId(colorId);
+				sac.setColorType(colorType);
+					sac.setImage(image1);
+				coList.add(sac);
+				
+			}
+			pioGoods.setColors(coList);
+			pioGoods.setSizeColor(sizeList);
+			if(zeroStock == dtItem.getRows().size()){
+				itemStock = "1";
+				productZeroStock ++;
+			}
+			pioGoods.setItemStock(itemStock);
+			pioGoods.setName(dr.getString("name"));
+			pioGoods.setDesc(dr.getString("desc"));
+			pioGoods.setCategory(dr.getString("category"));
+			pioGoods.setMetarialDesc(dr.getString("metarial_desc"));
+			pioGoods.setSupplyName(dr.getString("supply_name"));
+			pioGoods.setColor(dr.getString("color"));
+			pioGoods.setPrice(dr.getString("price"));
+			pioGoods.setSize(dr.getString("size"));
+			pioGoods.setSuitPrice(dr.getString("suit_price"));
+			pioGoods.setDiscountPrice(dr.getString("discount_price"));
+			pioGoods.setStockStatus(dr.getString("stock_status"));
+			pioGoods.setStockCount(dr.getString("stock_count"));
+			pioGoods.setSoldCount(dr.getString("sold_count"));
+			pioGoods.setImgFront(dr.getString("img_front"));
+			pioGoods.setImgBehind(dr.getString("img_behind"));
+			pioGoods.setStockStatus(dr.getString("stock_status"));
+			pioGoods.setImpression(dr.getString("IMPRESSION"));
+			pioGoods.setBodySuit(dr.getString("BODY_SUIT"));
+			pioGoods.setNotSuitSkin(dr.getString("NOT_SUIT_SKIN"));
+			pioGoods.setFaceSuitColor(dr.getString("FACE_SUIT_COLOR"));
 			pioGoodsList.add(pioGoods);
+			
+			
+			
 			msro.setPioList(pioGoodsList);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

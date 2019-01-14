@@ -83,7 +83,7 @@ public class Transaction_001099 extends AbstractInterfaceClass {
 	public static void main(String[] args) {
 		StringBuffer sb = new StringBuffer();
 		StringBuffer ss = new StringBuffer();
-		ss.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>001099</type><messageId>1</messageId><agentId>001</agentId><digest>MD5数字签名</digest></head><body><waiOrderId>0000000000004820</waiOrderId><account>0000000000000909</account><token>7282c614bcddc8b825e6f6857ba7ee1</token></body></message>");
+		ss.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>001099</type><messageId>1</messageId><agentId>001</agentId><digest>MD5数字签名</digest></head><body><waiOrderId>0000000000005376</waiOrderId><account>0000000000000909</account><token>c8e1356a4f7368d31eee219d3793c819</token></body></message>");
 		sb.append("<?xml version='1.0' encoding='utf-8'?>");
 		sb.append("<message>");
 		sb.append("<head>");
@@ -93,8 +93,8 @@ public class Transaction_001099 extends AbstractInterfaceClass {
 		sb.append("<digest>MD5数字签名</digest>");
 		sb.append("</head>");
 		sb.append("<body>");
-		sb.append("<waiOrderId>0000000000003500</waiOrderId>");
- 		sb.append("<account>0000000000000019</account>");
+		sb.append("<waiOrderId>0000000000005290</waiOrderId>");
+ 		sb.append("<account>0000000000001944</account>");
 		sb.append("<token>0</token>");	
 		sb.append("</body>");
 		sb.append("</message>");

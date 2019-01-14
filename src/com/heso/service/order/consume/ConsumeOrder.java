@@ -261,6 +261,166 @@ public class ConsumeOrder {
 	}
 	
 	
+	/**
+	 * 生成订单不生成支付订单
+	 * 
+	 * @param coao
+	 * @param listObject
+	 * @return
+	 */
+	public ConsumeOrderReturnObject genarateNew(ArrayList<ConsumeOrderObject> coaoList, String innerCoin, String receiveId,String paymentTerms ,String recommend,String couponDetId) {
+		DatabaseMgr dbm = DatabaseMgr.getInstance();
+		// 初始化返回对象
+		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		Connection conn = null;
+		try { 
+			conn = dbm.getConnection();
+			conn.setAutoCommit(false);
+			StringBuffer orderId = new StringBuffer();
+			List<String> orderIds = new ArrayList<String>();
+			ArrayList<ConsumeOrderObject> cooList = new ArrayList<ConsumeOrderObject>();
+			BigDecimal total = new BigDecimal(0) ;
+			BigDecimal notSPtotal = new BigDecimal(0) ;//非特价商品总额，不在优惠券优惠范围
+			for (ConsumeOrderObject coao : coaoList) {
+				// 获取用户账户信息
+				String sql = "select * from heso_account where account = ?";
+				List<Object> argsList = new ArrayList<Object>();
+				argsList.add(coao.getAccount());
+				DataTable dt = dbm.execSqlTrans(sql, argsList, conn);
+				if (dt.getRows().size() == 0)
+					throw new Exception("100100");
+
+				// 取序列
+				String seqId = dbm.getSequence("seq_order", "16");
+				orderIds.add(seqId);
+				if (seqId.isEmpty())
+					throw new Exception("000150");
+				sql = "SELECT COST_PRICE,DISCOUNT_PRICE FROM heso_product WHERE PRODUCT_ID =?";
+				argsList.clear();
+				argsList.add(coao.getProductId());
+				DataTable dtr = dbm.execSqlTrans(sql, argsList, conn);
+				String costPrice = dtr.getRows().get(0).getString("COST_PRICE");
+				String disPrice = dtr.getRows().get(0).getString("DISCOUNT_PRICE");
+				sql = "insert into heso_order_consume(order_id, account, product_Id,type,name,image,color,size,price,count,amount, currency, inner_coin, bonus_point, receive_id , payment_terms ,from_suit ,recommend, couponDet_Id,DISCOUNT_PRICE,price_cost,price_cost_sum) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				argsList.clear();
+				argsList.add(seqId);
+				argsList.add(coao.getAccount());
+				argsList.add(coao.getProductId());
+				argsList.add(coao.getType());
+				argsList.add(coao.getName());
+				argsList.add(coao.getImage());
+				argsList.add(coao.getColor());
+				argsList.add(coao.getSize());
+				argsList.add(coao.getPrice());
+				argsList.add(coao.getCount());
+				argsList.add(coao.getAmount());
+				argsList.add(coao.getCurrency());
+				argsList.add(coao.getInnerCoin());
+				argsList.add(coao.getBonusPoint());
+				argsList.add(receiveId);
+				argsList.add(paymentTerms);
+				argsList.add(coao.getSuitId());
+				argsList.add(recommend);
+				argsList.add(couponDetId);//增加优惠券使用子表ID
+				argsList.add(disPrice);
+				
+				
+				if(costPrice!=null&&!costPrice.equals("")&&!costPrice.equals("0")){
+					argsList.add(costPrice);
+					BigDecimal cost = new BigDecimal(costPrice);
+					BigDecimal countD = new BigDecimal(coao.getCount());
+					BigDecimal costSum = cost.multiply(countD);
+					argsList.add(costSum);
+				}else {
+					argsList.add("");
+					argsList.add("");
+				}
+				int rows = dbm.execNonSqlTrans(sql, argsList, conn);
+				if (rows <= 0)
+					throw new Exception("100150");
+
+				ArrayList<ConsumeProductObject> copList = coao.getCpoList();
+				for (ConsumeProductObject cpo : copList) {
+				//	sql = "insert into heso_order_consume_detail values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+					sql = "insert into heso_order_consume_detail values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+					argsList.clear();
+					argsList.add(seqId);
+					argsList.add(cpo.getProductId());
+					argsList.add(cpo.getName());
+					argsList.add(cpo.getImage());
+					argsList.add(cpo.getColor());
+					argsList.add(cpo.getSize());
+					argsList.add(cpo.getCount());
+					argsList.add(cpo.getPrice());
+					argsList.add(cpo.getAmount());
+					argsList.add(cpo.getSuitPrice());
+					argsList.add(cpo.getSuitPromotion());
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					argsList.add("0");
+					rows = dbm.execNonSqlTrans(sql, argsList, conn);
+					if (rows <= 0)
+						throw new Exception("100151");
+				}
+				 
+				ConsumeOrderObject coo = new ConsumeOrderObject(); 
+				coo.setOrderId(seqId);
+				coo.setPaymentTerms(paymentTerms);
+				total  = total.add( new BigDecimal(coao.getAmount())); 
+				
+				if(!coao.getProductId().contains("SPE")){
+					notSPtotal = notSPtotal.add(new BigDecimal(coao.getAmount()));
+				}
+				
+				cooList.add(coo);
+				orderId.append(seqId+";");
+			}
+			 
+			 conn.commit();
+			 //添加地址
+			 updateLoadAdd(receiveId, coaoList.get(0).getAccount(), orderIds);
+			 
+			ConsumeOrderObject coo1 = new ConsumeOrderObject();
+			coo1.setAmount(String.valueOf(total));//原来总价
+			cooList.add(coo1);
+
+			ConsumeOrderObject coo2 = new ConsumeOrderObject();
+			coo2.setAmount(String.valueOf(notSPtotal));//非特价商品总价
+			cooList.add(coo2);
+			coro.setOrderId(orderId+"");
+			coro.setCooList(cooList);
+		 
+		} catch (Exception e) {
+			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coro;
+	}
 	
 	
 	
@@ -564,7 +724,7 @@ public class ConsumeOrder {
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		// 初始化返回对象
 		
-		List<HesoType> list = new ArrayList<>();
+		List<HesoType> list = new ArrayList<HesoType>();
 		Connection conn = null; 
 		try {
 			conn = dbm.getConnection();
@@ -614,7 +774,7 @@ public class ConsumeOrder {
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		// 初始化返回对象
 		
-		List<HesoType> list = new ArrayList<>();
+		List<HesoType> list = new ArrayList<HesoType>();
 		Connection conn = null; 
 		try {
 			conn = dbm.getConnection();
@@ -984,21 +1144,21 @@ public class ConsumeOrder {
 		// 初始化返回对象
 		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
 		Connection conn = null;
-		List<List<QaTestQuestions>> list = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions1 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions6 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions15 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions24 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions30 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions36 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions43 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions52 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions60 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions74 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions89 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions95 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions109 = new ArrayList<>();
-		List<QaTestQuestions> qaTestQuestions114 = new ArrayList<>();
+		List<List<QaTestQuestions>> list = new ArrayList<List<QaTestQuestions>>();
+		List<QaTestQuestions> qaTestQuestions1 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions6 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions15 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions24 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions30 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions36 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions43 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions52 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions60 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions74 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions89 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions95 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions109 = new ArrayList<QaTestQuestions>();
+		List<QaTestQuestions> qaTestQuestions114 = new ArrayList<QaTestQuestions>();
 		
 		QaTestQuestions qaResult = new QaTestQuestions();
 		try {
@@ -2100,7 +2260,7 @@ public class ConsumeOrder {
 	/**
 	 * 订单支付
 	 */
-	public ConsumeOrderReturnObject payOrder(String account , List <String> orderIds ){
+	public ConsumeOrderReturnObject payOrder(String account , List <String> orderIds, String payType){
 		Connection conn = null;
 		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
 		try {
@@ -2154,7 +2314,7 @@ public class ConsumeOrder {
 			 sql = "insert into heso_order_pay (order_pay , pay_type , wai_order , order_money , create_time) values (? , ? , ? , ? , SYSDATE()) ";
 			List<Object> argsList = new ArrayList<Object>();
 			argsList.add(orderIdStr.toString());
-			argsList.add(dt.getRows().get(0).getString("payment_terms"));
+			argsList.add(payType);
 			String waiOrder = DatabaseMgr.getInstance().getSequence("seq_order", "16");
 			argsList.add(waiOrder);
 			argsList.add(total);
@@ -2882,7 +3042,7 @@ public class ConsumeOrder {
 		ArrayList<Object> argsList = new ArrayList<Object>();
 		//String account = "";
 		String code = "000001";
-		List<SendOrder> seList = new ArrayList<>();
+		List<SendOrder> seList = new ArrayList<SendOrder>();
 		try { 
 			
 			
@@ -3297,7 +3457,7 @@ public class ConsumeOrder {
 		ArrayList<Object> argsList = new ArrayList<Object>();
 		//String account = "";
 		String code = "000001";
-		List<VideoHistory> list = new ArrayList<>();
+		List<VideoHistory> list = new ArrayList<VideoHistory>();
 		try { 
 			
 			String liangtiStr = "";
@@ -4503,7 +4663,7 @@ public class ConsumeOrder {
 		String sql = "SELECT hoc.ACCOUNT,hp.SEASON,hp.IMG_FRONT,hp.product_id,hp.TYPE,hp.SCENE,hp.STYLE,hp.COLOR,hp.CATEGORY,hp.NAME,hp.SHANGYI,hp.KUZHUANG," +
 				"hp.QUNZHUANG,hp.PEISHI,hp.XIELEI,hp.WAZI,hp.TESHUFU FROM heso_order_consume AS hoc,heso_product AS hp where hoc.PRODUCT_ID = hp.PRODUCT_ID AND ORDER_ID = ?";
 		Connection conn = null;
-		List<WardrobeDTO> wardrobeDTOs = new ArrayList<>();
+		List<WardrobeDTO> wardrobeDTOs = new ArrayList<WardrobeDTO>();
 		try {
 			conn = DatabaseMgr.getInstance().getConnection();
 			List<Object> list = new ArrayList<Object>();
@@ -4798,7 +4958,7 @@ public class ConsumeOrder {
 		 ConsumeOrderObject coo = new ConsumeOrderObject();
 		try {
 			conn = DatabaseMgr.getInstance().getConnection();
- 			 
+ 			  
 				//查询订单是否存在
 				String sql = " select order_pay,pay_type,is_pay,order_money,PAY_TIME,create_time from heso_order_pay where wai_order  = ? ";
 				List<Object> list = new ArrayList<Object>();
@@ -4850,19 +5010,23 @@ public class ConsumeOrder {
 								+"WHERE hd.ADMIN_ID = hdp.DESIGNERID AND hmp.ID = hdp.SERVICEID AND hdp.ORDERID like '%" +
 								orderId +
 								"%'";
-
 						list.clear();
-						
 						DataTable dt11 = DatabaseMgr.getInstance().execSqlTrans(sql, list, conn);
 						productName = dt11.getRows().get(0).getString("name");
 						designerName = dt11.getRows().get(0).getString("admin_name");
-					}else {
+					}else if(type.equals("1")||type.equals("2")){
 						sql = "SELECT  hp.name,hp.sex  FROM heso_product AS hp WHERE hp.PRODUCT_ID=?";
 						list.clear();
 						list.add(productId);
 						DataTable dt11 = DatabaseMgr.getInstance().execSqlTrans(sql, list, conn);
 						productName = dt11.getRows().get(0).getString("name");
 						psex = dt11.getRows().get(0).getString("sex");
+					}else if(type.equals("3")||type.equals("33")||type.equals("4")){
+						sql = "SELECT hmp.NAME FROM heso_member_product AS hmp WHERE id = ?";
+						list.clear();
+						list.add(productId);
+						DataTable dt11 = DatabaseMgr.getInstance().execSqlTrans(sql, list, conn);
+						productName = dt11.getRows().get(0).getString("name");
 					}
 					String payType1 = dr.getString("PAYMENT_TERMS");
 					String amount = dr.getString("AMOUNT");
@@ -5571,9 +5735,9 @@ public class ConsumeOrder {
 		String sql = "" ;
 		 
 		
-		List<ProductsDTO> itemsList = new ArrayList<>();
+		List<ProductsDTO> itemsList = new ArrayList<ProductsDTO>();
 		List<SendOrder> list = new ArrayList<SendOrder>();
-		List<String> pinleiList = new ArrayList<>();
+		List<String> pinleiList = new ArrayList<String>();
 		ProductsDTO dtto = new ProductsDTO();
 		try { 
  			 
@@ -5948,9 +6112,9 @@ public class ConsumeOrder {
 			String sql = "SELECT PRODUCT_GOODS_ID FROM heso_product_detail WHERE product_suit_id =  ?" ;
 			argsList.add(productId);
 			
-			List<ProductsDTO> itemsList = new ArrayList<>();
+			List<ProductsDTO> itemsList = new ArrayList<ProductsDTO>();
 			List<SendOrder> list = new ArrayList<SendOrder>();
-			List<String> pinleiList = new ArrayList<>();
+			List<String> pinleiList = new ArrayList<String>();
 			try { 
 				DataTable dt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 				for(int i = 0 ;i<dt.getRows().size();i++){
@@ -6386,7 +6550,7 @@ public class ConsumeOrder {
 				throw new Exception("101122");
 			Orderinformation orderinformation = new Orderinformation();
 			CustomerInformation customerInformation = new CustomerInformation();
-			List<AmaniOrderdetail> detaillist = new ArrayList<>();
+			List<AmaniOrderdetail> detaillist = new ArrayList<AmaniOrderdetail>();
 			sql = "SELECT * FROM heso_order_consume WHERE ORDER_ID = ?";
 			argsList.clear();
 			argsList.add(orderId);

@@ -188,7 +188,7 @@ public class Transaction_001139 extends AbstractInterfaceClass {
 	public static void main(String[] args) {
 		StringBuffer sb = new StringBuffer();
 		StringBuffer ss = new StringBuffer();
-		ss.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>001090</type><messageId>1</messageId><agentId>001</agentId><digest>MD5数字签名</digest></head><body><account></account><token></token></body></message>");
+		ss.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>001139</type><messageId>1</messageId><agentId>001</agentId><digest>MD5数字签名</digest></head><body><account>0000000000001958</account><token>123456</token></body></message>");
 		sb.append("<?xml version='1.0' encoding='utf-8'?>");
 		sb.append("<message>");
 		sb.append("<head>");
@@ -205,7 +205,7 @@ public class Transaction_001139 extends AbstractInterfaceClass {
 		sb.append("</body>");
 		sb.append("</message>");
 		try {
-			new TransDataProcess().execute(sb.toString());
+			new TransDataProcess().execute(ss.toString());
 			System.out.println(">>>>>>>>>>>>>>gg");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -776,7 +776,7 @@ public class YesUserService extends UserService{
 		String dateB = date+" 23:59:59";
 		String code = "000000";
 		Connection conn = dbm.getConnection();
-		List<AccountNeed> anList = new ArrayList<>();
+		List<AccountNeed> anList = new ArrayList<AccountNeed>();
 		ArrayList<Object> argsList = new ArrayList<Object>();
 		try {
 			String sql = "SELECT * FROM heso_account_demand WHERE createTIme between ? and ? ";
@@ -1016,7 +1016,7 @@ public class YesUserService extends UserService{
 		DatabaseMgr dbm = DatabaseMgr.getInstance();
 		Connection conn = dbm.getConnection();
 		ArrayList<Object> argsList = new ArrayList<Object>();
-		List<AccountRight> arList = new ArrayList<>();
+		List<AccountRight> arList = new ArrayList<AccountRight>();
 		String sql = "";
 		//0为根据用户ID查询
 		if(type.equals("0")){
@@ -1718,6 +1718,7 @@ public class YesUserService extends UserService{
 			// 取得账号
 			String account = dt.getRows().get(0).getString("account");
  			String userIdString = dt.getRows().get(0).getString("user_id");
+ 			String sex = dt.getRows().get(0).getString("sex");
 			// 生成token
 			Object o = new Object();
 			String token = MD5Util.getMD5String(String.valueOf(o.hashCode()));
@@ -1745,6 +1746,7 @@ public class YesUserService extends UserService{
 			usro.setAccount(account);
 			usro.setProductCount(userIdString);
 			usro.setToken(token);
+			usro.setBalance(sex);
 		} catch (Exception e) {
 			// TODO: handle exception
 			usro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
@@ -1859,7 +1861,7 @@ public class YesUserService extends UserService{
 				String strings = "";
 				Orderinformation orderinformation = new Orderinformation();
 				CustomerInformation customerInformation = new CustomerInformation();
-				List<AmaniOrderdetail> detaillist = new ArrayList<>();
+				List<AmaniOrderdetail> detaillist = new ArrayList<AmaniOrderdetail>();
 				sql = "SELECT * FROM heso_order_consume WHERE ORDER_ID = ?";
 				argsList.clear();
 				argsList.add(orderId);

@@ -125,7 +125,7 @@ public class PackXmlToAmani {
 		amaniOrderdetail.setOrdersprocess("37,51,88,178,194,220,214,433,1146:FLL624-135,30083,1889,1381,1385,1378,1380,1965,1379,1927");
 		amaniOrderdetail.setPartsize("10101:41,10102:93,10105:87,10110:32,10111:45.5,10113:61,10114:61,10115:41,10116:37,10117:70,10172:39,10108:94");
 		amaniOrderdetail.setSizespecheight("");
-		List<AmaniOrderdetail> list = new ArrayList<>();
+		List<AmaniOrderdetail> list = new ArrayList<AmaniOrderdetail>();
 		list.add(amaniOrderdetail);
 		
 		Orderinformation orderinformation = new Orderinformation();

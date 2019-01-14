@@ -24,6 +24,45 @@ public class WardrobeDTO {
 	private String season;
 	private String sex;
 	
+	private String secondTypeId;
+	private String seasonName;
+	private String styleName;
+	private String sceneName;
+	private String categoryName;
+	
+	
+	
+	
+	public String getSecondTypeId() {
+		return secondTypeId;
+	}
+	public void setSecondTypeId(String secondTypeId) {
+		this.secondTypeId = secondTypeId;
+	}
+	public String getSeasonName() {
+		return seasonName;
+	}
+	public void setSeasonName(String seasonName) {
+		this.seasonName = seasonName;
+	}
+	public String getStyleName() {
+		return styleName;
+	}
+	public void setStyleName(String styleName) {
+		this.styleName = styleName;
+	}
+	public String getSceneName() {
+		return sceneName;
+	}
+	public void setSceneName(String sceneName) {
+		this.sceneName = sceneName;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 	public String getSex() {
 		return sex;
 	}

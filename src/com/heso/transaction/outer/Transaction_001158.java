@@ -64,10 +64,10 @@ public class Transaction_001158 extends AbstractInterfaceClass {
 			if(listPNodes!=null){
 				for(Node pnode : listPNodes){
 					//套装内品类list
-					List<String> pinleiList = new ArrayList<>();
+					List<String> pinleiList = new ArrayList<String>();
 					//套装内面料list
-					List<String> mianliaoList = new ArrayList<>();
-					List<String> xiadanfangshiList = new ArrayList<>();
+					List<String> mianliaoList = new ArrayList<String>();
+					List<String> xiadanfangshiList = new ArrayList<String>();
 					ProductsDTO productsDTO = new ProductsDTO();
 					productsDTO.setProdctId(pnode.selectSingleNode("productId").getText());
 					productsDTO.setColor(pnode.selectSingleNode("color").getText());
@@ -279,20 +279,20 @@ public class Transaction_001158 extends AbstractInterfaceClass {
 	  }
 	 String getpinlei(List<String> pinleiList){
 		Collections.sort(pinleiList);
-		List<String> nvliangjian = new ArrayList<>();
+		List<String> nvliangjian = new ArrayList<String>();
 		nvliangjian.add("95000");
 		nvliangjian.add("98000");
 		Collections.sort(nvliangjian);
-		List<String> nvsanjian = new ArrayList<>();
+		List<String> nvsanjian = new ArrayList<String>();
 		nvsanjian.add("95000");
 		nvsanjian.add("98000");
 		nvsanjian.add("222000");
 		Collections.sort(nvsanjian);
-		List<String> nanliangjian = new ArrayList<>();
+		List<String> nanliangjian = new ArrayList<String>();
 		nanliangjian.add("3");
 		nanliangjian.add("2000");
 		Collections.sort(nanliangjian);
-		List<String> nansanjian = new ArrayList<>();
+		List<String> nansanjian = new ArrayList<String>();
 		nansanjian.add("4000");
 		nansanjian.add("2000");
 		nansanjian.add("3");
@@ -388,7 +388,7 @@ public class Transaction_001158 extends AbstractInterfaceClass {
 		sb.append("</message>");
 		try {
 			//new TransDataProcess().execute(ssb.toString());
-			List<String> mianliaoList = new ArrayList<>();
+			List<String> mianliaoList = new ArrayList<String>();
 			mianliaoList.add("454545");
 			mianliaoList.add("45455");
 			

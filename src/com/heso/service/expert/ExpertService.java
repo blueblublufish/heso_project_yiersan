@@ -34,7 +34,7 @@ public class ExpertService {
 	 
 	
 	 public  static List<String> getStyleName(String ids,Map<String, List<String>> map){
-			List<String> list = new ArrayList<>();
+			List<String> list = new ArrayList<String>();
 			String wstyle1 ="";
 			String wstyle2 ="";
 			String[] sourceStrArray = ids.split(",");
@@ -63,7 +63,7 @@ public class ExpertService {
 		public     MallServiceReturnObject getTestSuit(String sex ,String zhuStyle,String fuStyle,String bodyPattern,String bodyNotSuit,String skinNotSuit,String age) {
 			MallServiceReturnObject msro = new MallServiceReturnObject();
 			Connection conn = DatabaseMgr.getInstance().getConnection();
-			Map<String, List<String>> map = new HashMap<>();
+			Map<String, List<String>> map = new HashMap<String, List<String>>();
 			ArrayList<Object> argsList = new ArrayList<Object>();
 			try {
 				
@@ -71,7 +71,7 @@ public class ExpertService {
 				DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 				int d = dtt.getRows().size();
 				for(int i = 0;i<dtt.getRows().size();i++){
-					List<String> list = new ArrayList<>();
+					List<String> list = new ArrayList<String>();
 					String value = dtt.getRows().get(i).getString("VALUE");
 					String id = dtt.getRows().get(i).getString("ID");
 	 				String label = dtt.getRows().get(i).getString("LABEL");
@@ -239,7 +239,7 @@ public class ExpertService {
 		public     MallServiceReturnObject getTuijianDanpin(String sex ,String account) {
 			MallServiceReturnObject msro = new MallServiceReturnObject();
 			Connection conn = DatabaseMgr.getInstance().getConnection();
-			Map<String, List<String>> map = new HashMap<>();
+			Map<String, List<String>> map = new HashMap<String, List<String>>();
 			ArrayList<Object> argsList = new ArrayList<Object>();
 			try {
 				
@@ -247,7 +247,7 @@ public class ExpertService {
 				DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 				int d = dtt.getRows().size();
 				for(int i = 0;i<dtt.getRows().size();i++){
-					List<String> list = new ArrayList<>();
+					List<String> list = new ArrayList<String>();
 					String value = dtt.getRows().get(i).getString("VALUE");
 					String id = dtt.getRows().get(i).getString("ID");
 	 				String label = dtt.getRows().get(i).getString("LABEL");
@@ -351,7 +351,7 @@ public class ExpertService {
 		//搜索商品
 				public     ArrayList<ProductItemObject> getSearchtSuitByProductId(String productId) {
  					Connection conn = DatabaseMgr.getInstance().getConnection();
-					Map<String, List<String>> map = new HashMap<>();
+					Map<String, List<String>> map = new HashMap<String, List<String>>();
 					ArrayList<Object> argsList = new ArrayList<Object>(); 
 					ArrayList<ProductItemObject> pioSuitList = new ArrayList<ProductItemObject>();
 					try { 
@@ -371,7 +371,7 @@ public class ExpertService {
 						DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 						int d = dtt.getRows().size();
 						for(int i = 0;i<dtt.getRows().size();i++){
-							List<String> list = new ArrayList<>();
+							List<String> list = new ArrayList<String>();
 							String value = dtt.getRows().get(i).getString("VALUE");
 							String id = dtt.getRows().get(i).getString("ID");
 			 				String label = dtt.getRows().get(i).getString("LABEL");
@@ -485,7 +485,7 @@ public class ExpertService {
 		public     MallServiceReturnObject getSearchtSuit(String sex ,String style,String scene,String productName,String pinlei,String supplier,Integer page,Integer pageSize,String paixu) {
 			MallServiceReturnObject msro = new MallServiceReturnObject();
 			Connection conn = DatabaseMgr.getInstance().getConnection();
-			Map<String, List<String>> map = new HashMap<>();
+			Map<String, List<String>> map = new HashMap<String, List<String>>();
 			ArrayList<Object> argsList = new ArrayList<Object>(); 
 			try { 
 				
@@ -493,7 +493,7 @@ public class ExpertService {
 				DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 				int d = dtt.getRows().size();
 				for(int i = 0;i<dtt.getRows().size();i++){
-					List<String> list = new ArrayList<>();
+					List<String> list = new ArrayList<String>();
 					String value = dtt.getRows().get(i).getString("VALUE");
 					String id = dtt.getRows().get(i).getString("ID");
 	 				String label = dtt.getRows().get(i).getString("LABEL");
@@ -559,7 +559,7 @@ public class ExpertService {
  						"'";
 				 
 				// 获取套装列表 
-				 sql = "select * from heso_product where " +
+				 sql = "select * from heso_product where status = '1' and " +
 						styleSql+ 
 						sceneSql +
 				 		productNameSql +
@@ -676,7 +676,7 @@ public class ExpertService {
 		public     MallServiceReturnObject getTestSuitTuozhan(String sex ,String zhuStyle,String fuStyle,String bodyPattern,String bodyNotSuit,String skinNotSuit,String age) {
 			MallServiceReturnObject msro = new MallServiceReturnObject();
 			Connection conn = DatabaseMgr.getInstance().getConnection();
-			Map<String, List<String>> map = new HashMap<>();
+			Map<String, List<String>> map = new HashMap<String, List<String>>();
 			ArrayList<Object> argsList = new ArrayList<Object>();
 			try {
 				
@@ -684,7 +684,7 @@ public class ExpertService {
 				DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 				int d = dtt.getRows().size();
 				for(int i = 0;i<dtt.getRows().size();i++){
-					List<String> list = new ArrayList<>();
+					List<String> list = new ArrayList<String>();
 					String value = dtt.getRows().get(i).getString("VALUE");
 					String id = dtt.getRows().get(i).getString("ID");
 	 				String label = dtt.getRows().get(i).getString("LABEL");
@@ -864,7 +864,7 @@ public class ExpertService {
 	public   MallServiceReturnObject getSuitInfo(String desingerId,String style,String sex,String scene) {
 		MallServiceReturnObject msro = new MallServiceReturnObject();
 		Connection conn = DatabaseMgr.getInstance().getConnection();
-		Map<String, List<String>> map = new HashMap<>();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		ArrayList<Object> argsList = new ArrayList<Object>();
 		try {
 			
@@ -872,7 +872,7 @@ public class ExpertService {
 			DataTable dtt = DatabaseMgr.getInstance().execSqlTrans(sql, argsList, conn);
 			int d = dtt.getRows().size();
 			for(int i = 0;i<dtt.getRows().size();i++){
-				List<String> list = new ArrayList<>();
+				List<String> list = new ArrayList<String>();
 				String value = dtt.getRows().get(i).getString("VALUE");
 				String id = dtt.getRows().get(i).getString("ID");
  				String label = dtt.getRows().get(i).getString("LABEL");

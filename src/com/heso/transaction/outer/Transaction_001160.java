@@ -52,7 +52,8 @@ public class Transaction_001160 extends AbstractInterfaceClass {
 				sb.append("<typeName>"+ type2.getName()+"</typeName>");
 				sb.append("<sex>"+ type2.getSex()+"</sex>");
 				sb.append("<image>"+type2.getImage()+"</image>");
-				
+				sb.append("<value>"+type2.getValue()+"</value>");
+				sb.append("<label>"+type2.getLabel()+"</label>");
 				sb.append("</typeList>");
 			}
 			

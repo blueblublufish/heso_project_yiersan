@@ -1,279 +1,46 @@
-2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@742caa5a -- Acquisition Attempt Failed!!! Clearing pending acquires. While trying to acquire a needed new resource, we failed to succeed more than the maximum number of allowed acquisition attempts (30). Last acquisition attempt exception: 
- com.mysql.jdbc.CommunicationsException: Communications link failure due to underlying exception: 
-
-** BEGIN NESTED EXCEPTION ** 
-
-java.net.UnknownHostException
-MESSAGE: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-
-STACKTRACE:
-
-java.net.UnknownHostException: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1252)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1164)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1098)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:246)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:271)
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2771)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-
-
-** END NESTED EXCEPTION **
-
-
-
-Last packet sent to the server was 0 ms ago.
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2847)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@2064364c -- Acquisition Attempt Failed!!! Clearing pending acquires. While trying to acquire a needed new resource, we failed to succeed more than the maximum number of allowed acquisition attempts (30). Last acquisition attempt exception: 
- com.mysql.jdbc.CommunicationsException: Communications link failure due to underlying exception: 
-
-** BEGIN NESTED EXCEPTION ** 
-
-java.net.UnknownHostException
-MESSAGE: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-
-STACKTRACE:
-
-java.net.UnknownHostException: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1252)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1164)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1098)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:246)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:271)
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2771)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-
-
-** END NESTED EXCEPTION **
-
-
-
-Last packet sent to the server was 0 ms ago.
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2847)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@1328c831 -- Acquisition Attempt Failed!!! Clearing pending acquires. While trying to acquire a needed new resource, we failed to succeed more than the maximum number of allowed acquisition attempts (30). Last acquisition attempt exception: 
- com.mysql.jdbc.CommunicationsException: Communications link failure due to underlying exception: 
-
-** BEGIN NESTED EXCEPTION ** 
-
-java.net.UnknownHostException
-MESSAGE: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-
-STACKTRACE:
-
-java.net.UnknownHostException: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1252)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1164)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1098)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:246)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:271)
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2771)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-
-
-** END NESTED EXCEPTION **
-
-
-
-Last packet sent to the server was 0 ms ago.
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2847)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] Having failed to acquire a resource, com.mchange.v2.resourcepool.BasicResourcePool@c4fa1cd is interrupting all Threads waiting on a resource to check out. Will try again in response to new client requests.
- 2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] Having failed to acquire a resource, com.mchange.v2.resourcepool.BasicResourcePool@c4fa1cd is interrupting all Threads waiting on a resource to check out. Will try again in response to new client requests.
- 2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] Having failed to acquire a resource, com.mchange.v2.resourcepool.BasicResourcePool@c4fa1cd is interrupting all Threads waiting on a resource to check out. Will try again in response to new client requests.
- 2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@43ae12bb -- Acquisition Attempt Failed!!! Clearing pending acquires. While trying to acquire a needed new resource, we failed to succeed more than the maximum number of allowed acquisition attempts (30). Last acquisition attempt exception: 
- com.mysql.jdbc.CommunicationsException: Communications link failure due to underlying exception: 
-
-** BEGIN NESTED EXCEPTION ** 
-
-java.net.UnknownHostException
-MESSAGE: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-
-STACKTRACE:
-
-java.net.UnknownHostException: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1252)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1164)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1098)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:246)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:271)
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2771)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-
-
-** END NESTED EXCEPTION **
-
-
-
-Last packet sent to the server was 0 ms ago.
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2847)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] Having failed to acquire a resource, com.mchange.v2.resourcepool.BasicResourcePool@c4fa1cd is interrupting all Threads waiting on a resource to check out. Will try again in response to new client requests.
- 2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask@9f430d3 -- Acquisition Attempt Failed!!! Clearing pending acquires. While trying to acquire a needed new resource, we failed to succeed more than the maximum number of allowed acquisition attempts (30). Last acquisition attempt exception: 
- com.mysql.jdbc.CommunicationsException: Communications link failure due to underlying exception: 
-
-** BEGIN NESTED EXCEPTION ** 
-
-java.net.UnknownHostException
-MESSAGE: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-
-STACKTRACE:
-
-java.net.UnknownHostException: rm-wz9qd1g56y33ogc292o.mysql.rds.aliyuncs.com
-	at java.net.InetAddress.getAllByName0(InetAddress.java:1252)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1164)
-	at java.net.InetAddress.getAllByName(InetAddress.java:1098)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:246)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:271)
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2771)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-
-
-** END NESTED EXCEPTION **
-
-
-
-Last packet sent to the server was 0 ms ago.
-	at com.mysql.jdbc.Connection.createNewIO(Connection.java:2847)
-	at com.mysql.jdbc.Connection.<init>(Connection.java:1555)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:285)
-	at com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:146)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:195)
-	at com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:184)
-	at com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:200)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1086)
-	at com.mchange.v2.resourcepool.BasicResourcePool.doAcquireAndDecrementPendingAcquiresWithinLockOnSuccess(BasicResourcePool.java:1073)
-	at com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:44)
-	at com.mchange.v2.resourcepool.BasicResourcePool$ScatteredAcquireTask.run(BasicResourcePool.java:1810)
-	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:648)
-2019-01-02 08:25:06 [com.mchange.v2.resourcepool.BasicResourcePool]-[WARN] Having failed to acquire a resource, com.mchange.v2.resourcepool.BasicResourcePool@c4fa1cd is interrupting all Threads waiting on a resource to check out. Will try again in response to new client requests.
- 2019-01-02 10:21:53 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:21:54 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Index: 0, Size: 0
- 2019-01-02 10:24:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:24:44 [com.heso.service.cart.CartService]-[ERROR] 101130
- 2019-01-02 10:25:02 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:25:10 [com.heso.service.cart.CartService]-[ERROR] 101130
- 2019-01-02 10:37:29 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:37:59 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Index: 0, Size: 0
- 2019-01-02 10:41:12 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:41:37 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:42:21 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:55:10 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:56:02 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 10:59:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:01:34 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:02:02 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] A PooledConnection that has already signalled a Connection error is still in use!
- 2019-01-02 11:02:02 [com.mchange.v2.c3p0.impl.NewPooledConnection]-[WARN] [c3p0] Another error has occurred [ com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state. ] which will not be reported to listeners!
- com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException: Connection.close() has already been called. Invalid operation in this state.
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:888)
-	at com.mysql.jdbc.Connection.getMutex(Connection.java:3755)
-	at com.mysql.jdbc.Connection.rollback(Connection.java:5251)
-	at com.mchange.v2.c3p0.impl.NewProxyConnection.rollback(NewProxyConnection.java:860)
-	at com.heso.service.cart.CartService.setProduct(CartService.java:871)
-	at com.heso.transaction.outer.Transaction_001020.execute(Transaction_001020.java:78)
-	at com.heso.data.TransDataProcess.execute(TransDataProcess.java:101)
-	at com.heso.transaction.outer.Transaction_001020.main(Transaction_001020.java:120)
-2019-01-02 11:02:02 [com.heso.service.cart.CartService]-[ERROR] No operations allowed after connection closed.
- 2019-01-02 11:02:27 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:03:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:05:42 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:06:28 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:07:40 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:07:53 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:07:55 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 
- 2019-01-02 11:11:31 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 11:11:36 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 17:17:57 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
- 2019-01-02 17:23:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+2019-01-11 10:54:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 10:54:44 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 10:55:27 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 11:06:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 11:07:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 11:07:23 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 11:07:33 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 11:21:59 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 11:31:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 11:31:51 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] 101300
+ 2019-01-11 11:33:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 12:13:39 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 12:13:40 [com.heso.service.cart.CartService]-[ERROR] null
+ 2019-01-11 12:14:19 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 12:21:09 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 12:33:34 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 12:33:35 [com.heso.service.cart.CartService]-[ERROR] 101130
+ 2019-01-11 14:32:07 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 14:33:23 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:05:26 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:05:50 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:05:51 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Index: 0, Size: 0
+ 2019-01-11 15:05:51 [com.heso.service.cart.CartService]-[ERROR] null
+ 2019-01-11 15:06:57 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:14:56 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:18:54 [com.heso.service.cart.CartService]-[ERROR] No operations allowed after connection closed.
+ 2019-01-11 15:19:00 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:19:37 [com.heso.service.cart.CartService]-[ERROR] No operations allowed after connection closed.
+ 2019-01-11 15:20:45 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:20:58 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Index: 0, Size: 0
+ 2019-01-11 15:20:58 [com.heso.service.cart.CartService]-[ERROR] null
+ 2019-01-11 15:23:01 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:23:40 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:23:42 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Index: 0, Size: 0
+ 2019-01-11 15:23:42 [com.heso.service.cart.CartService]-[ERROR] null
+ 2019-01-11 15:24:08 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:25:02 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:27:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:34:04 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:46:37 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:50:41 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:50:50 [com.heso.service.order.consume.ConsumeOrder]-[ERROR] Parameter index out of range (2 > number of parameters, which is 1).
+ 2019-01-11 15:53:37 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 15:57:27 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
+ 2019-01-11 16:06:59 [com.mchange.v2.c3p0.cfg.C3P0Config]-[WARN] Unknown c3p0-config property: MaxStatementsPerConnection
  

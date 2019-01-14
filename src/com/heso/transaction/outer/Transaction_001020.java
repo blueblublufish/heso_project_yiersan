@@ -115,7 +115,7 @@ public class Transaction_001020 extends AbstractInterfaceClass {
 		//sb.append("<productDetail></productDetail>");
 		sb.append("</body>");
 		sb.append("</message>");
-		dd.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>001020</type><messageId>1</messageId><agentId>001</agentId><digest>MD5数字签名</digest></head><body><account>0000000000000909</account><productId>D18TZ0280</productId><suitId>F18SY0003</suitId><count>1</count><color>橙色</color><colorType>DAS014A</colorType><size>XS</size><selected>1</selected><subordinate></subordinate><token>b273d77a13a422fca9f584ef0e6aad5</token></body></message>");
+		dd.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>008001</type><messageId>1</messageId><agentId>001</agentId><digest>MD5数字签名</digest></head><body><name>5678</name><tel>15014606141</tel><type>3</type><content></content></body></message>");
 		try {
 			new TransDataProcess().execute(dd.toString());
 		} catch (Exception e) {

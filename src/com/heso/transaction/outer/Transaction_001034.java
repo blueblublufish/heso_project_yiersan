@@ -26,6 +26,7 @@ public class Transaction_001034 extends AbstractInterfaceClass {
 			//获取信息
 			String orderIds = arg0.selectSingleNode("orderIds").getText().trim();
 			String account = arg0.selectSingleNode("account").getText();
+			String payType = arg0.selectSingleNode("payType").getText();
 			//验证token
 			String token = arg0.selectSingleNode("token").getText();
 			if(!tokenAuth(account, token))
@@ -37,7 +38,7 @@ public class Transaction_001034 extends AbstractInterfaceClass {
 			for(int i =0 ; i<strList.length ; i++){
 				Strs.add(strList[i]);
 			}
-				ConsumeOrderReturnObject coro = new ConsumeOrder().payOrder(account, Strs);
+				ConsumeOrderReturnObject coro = new ConsumeOrder().payOrder(account, Strs,payType);
 				if("000000".equals(coro.getCode())){
 					List<ConsumeOrderObject> list = coro.getCooList();
 					for(int i =0 ; i<list.size()-1 ; i++){

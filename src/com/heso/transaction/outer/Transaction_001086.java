@@ -68,14 +68,14 @@ public class Transaction_001086 extends AbstractInterfaceClass {
 			
 			//·µ»ØÊý¾Ý
 			StringBuffer sb = new StringBuffer();
-			if(wsro.getCode().equals("000000")){
+			if(wsro.getCode().equals("000000")){ 
 				if(wsro.getWardrobeList()!=null&&wsro.getWardrobeList().size()!=0){
 					for(WardrobeDTO wardrobeDTO : wsro.getWardrobeList()){
 						sb.append("<wardrobeItem>");
 						/*if(wardrobeDTO.getwList()!=null&&wardrobeDTO.getwList().size()!=0){
 							for(WardrobeDTO wwdto:wardrobeDTO.getwList()){
 								sb.append("<secondType>");
-								sb.append("<id>"+wwdto.getId()+"</id>");
+								sb.append("<id>"+wwdto.getId()+"</id>"); 
 								sb.append("<account>"+wwdto.getAccount()+"</account>");
 								sb.append("<image>"+wwdto.getImage()+"</image>");
 								sb.append("<type>"+wwdto.getType()+"</type>");

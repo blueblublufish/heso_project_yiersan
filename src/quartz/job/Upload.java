@@ -292,16 +292,16 @@ public class Upload {
 						list3.clear();
 						list3.add(newOrderIds);
 						list3.add(newaccounts);
-						if(DatabaseMgr.getInstance().execNonSqlTrans(sql2, list3, conn)<=0){
+						/*if(DatabaseMgr.getInstance().execNonSqlTrans(sql2, list3, conn)<=0){
 						 
-						}
+						}*/
 						
 						
 					}
 					//日程返回结束
 					logger.info("隐藏订单："+dt.getRows().get(i).getString("order_id"));
 				}
-				sql+="0)";
+				sql+="'')";
 				if(DatabaseMgr.getInstance().execNonSqlTrans(sql, list, conn)<=0){
 					throw new Exception("101510");
 				}
@@ -711,7 +711,7 @@ public class Upload {
 	static String subString (String str1,String longstr){
 		
 		List<String> list = Arrays.asList(longstr.split(","));  
-		ArrayList <String> newList = new ArrayList<>(list);
+		ArrayList <String> newList = new ArrayList<String>(list);
 		
 		
 		for(String string:newList){

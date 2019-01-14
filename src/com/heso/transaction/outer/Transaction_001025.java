@@ -3,6 +3,8 @@ package com.heso.transaction.outer;
 import java.util.ArrayList;
 import java.util.List;
 
+import oracle.net.aso.s;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
@@ -78,11 +80,11 @@ public class Transaction_001025 extends AbstractInterfaceClass {
 					sb.append("<logistCom>"+coo.getLogistCom()+"</logistCom>");
 					sb.append("<trackingNum>"+coo.getTrackingNum()+"</trackingNum>");
 					sb.append("<showStatus>"+coo.getShowStatus()+"</showStatus>");
-					sb.append("<suitId>"+coo.getSuitId()+"</suitId>");
+					sb.append("<suitId>"+coo.getSuitId()+"</suitId>"); 
 					sb.append("<pointType>"+coo.getPointType()+"</pointType>");
 					sb.append("<sendTime>"+coo.getSendTime()+"</sendTime>");
-					sb.append("<reviveName>"+coo.getSendTime()+"</reviveName>");
-					sb.append("<recivePhone>"+coo.getReciveName()+"</recivePhone>");
+					sb.append("<reviveName>"+coo.getReciveName()+"</reviveName>");
+					sb.append("<recivePhone>"+coo.getRecivePhone()+"</recivePhone>");
 					sb.append("<reciveAddress>"+coo.getReciceAddress()+"</reciveAddress>");
 					sb.append("<remark>"+coo.getRemark()+"</remark>");
 					sb.append("<wuliugongsi>"+coo.getWuliugongsi()+"</wuliugongsi>");
@@ -129,9 +131,11 @@ public class Transaction_001025 extends AbstractInterfaceClass {
 		
 		sb.append("</body>");
 		sb.append("</message>");
+		StringBuffer ssBuffer = new StringBuffer();
+		ssBuffer.append("<?xml version='1.0' encoding='UTF-8'?><message><head><type>001025</type><messageId>1</messageId><agentId>001</agentId><digest>MD5Êý×ÖÇ©Ãû</digest></head><body><orderId></orderId><payStatus></payStatus><sendStatus></sendStatus><returnStatus></returnStatus><showStatus></showStatus><recStart>0</recStart><recCount>100</recCount><account>0000000000001958</account><token>123456</token></body></message>");
 
 		try {
-			new TransDataProcess().execute(sb.toString());
+			new TransDataProcess().execute(ssBuffer.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

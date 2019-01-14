@@ -20,7 +20,7 @@ import com.heso.service.system.entity.SystemTypeObject;
 public class tese1 {
 	public static void main(String[] args) throws SQLException {
 		
-		ArrayList<String> list = new  ArrayList<>();
+		ArrayList<String> list = new  ArrayList<String>();
 		list.add("ßã");
 		list.add("ßè");
 		list.add("¸Â");

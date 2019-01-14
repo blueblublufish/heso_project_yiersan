@@ -7,8 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.crypto.AEADBadTagException;
+ 
 import javax.xml.crypto.Data;
 
 import org.apache.commons.logging.Log;
@@ -1097,7 +1096,7 @@ public class CartService {
 	 * @param productId
 	 * @return
 	 */
-	public ConsumeOrderReturnObject settle(String account, String innerCoin, String receiveId,String paymentTerms,String recommend ,String couponDetId ) {
+	public ConsumeOrderReturnObject settle(String account, String innerCoin, String receiveId,String paymentTerms,String recommend ,String couponDetId ,String remarks) {
 		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
 		Connection conn = DatabaseMgr.getInstance().getConnection();
 		try {
@@ -1146,6 +1145,7 @@ public class CartService {
 				coao.setAmount(dr.getString("amount"));
 				coao.setSuitId(dr.getString("suit_id"));
 				coao.setColor(dr.getString("color"));
+				coao.setRemarks(remarks);
 				coao.setSubordinate(dr.getString("subordinate"));
 				if(dr.getString("type").equals("1")){
 					coao.setSize(dr.getString("size"));
@@ -1250,6 +1250,7 @@ public class CartService {
 	 */
 	public ConsumeOrderReturnObject settleNew(String account, String innerCoin, String reciveId,String paymentTerms,String recommend ,String couponDetId ,String remark) {
 		ConsumeOrderReturnObject coro = new ConsumeOrderReturnObject();
+		ConsumeOrderReturnObject coroDingzhi = new ConsumeOrderReturnObject();
 		ConsumeOrderReturnObject coroo = new ConsumeOrderReturnObject();
 		Connection conn = DatabaseMgr.getInstance().getConnection();
 		try {
@@ -1265,13 +1266,67 @@ public class CartService {
 				throw new Exception("101130");
 			List<ProductsDTO> productsDTOs = new ArrayList<ProductsDTO>();
 			ArrayList<ConsumeOrderObject> coaooList = new ArrayList<ConsumeOrderObject>();
+			ArrayList<ConsumeOrderObject> coaooListDingzhi = new ArrayList<ConsumeOrderObject>();
+			ArrayList<ConsumeOrderObject> coaoList = new ArrayList<ConsumeOrderObject>();
 			for(int i = 0 ; i < dt.getRows().size() ; i++){
+				String colorType = dt.getRows().get(i).getString("COLOR_TYPE");
+				if(colorType==null||colorType.equals("null")||colorType.equals("")){
+					DataRow dr = dt.getRows().get(i);
+					// 建立主数据
+					ConsumeOrderObject coao = new ConsumeOrderObject();
+					coao.setAccount(account);
+					coao.setProductId(dr.getString("product_id"));
+					coao.setType(dr.getString("type"));
+					coao.setName(dr.getString("name"));
+					coao.setImage(dr.getString("image"));
+					coao.setPrice(dr.getString("price"));
+					coao.setCount(dr.getString("count"));
+					coao.setAmount(dr.getString("amount"));
+					coao.setSuitId(dr.getString("suit_id"));
+					coao.setColor(dr.getString("color"));
+					coao.setRemarks(remark);
+					coao.setSubordinate(dr.getString("subordinate"));
+					if(dr.getString("type").equals("1")){
+						coao.setSize(dr.getString("size"));
+					}
+					// coao.setCurrency(dr.getString("currency"));
+					// coao.setInnerCoin(dr.getString("inner_coin"));
+					// coao.setBonusPoint(dr.getString("bonus_point"));
+
+					ArrayList<ConsumeProductObject> cpoList = new ArrayList<ConsumeProductObject>();
+					sql = "select * from heso_cart_detail where account=? and  product_suit_id=? and subordinate = ? ";
+					argsList.clear();
+					argsList.add(account);
+					argsList.add(coao.getProductId());
+					argsList.add(dr.getString("subordinate"));
+					DataTable dt1 = DatabaseMgr.getInstance().execSqlTrans(sql, argsList,conn);
+					for (int ij = 0; ij < dt1.getRows().size(); ij++) {
+						DataRow dr1 = dt1.getRows().get(ij);
+						ConsumeProductObject cpo = new ConsumeProductObject();
+						cpo.setProductId(dr1.getString("product_id"));
+						cpo.setName(dr1.getString("name"));
+						cpo.setImage(dr1.getString("image"));
+						cpo.setColor(dr1.getString("color"));
+						cpo.setCount(dr1.getString("count"));
+						cpo.setSize(dr1.getString("size"));
+						cpo.setPrice(dr1.getString("price"));
+						cpo.setAmount(dr1.getString("amount"));
+						cpo.setSuitPrice(dr1.getString("suit_price"));
+						cpo.setSuitPromotion(dr1.getString("suit_promotion"));
+						cpo.setSubordinate(dr1.getString("subordinate"));
+						cpoList.add(cpo);
+					}
+					coao.setCpoList(cpoList);
+					coaooListDingzhi.add(coao);
+					continue;
+				}
+				
+				
 				String productId = dt.getRows().get(i).getString("product_id");
-				String colorType = dt.getRows().get(0).getString("COLOR_TYPE");
-				String size = dt.getRows().get(0).getString("SIZE");
-				String count = dt.getRows().get(0).getString("COUNT");
-				String cartId = dt.getRows().get(0).getString("ID");
-				String subordinate = dt.getRows().get(0).getString("subordinate");
+				String size = dt.getRows().get(i).getString("SIZE");
+				String count = dt.getRows().get(i).getString("COUNT");
+				String cartId = dt.getRows().get(i).getString("ID");
+				String subordinate = dt.getRows().get(i).getString("subordinate");
 				ConsumeOrderObject coo = new ConsumeOrderObject();
 				coo.setProductId(productId);
 				coo.setSubordinate(subordinate);
@@ -1285,10 +1340,10 @@ public class CartService {
 				
 
 				//套装内品类list
-				List<String> pinleiList = new ArrayList<>();
+				List<String> pinleiList = new ArrayList<String>();
 				//套装内面料list
-				List<String> mianliaoList = new ArrayList<>();
-				List<String> xiadanfangshiList = new ArrayList<>();
+				List<String> mianliaoList = new ArrayList<String>();
+				List<String> xiadanfangshiList = new ArrayList<String>();
 				ProductsDTO productsDTO = new ProductsDTO();
 				productsDTO.setProdctId(productId);
 				productsDTO.setColor(colorType);
@@ -1343,7 +1398,7 @@ public class CartService {
 				}
 			
 			}
-			
+			coroDingzhi =  order.genarateNew(coaooListDingzhi, innerCoin, reciveId,paymentTerms,recommend,couponDetId);
 			
 			String seller = "";//客户跟进人
 			String sellerName = "";//客户跟进人
@@ -1355,7 +1410,7 @@ public class CartService {
 			String qudaoId =""; 
 			String mobile ="";
 			
-			ArrayList<ConsumeOrderObject> coaoList = new ArrayList<ConsumeOrderObject>();
+			
 			String productName = "";
 			String price = "";
 			for(ProductsDTO productsDTO : productsDTOs){
@@ -1455,7 +1510,7 @@ public class CartService {
 					}
 			
 			System.out.println("");
-			coro= order.innerOrder4(coaoList,account, "", reciveId, "3", "");
+			coro= order.innerOrder4(coaoList,account, "", reciveId, paymentTerms, "");
 			
 			// 移除购物车商品
 			if (coro.getCode().equals("000000")) {
@@ -1466,17 +1521,23 @@ public class CartService {
 					String ps = productId+":"+subordinate;
 					strList.add(ps);
 				}
-				removeProduct(account, strList);
+				for (int i = 0; i < coaooListDingzhi.size(); i++) {
+					String productId = coaooList.get(i).getProductId();
+					String subordinate = coaooList.get(i).getSubordinate();
+					String ps = productId+":"+subordinate;
+					strList.add(ps);
+				}
+				//removeProduct(account, strList);
 			}
 			List<String> Strs = new ArrayList<String>();
-			String orderIds = coro.getOrderId();
+			String orderIds = coro.getOrderId()+coroDingzhi.getOrderId();
  			String[] strList = orderIds.split(";");
 			for(int i =0 ; i<strList.length ; i++){
 				if(!strList[i].isEmpty()){
 					Strs.add(strList[i]);					
 				}
 			}
-			coroo = new ConsumeOrder().payOrder(account, Strs);
+			coroo = new ConsumeOrder().payOrder(account, Strs,paymentTerms);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			coro.setCode(String.valueOf(ErrorProcess.execute(e.getMessage())));
@@ -1698,20 +1759,20 @@ public class CartService {
 	  }
 	 String getpinlei(List<String> pinleiList){
 		Collections.sort(pinleiList);
-		List<String> nvliangjian = new ArrayList<>();
+		List<String> nvliangjian = new ArrayList<String>();
 		nvliangjian.add("95000");
 		nvliangjian.add("98000");
 		Collections.sort(nvliangjian);
-		List<String> nvsanjian = new ArrayList<>();
+		List<String> nvsanjian = new ArrayList<String>();
 		nvsanjian.add("95000");
 		nvsanjian.add("98000");
 		nvsanjian.add("222000");
 		Collections.sort(nvsanjian);
-		List<String> nanliangjian = new ArrayList<>();
+		List<String> nanliangjian = new ArrayList<String>();
 		nanliangjian.add("3");
 		nanliangjian.add("2000");
 		Collections.sort(nanliangjian);
-		List<String> nansanjian = new ArrayList<>();
+		List<String> nansanjian = new ArrayList<String>();
 		nansanjian.add("4000");
 		nansanjian.add("2000");
 		nansanjian.add("3");
